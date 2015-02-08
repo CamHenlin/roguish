@@ -1,7 +1,7 @@
 var ExampleComplexObject = function() {
-	// I have all the properties of a simple object here
+	// I have all the properties of a complex object here
 };
 
-ExampleComplexObject.prototype = new SimpleObject;
+ExampleComplexObject.prototype = new ComplexObject;
 ExampleComplexObject.prototype.constructor = ExampleComplexObject
 
