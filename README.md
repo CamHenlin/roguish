@@ -58,12 +58,12 @@ The `git pull --rebase` will pull down other updates from the repository, and th
 Each of the items in the following list are logical groupings of code, separated by directories at the root of the project structure of the same name.
 
 - **build** contains files for building the system. *Google Closure Compiler*, a simple build shell script, and a minified javascript output file
-- **classes** extendable classes. things in *objects* and *simpleobjects* would probably make use of these files.
+- **classes** extendable classes. things in *complexobjects* and *simpleobjects* would probably make use of these files.
+- **complexobjects** these are the default includeable in-game objects, including things such as treasure chests, doors, etc. Items of this type are considered "active" and would run as a part of the main game loop. *Tiled* "objects" with attributes.
 - **graphics** default graphics files.
 - **libs** contains library files depended on by the system. For example, EaselJS.
 - **maps** default map files.
 - **mechanics** these are the files that control the core functionality of the entire system.
-- **objects** these are the default includeable in-game objects, including things such as treasure chests, doors, etc. Items of this type are considered "active" and would run as a part of the main game loop. *Tiled* "objects" with attributes.
 - **simpleobjects** simpleobjects differ from normal objects in that they are a simple tile layer items with no options. Allows for keeping track of objects that maybe don't need to be updated as quickly. For example, tiles that have disappearing footprints. *Tiled* "tiles" with no attributes on *active* tile layer.
 - **plugins** contains user plugins - we need to build documentation on how such a plugin might attach itself to the main game loop. This is probably our most important feature.
 - **tests** unit tests.
@@ -86,7 +86,7 @@ Maps in tiled allow for separate layers, and we are going to use them as follows
 - **background1** top background layer, used for layering on top of *background2* layer, makes doing certain types of art easier
 - **background2** bottom background layer. combined with *background1* layer at render time.
 
-Additionally, we need to add an *object* layer, which will allow us more general *objects* with map-designer-defined properties.
+Additionally, we need to add an *object* layer, which will allow us more general *complexobjects* with map-designer-defined properties.
 
 ## Project code groupings
 

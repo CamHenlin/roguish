@@ -1,0 +1,1 @@
+var SimpleObject = function() {};
