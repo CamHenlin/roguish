@@ -85,7 +85,7 @@
          "name":"dungeon_tiles_0",
          "properties":
             {
-
+				"backgroundColor": "#FF0000"
             },
          "spacing":0,
          "tileheight":16,
