@@ -331,6 +331,10 @@ function Renderer(gamestage) {
 	 */
 	this.shiftMap = function(xamount, yamount) {
 		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
+		for (i = 0; i < enemies.length; i++) {
+			enemies[i].animations.x -= xamount;
+			enemies[i].animations.y -= yamount;
+		}
 
 		this.backgroundContainer.x -= xamount;
 		this.backgroundContainer.y -= yamount;

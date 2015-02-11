@@ -16,17 +16,17 @@ var Enemy = function(x, y) {
 				"speed": 1
 			}
 		}
-	});	
+	});
 
-	this.animation = new createjs.Sprite(this.spriteSheet, "move");	
-	this.animation.x = this.x;
-	this.animation.y = this.y;
-	this.animation.regX = 14;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
+	this.animations = new createjs.Sprite(this.spriteSheet, "move");
+	this.animations.x = this.x;
+	this.animations.y = this.y;
+	this.animations.regX = 14;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
 
 	this.watchedElements = [];
 
-	var counter = 0;	
-	gamestage.addChild(this.animation);
+	var counter = 0;
+	gamestage.addChild(this.animations);
 
 	var dy = 0; // change in y and x respectively, used for movement.
 	var dx = 0;
@@ -47,15 +47,15 @@ var Enemy = function(x, y) {
 				dy = SPEED;
 			} else if (randomNumber == 2) { // Move right
 				dx = SPEED;
-				this.animation.scaleX = 1;			
+				this.animations.scaleX = 1;
 			} else { 						// Move left
 				dx = -SPEED;
-				this.animation.scaleX = -1;
+				this.animations.scaleX = -1;
 			}
 		}
 
-		this.animation.x += dx;
-		this.animation.y += dy;	
+		this.animations.x += dx;
+		this.animations.y += dy;
 	}
 
 
