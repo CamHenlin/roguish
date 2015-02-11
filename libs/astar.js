@@ -160,11 +160,13 @@ function Graph(gridIn, options) {
     this.nodes = [];
     this.diagonal = !!options.diagonal;
     this.grid = [];
-    for (var x = 0; x < gridIn.length; x++) {
-        this.grid[x] = [];
-
-        for (var y = 0, row = gridIn[x]; y < row.length; y++) {
-            var node = new GridNode(x, y, row[y]);
+    for (var y = 0; y < gridIn.length; y++) {
+        column = gridIn[y];
+        for (var x = 0; x < column.length; x++) {
+			if (!this.grid[x]) {
+				this.grid[x] = [];
+			}
+            var node = new GridNode(x, y, column[x]);
             this.grid[x][y] = node;
             this.nodes.push(node);
         }
