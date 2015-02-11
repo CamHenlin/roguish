@@ -46,7 +46,7 @@ function initVars() {
 	createjs.Ticker.setFPS(60);
 
 	// make ten player
-	initPlayers(10);
+	initPlayers(1);
 }
 
 /**
@@ -57,7 +57,7 @@ function initVars() {
 function initPlayers(playerCount) {
 	players = [];
 	for (var i = 0; i < playerCount; i++) {
-		players.push(new Player(i * 32, i * 32));
+		players.push(new Player(i * 32 + 96, i * 32 + 96));
 	}
 }
 
@@ -72,11 +72,17 @@ function handleTick(event) {
 		return;
 	}
 
-	var i = 0; // going to need to use i multiple times here, might as well only declare it once
+	if (renderer.moving) {
+		renderer.movementTickActions();
+	} else {
+		var i = 0; // going to need to use i multiple times here, might as well only declare it once
 
-	// iterate players and allow each player to get its tickAction
-	for (i = 0; i < players.length; i++) {
-		players[i].tickActions();
+		// iterate players and allow each player to get its tickAction
+		for (i = 0; i < players.length; i++) {
+			players[i].tickActions();
+		}
+
+		playerTurn();
 	}
 
 	// this should be the only time the gamestage is updated anywhere in our code. Ensures that we only attempt to render 60 times per second.

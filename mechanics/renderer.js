@@ -16,7 +16,15 @@ function Renderer(gamestage) {
 	this.mapData = map1; // this is our tiled JSON data
 	this.simpleObjects = [];
 	this.tileset = new Image();
-	console.log(map1);
+
+	// new tickaction code:
+	this.moving = false;
+	this.moveToX = 0;
+	this.moveToY = 0;
+	this.movingObject = {};
+	this.movingToCellTarget = {};
+	this.movingToCellStart = {};
+
 	console.log('initializing renderer');
 
 	// getting imagefile from first tileset
@@ -211,17 +219,6 @@ function Renderer(gamestage) {
 				var idx = x + y * layerData.width;
 				if (layerData.data[idx] !== 0) {
 					var cellBitmap = null;
-					if (y === 0) {
-						for (var i = 1; i <= this.getRepeatedTopRows(); i++) {
-							cellBitmap = new createjs.Sprite(tilesetSheet);
-							// tilemap data uses 1 as first value, EaselJS uses 0 (sub 1 to load correct tile)
-							cellBitmap.gotoAndStop(layerData.data[idx] - 1);
-							cellBitmap.x = x * tilewidth;
-							cellBitmap.y = (y - i) * tileheight;
-							container.addChild(cellBitmap);
-						}
-					}
-
 					cellBitmap = new createjs.Sprite(tilesetSheet);
 					// tilemap data uses 1 as first value, EaselJS uses 0 (sub 1 to load correct tile)
 					cellBitmap.gotoAndStop(layerData.data[idx] - 1);
@@ -231,9 +228,9 @@ function Renderer(gamestage) {
 
 					// internalgamestage.addChild(cellBitmap);
 
-					this.collisionArray[y][x] = true;
+					this.collisionArray[y][x] = 0;
 				} else {
-					this.collisionArray[y][x] = false;
+					this.collisionArray[y][x] = 1;
 				}
 			}
 		}
@@ -241,6 +238,134 @@ function Renderer(gamestage) {
 		container.tickEnabled = false;
 		container.snapToPixel = true;
 		return container;
+	};
+
+	/**
+	 * [moveTo shifts the map in a certain way]
+	 * @param  {[type]} trackedObject [description]
+	 * @param  {[type]} targetx             [description]
+	 * @param  {[type]} targety             [description]
+	 * @return {[type]}               [description]
+	 */
+	this.moveTo = function(trackedObject, targetx, targety) {
+
+		console.log('asking to move map');
+		if (!this.checkCellValid(targetx, targety) ||
+			(this.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x = targety &&
+			 this.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === targety)) {
+
+			console.log('invalid target!');
+			return;
+		}
+
+		this.moveToX = targetx;
+		this.moveToY = targety;
+		this.movingToCellTarget = this.getCollisionCoordinateFromCell(this.moveToX, this.moveToY);
+		this.movingToCellStart = this.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
+		this.moving = true;
+		console.log(trackedObject);
+		this.movingObject = trackedObject;
+	};
+
+	/**
+	 * [movementTickActions description]
+	 * @return {[type]} [description]
+	 */
+	this.movementTickActions = function() {
+		var startxy = this.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
+		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) {
+			this.moving = false;
+			this.movingObject = {};
+			this.moveToX = 0;
+			this.moveToY = 0;
+			this.movingToCellTarget = {};
+			return;
+		}
+
+		console.log('moving map from x ' + startxy.x + ' y ' + startxy.y + ' to x ' + this.movingToCellTarget.x + ' y ' + this.movingToCellTarget.y);
+		var graph = new Graph(this.collisionArray);
+		var start = graph.grid[startxy.x][startxy.y];
+		var end = graph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
+		var result = astar.search(graph, start, end);
+		//console.log(result);
+		console.log('search tells me to follow my heart and move towards x ' + result[0].x + ' and y ' + result[0].y + ' with speed of ' + this.movingObject.moveSpeed);
+		this.movingObject.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
+		this.movingObject.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
+
+		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
+
+		this.shiftMap((result[0].x - startxy.x) * this.movingObject.moveSpeed, (result[0].y - startxy.y) * this.movingObject.moveSpeed)
+	};
+
+	/**
+	 * [shiftMap description]
+	 * @param  {[type]} xamount [description]
+	 * @param  {[type]} yamount [description]
+	 * @return {[type]}         [description]
+	 */
+	this.shiftMap = function(xamount, yamount) {
+		this.backgroundContainer.x -= xamount;
+		this.backgroundContainer.y -= yamount;
+		this.container.x -= xamount;
+		this.container.y -= yamount;
+		this.foregroundContainer.x -= xamount;
+		this.foregroundContainer.y -= yamount;
+	}
+
+	/**
+	 * [checkCellValid check cell valid]
+	 * @param  {[type]} playerCollisionPoints [description]
+	 * @param  {[type]} collisionArray        [description]
+	 * @param  {[type]} heightOffset          [description]
+	 * @param  {[type]} widthOffset           [description]
+	 * @return {[type]}                       [description]
+	 */
+	this.checkCellValid = function(x, y) {
+		var tilesize = 16; // this is used as width and height!
+
+		try {
+			var a = ~~(y / tilesize);
+			var b = ~~(x / tilesize);
+
+			if (a <= -1 || a > this.collisionArray.length) {
+				a = 0;
+			}
+
+			if (b <= -1 || b > this.collisionArray[a].length) {
+				b = 0;
+			}
+
+			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				return false;
+			}
+		} catch (error) {
+
+		}
+
+		return true;
+	};
+
+	/**
+	 * [getCollisionCoordinateFromCell description]
+	 * @param  {[type]} x [description]
+	 * @param  {[type]} y [description]
+	 * @return {[type]}   [description]
+	 */
+	this.getCollisionCoordinateFromCell = function(x, y) {
+		var tilesize = 16; // this is used as width and height!
+
+		var a = ~~(y / tilesize);
+		var b = ~~(x / tilesize);
+
+		if (a <= -1 || a > this.collisionArray.length) {
+			a = 0;
+		}
+
+		if (b <= -1 || b > this.collisionArray[a].length) {
+			b = 0;
+		}
+
+		return {x: b, y: a};
 	};
 
 	/**

@@ -4,8 +4,11 @@
  * @param {[type]} y [description]
  */
 var Player = function(x, y) {
-	this.x = x; // maybe we don't bother with this and simply use animation x,y instead
-	this.y = y; // maybe we don't bother with this and simply use animation x,y instead
+	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.initiative = 1; // this is a statistic used for determining player turn in default playerturn.js
+	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
+	this.turnCounter = 0;
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
 		"frames": {
@@ -18,6 +21,11 @@ var Player = function(x, y) {
 				"frames": [0],
 				"next": "stand",
 				"speed": 1
+			},
+			"walking": {
+				"frames": [0],
+				"next": "walking",
+				"speed": 1
 			}
 		}
 	});
@@ -25,9 +33,6 @@ var Player = function(x, y) {
 	this.animations.x = this.x;
 	this.animations.y = this.y;
 	this.watchedElements = [];
-
-	// private counter variable
-	var counter = 0;
 
 	// add our animations to global gamestage:
 	gamestage.addChild(this.animations);
@@ -37,13 +42,15 @@ var Player = function(x, y) {
 	 * @return {[type]} [description]
 	 */
 	this.tickActions = function() {
-		// check and make sure any children of the player get ticked
-		for (var i = 0; i < this.watchedElements.length; i++) {
-			this.watchedElements[i].tickActions();
-		}
 
-		// just a player movement demo:
-		counter++;
-		this.animations.x += Math.sin((counter % 60) / 60 - 1/2);
+	};
+
+	/**
+	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
+	 * @return {[type]} [description]
+	 */
+	this.turn = function() {
+		console.log('player turn called');
+		renderer.moveTo(this, 600, 600);
 	};
 };
