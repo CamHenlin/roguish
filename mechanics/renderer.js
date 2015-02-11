@@ -24,6 +24,7 @@ function Renderer(gamestage) {
 	this.movingObject = {};
 	this.movingToCellTarget = {};
 	this.movingToCellStart = {};
+	this.movementGraph = {};
 
 	console.log('initializing renderer');
 
@@ -235,6 +236,8 @@ function Renderer(gamestage) {
 			}
 		}
 
+		this.movementGraph = new Graph(this.collisionArray);
+
 		container.tickEnabled = false;
 		container.snapToPixel = true;
 		return container;
@@ -248,7 +251,6 @@ function Renderer(gamestage) {
 	 * @return {[type]}               [description]
 	 */
 	this.moveTo = function(trackedObject, targetx, targety) {
-		console.log('asking to move map');
 		if (!this.checkCellValid(targetx, targety) ||
 			(this.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x = targety &&
 			 this.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === targety)) {
@@ -281,14 +283,9 @@ function Renderer(gamestage) {
 			return;
 		}
 
-		console.log('moving map from x ' + startxy.x + ' y ' + startxy.y + ' to x ' + this.movingToCellTarget.x + ' y ' + this.movingToCellTarget.y);
-		var graph = new Graph(this.collisionArray);
-		var start = graph.grid[startxy.x][startxy.y];
-		var end = graph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
-		var result = astar.search(graph, start, end);
-		//console.log(result);
-		console.log('search tells me to follow my heart and move towards x ' + result[0].x + ' and y ' + result[0].y + ' with speed of ' + this.movingObject.moveSpeed);
-
+		var start = this.movementGraph.grid[startxy.x][startxy.y];
+		var end = this.movementGraph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
+		var result = astar.search(this.movementGraph, start, end);
 		// figure out if we should move the player or the map:
 		// these if statements require some explanation since they are basically unreadable
 
@@ -334,7 +331,6 @@ function Renderer(gamestage) {
 	 * @return {[type]}         [description]
 	 */
 	this.shiftMap = function(xamount, yamount) {
-		console.log('shifting map by  x ' + xamount + ' y ' + yamount)
 		this.backgroundContainer.x -= xamount;
 		this.backgroundContainer.y -= yamount;
 		this.container.x -= xamount;
