@@ -11,14 +11,13 @@ loader.loadManifest([
  * @return {[type]} [description]
  */
 function handleComplete() {
-	setTimeout(function() {
-		init();
-	}, 100);
+	init();
 }
 
 var gamestage; // this is the global canvas object that everything canvas-related in the game will attach to
 var renderer;
 var players = []; // list of active players
+var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
 
 /**
  * [init call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler.]
@@ -36,6 +35,8 @@ function init() {
 function initVars() {
 	console.log('initializing vars');
 	gamestage = new createjs.Stage("gamecanvas");
+	gamestage.canvas.width = window.innerWidth / gamezoom;
+	gamestage.canvas.height = window.innerHeight / gamezoom;
 	gamestage.clear();
 	gamestage.snapToPixelEnabled = true;
 	renderer = new Renderer(gamestage);

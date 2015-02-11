@@ -64,6 +64,7 @@ Each of the items in the following list are logical groupings of code, separated
 - **libs** contains library files depended on by the system. For example, EaselJS.
 - **maps** default map files.
 - **mechanics** these are the files that control the core functionality of the entire system.
+- **rules** these are files that contain single functions to be easily read and modified by users if so desired.
 - **simpleobjects** simpleobjects differ from normal objects in that they are a simple tile layer items with no options. Allows for keeping track of objects that maybe don't need to be updated as quickly. For example, tiles that have disappearing footprints. *Tiled* "tiles" with no attributes on *active* tile layer.
 - **plugins** contains user plugins - we need to build documentation on how such a plugin might attach itself to the main game loop. This is probably our most important feature.
 - **tests** unit tests.
@@ -89,6 +90,13 @@ Maps in tiled allow for separate layers, and we are going to use them as follows
 Additionally, we need to add an *object* layer, which will allow us more general *complexobjects* with map-designer-defined properties.
 
 ## Project code groupings
+
+### *Rules* Files
+
+Rules are files that contain single functions to be easily read and modified by users if so desired.
+For example:
+
+- **playerturn** exposes playerTurn function which selects the next playerfor a given frame, if any. Assumes global players array.
 
 ### *Mechanics* Files
 
