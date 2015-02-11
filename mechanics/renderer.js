@@ -248,7 +248,6 @@ function Renderer(gamestage) {
 	 * @return {[type]}               [description]
 	 */
 	this.moveTo = function(trackedObject, targetx, targety) {
-
 		console.log('asking to move map');
 		if (!this.checkCellValid(targetx, targety) ||
 			(this.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x = targety &&
@@ -289,12 +288,20 @@ function Renderer(gamestage) {
 		var result = astar.search(graph, start, end);
 		//console.log(result);
 		console.log('search tells me to follow my heart and move towards x ' + result[0].x + ' and y ' + result[0].y + ' with speed of ' + this.movingObject.moveSpeed);
+
+		// figure out if we should move the player or the map:
+		if ((this.movingToCellTarget.x > this.gamestage.canvas.width / 2) &&
+			(this.getMapWidth() > this.movingToCellTarget.x + this.gamestage.canvas.width / 2)) {
+			// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
+
+			renderer.shiftMap((result[0].x - startxy.x) * this.movingObject.moveSpeed, (result[0].y - startxy.y) * this.movingObject.moveSpeed);
+		} else {
+			this.movingToCellTarget.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
+			this.movingToCellTarget.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
+		}
+
 		this.movingObject.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
 		this.movingObject.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
-
-		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
-
-		this.shiftMap((result[0].x - startxy.x) * this.movingObject.moveSpeed, (result[0].y - startxy.y) * this.movingObject.moveSpeed)
 	};
 
 	/**
