@@ -111,6 +111,6 @@ var Player = function(x, y) {
 	 */
 	this.turn = function() {
 		console.log('player turn called');
-		renderer.moveTo(this, 600, 600);
+		renderer.moveTo(this, this.x + 600, this.y + 600);
 	};
 };
