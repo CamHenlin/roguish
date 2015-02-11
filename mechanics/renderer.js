@@ -274,7 +274,7 @@ function Renderer(gamestage) {
 	 */
 	this.movementTickActions = function() {
 		var startxy = this.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
-		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !checkCellValid(startxy.x, startxy.y)) {
+		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !this.checkCellValid(startxy.x, startxy.y)) {
 			this.moving = false;
 			this.movingObject = {};
 			this.moveToX = 0;
