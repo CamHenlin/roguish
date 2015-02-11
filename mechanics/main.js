@@ -4,6 +4,7 @@ loader.addEventListener("complete", handleComplete);
 loader.loadManifest([
 	{id: "dungeon_tiles_0", src: "graphics/dungeon_tiles_0.png"},
 	{id: "player", src: "graphics/player.png"},
+	{id: "enemy", src: "graphics/treadbot1sheet.png"},
 ]);
 
 /**
@@ -17,6 +18,7 @@ function handleComplete() {
 var gamestage; // this is the global canvas object that everything canvas-related in the game will attach to
 var renderer;
 var players = []; // list of active players
+var enemies = []; // list of enemies
 var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
 
 /**
@@ -47,6 +49,7 @@ function initVars() {
 
 	// make ten player
 	initPlayers(1);
+	initEnemies(20);
 }
 
 /**
@@ -58,6 +61,14 @@ function initPlayers(playerCount) {
 	players = [];
 	for (var i = 0; i < playerCount; i++) {
 		players.push(new Player(i * 32 + 96, i * 32 + 96));
+	}
+}
+
+
+function initEnemies(enemyCount) {
+	enemies = [];
+	for (var i = 0; i < enemyCount; i++) {
+		enemies.push(new Enemy(i * 32 + 32, i * 32));
 	}
 }
 
@@ -83,6 +94,10 @@ function handleTick(event) {
 		}
 
 		playerTurn();
+	}
+
+	for (i = 0; i < enemies.length; i++) {
+		enemies[i].tickActions();
 	}
 
 	// this should be the only time the gamestage is updated anywhere in our code. Ensures that we only attempt to render 60 times per second.
