@@ -274,7 +274,7 @@ function Renderer(gamestage) {
 	 */
 	this.movementTickActions = function() {
 		var startxy = this.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
-		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) {
+		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !checkCellValid(startxy.x, startxy.y)) {
 			this.moving = false;
 			this.movingObject = {};
 			this.moveToX = 0;
@@ -302,7 +302,6 @@ function Renderer(gamestage) {
 			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2) &&
 			!((this.movingObject.y > gamestage.canvas.height / 2) &&
 				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2))) {
-			// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
 
 			this.shiftMap((result[0].x - startxy.x) * this.movingObject.moveSpeed, 0);
 			this.movingObject.animations.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
@@ -331,6 +330,8 @@ function Renderer(gamestage) {
 	 * @return {[type]}         [description]
 	 */
 	this.shiftMap = function(xamount, yamount) {
+		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
+
 		this.backgroundContainer.x -= xamount;
 		this.backgroundContainer.y -= yamount;
 		this.container.x -= xamount;
