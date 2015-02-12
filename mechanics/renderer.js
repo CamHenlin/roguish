@@ -285,8 +285,9 @@ function Renderer(gamestage) {
 		var end = this.movementGraph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
 		var result = astar.search(this.movementGraph, start, end);
 
-		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !result) {
+		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !result || !result[0]) {
 			this.moving = false;
+			this.movingObject.animations.gotoAndPlay("stand-front");
 			this.movingObject = {};
 			this.moveToX = 0;
 			this.moveToY = 0;
@@ -326,6 +327,9 @@ function Renderer(gamestage) {
 			this.movingObject.animations.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
 			this.movingObject.animations.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
 		}
+
+		// inherited from person class
+		this.movingObject.updateMovementAnimation(result[0].x - startxy.x, result[0].y - startxy.y);
 
 		this.movingObject.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
 		this.movingObject.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
