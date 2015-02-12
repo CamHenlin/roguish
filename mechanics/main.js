@@ -94,7 +94,7 @@ function handleTick(event) {
 			players[i].tickActions();
 		}
 
-		playerTurn();
+		advanceTurn();
 	}
 
 	for (i = 0; i < enemies.length; i++) {

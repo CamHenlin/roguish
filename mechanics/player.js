@@ -6,7 +6,7 @@
 var Player = function(x, y) {
 	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
 	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
-	this.initiative = 5; // this is a statistic used for determining player turn in default playerturn.js
+	this.initiative = 5; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
 	this.spriteSheet =  new createjs.SpriteSheet({

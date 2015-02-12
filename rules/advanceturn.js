@@ -1,8 +1,8 @@
 /**
- * [playerTurn function used in default game engine for determining next player turn]
+ * [advanceTurn function used in default game engine for determining next player turn]
  * @return {[type]} [description]
  */
-function playerTurn() {
+function advanceTurn() {
 	for (var i = 0; i < players.length; i++) {
 		players[i].turnCounter += players[i].initiative;
 

@@ -12,6 +12,6 @@ java -jar compiler.jar \
 	--js=../mechanics/renderer.js --js=../mechanics/player.js --js=../mechanics/collision.js \
 	--js=../mechanics/enemy.js  --js=../mechanics/constants.js --js=../mechanics/main.js \
 	\
-	--js=../rules/playerturn.js \
+	--js=../rules/advanceturn.js \
 	\
 	--js_output_file=game.min.js
