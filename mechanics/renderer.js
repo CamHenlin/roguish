@@ -24,6 +24,7 @@ function Renderer(gamestage) {
 	this.movingToCellTarget = {};
 	this.movingToCellStart = {};
 	this.movementGraph = {};
+	this.movementSearchResult = [];
 
 	// getting imagefile from first tileset
 	if (this.mapData.tilesets[0].image.indexOf("..\/") > -1) {
@@ -281,17 +282,20 @@ function Renderer(gamestage) {
 	 */
 	this.movementTickActions = function() {
 		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.animations.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.animations.spriteSheet._frameHeight);
-		var start = this.movementGraph.grid[startxy.x][startxy.y];
-		var end = this.movementGraph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
-		var result = astar.search(this.movementGraph, start, end);
+		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
+			var start = this.movementGraph.grid[startxy.x][startxy.y];
+			var end = this.movementGraph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
+			this.movementSearchResult = astar.search(this.movementGraph, start, end);
+		}
 
-		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !result || !result[0]) {
+		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !this.movementSearchResult || !this.movementSearchResult[0]) {
 			this.moving = false;
 			this.movingObject.animations.gotoAndPlay("stand-front");
 			this.movingObject = {};
 			this.moveToX = 0;
 			this.moveToY = 0;
 			this.movingToCellTarget = {};
+			this.movementSearchResult = [];
 			return;
 		}
 
@@ -305,34 +309,34 @@ function Renderer(gamestage) {
 				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2))
 			) {
 
-			shiftMap.call(this, (result[0].x - startxy.x) * this.movingObject.moveSpeed, (result[0].y - startxy.y) * this.movingObject.moveSpeed);
+			shiftMap.call(this, (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed, (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed);
 		// if the player is centered on x but not y
 		} else if ((this.movingObject.x > gamestage.canvas.width / 2) &&
 			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2) &&
 			!((this.movingObject.y > gamestage.canvas.height / 2) &&
 				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2))) {
 
-			shiftMap.call(this, (result[0].x - startxy.x) * this.movingObject.moveSpeed, 0);
-			this.movingObject.animations.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
+			shiftMap.call(this, (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed, 0);
+			this.movingObject.animations.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
 		// if the player is centered on y but not x
 		} else if ((this.movingObject.y > gamestage.canvas.height / 2) &&
 				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2) &&
 				   !((this.movingObject.x > gamestage.canvas.width / 2) &&
 			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2))) {
 
-			shiftMap.call(this, 0, (result[0].y - startxy.y) * this.movingObject.moveSpeed);
-			this.movingObject.animations.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
+			shiftMap.call(this, 0, (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed);
+			this.movingObject.animations.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
 		// if the player is not centered at all
 		} else {
-			this.movingObject.animations.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
-			this.movingObject.animations.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
+			this.movingObject.animations.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
+			this.movingObject.animations.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
 		}
 
 		// inherited from person class
-		this.movingObject.updateMovementAnimation(result[0].x - startxy.x, result[0].y - startxy.y);
+		this.movingObject.updateMovementAnimation(this.movementSearchResult[0].x - startxy.x, this.movementSearchResult[0].y - startxy.y);
 
-		this.movingObject.x += (result[0].x - startxy.x) * this.movingObject.moveSpeed;
-		this.movingObject.y += (result[0].y - startxy.y) * this.movingObject.moveSpeed;
+		this.movingObject.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
+		this.movingObject.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
 	};
 
 	/**
