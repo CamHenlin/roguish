@@ -4,7 +4,7 @@ loader.addEventListener("complete", handleComplete);
 loader.loadManifest([
 	{id: "dungeon_tiles_0", src: "graphics/dungeon_tiles_0.png"},
 	{id: "player", src: "graphics/player.png"},
-	{id: "enemy", src: "graphics/treadbot1sheet.png"},
+	{id: "enemy", src: "graphics/treadbot1sheet.png"}
 ]);
 
 /**
