@@ -122,6 +122,14 @@ Any more ideas as to what we can have as some default classes to inherit from?
 
 The basic idea is that the renderer needs to pull in a JSON tiled map, render it to the screen, and then handle player movement around the map each frame (more difficult than it sounds) when asked to do so by the *main loop*.
 
+#### Public functions
+- *initMap* initializes a the default map and begins rendering it
+- *prepareRenderer* same as initMap, but takes input of new mapData to render
+- *moveObjectTo* moves an object on the map to another location, and follows it with the view
+- *movementTickActions* main tick handler for when an object is being moved
+- *getMapWidth* returns map width in pixels
+- *getMapHeight* returns map height in pixels
+
 ### Main Game Loop
 
 This is the game "loop" that runs continuously, updating the onscreen graphics, calling tickhandlers for each "tickable" object, requesting the renderer for map updates, etc. Note that this is not actually a loop but a requestAnimationFrame run 60 times per second.

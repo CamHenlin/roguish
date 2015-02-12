@@ -56,8 +56,15 @@ var Enemy = function(x, y) {
 
 		this.animations.x += dx;
 		this.animations.y += dy;
-	}
+	};
 
+	/**
+	 * [turn code that gets called when it's the enemy's turn]
+	 * @return {[type]} [description]
+	 */
+	this.turn = function() {
+
+	};
 
 
 	this.tickActions = function() {

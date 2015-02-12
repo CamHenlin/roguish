@@ -17,6 +17,7 @@ function handleComplete() {
 
 var gamestage; // this is the global canvas object that everything canvas-related in the game will attach to
 var renderer;
+var collisionSystem = new CollisionSystem();
 var players = []; // list of active players
 var enemies = []; // list of enemies
 var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
@@ -49,7 +50,7 @@ function initVars() {
 
 	// make ten player
 	initPlayers(1);
-	initEnemies(20);
+	initEnemies(2);
 }
 
 /**
@@ -68,7 +69,7 @@ function initPlayers(playerCount) {
 function initEnemies(enemyCount) {
 	enemies = [];
 	for (var i = 0; i < enemyCount; i++) {
-		enemies.push(new Enemy(i * 32 + 32, i * 32));
+		enemies.push(new Enemy(i * 32 + 32 + 180, i * 32 + 180));
 	}
 }
 

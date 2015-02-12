@@ -33,62 +33,63 @@ var Player = function(x, y) {
 				"speed": 1
 			},
 			"stand-back": {
-				"frames":[12],
+				"frames": [12],
 				"next": "stand-back",
 				"speed": 1
 			},
 			"spin-left": {
-				"frames": [0,8,12,4],
+				"frames": [0, 8, 12, 4],
 				"next": "spin",
 				"speed": 1
 			},
 			"spin-right": {
-				"frames": [0,4,12,8],
+				"frames": [0, 4, 12, 8],
 				"next": "spin",
 				"speed": 1
 			},
 			"walk-front": {
-				"frames": [1,2,3,2],
+				"frames": [1, 2, 3, 2],
 				"next": "walk-front",
 				"speed": 1
 			},
 			"walk-left": {
-				"frames": [5,6,7,6],
+				"frames": [5, 6, 7, 6],
 				"next": "walk-left",
 				"speed": 1
 			},
 			"walk-right": {
-				"frames": [9,10,11,10],
+				"frames": [9, 10, 11, 10],
 				"next": "walk-right",
 				"speed": 1
 			},
 			"walk-back": {
-				"frames": [13,14,15,14],
+				"frames": [13, 14, 15, 14],
 				"next": "walk-back",
 				"speed": 1
 			},
 			"run-front": {
-				"frames": [1,3],
+				"frames": [1, 3],
 				"next": "run-front",
 				"speed": 1
 			},
 			"run-left": {
-				"frames": [5,6,7,6],
+				"frames": [5, 6, 7, 6],
 				"next": "run-left",
 				"speed": 3
 			},
 			"run-right": {
-				"frames": [9,10,11,10],
+				"frames": [9, 10, 11, 10],
 				"next": "run-right",
 				"speed": 3
 			},
 			"run-back": {
-				"frames": [13,15],
+				"frames": [13, 15],
 				"next": "run-back",
 				"speed": 1
 			}
 		}
 	});
+
 	this.animations = new createjs.Sprite(this.spriteSheet, "run-front"); // change the second string to an animation from the spritesheet
 	this.animations.x = this.x;
 	this.animations.y = this.y;
@@ -111,6 +112,12 @@ var Player = function(x, y) {
 	 */
 	this.turn = function() {
 		console.log('player turn called');
-		renderer.moveTo(this, this.x + 600, this.y + 600);
+		document.getElementById("gamecanvas").addEventListener('click', function(event) {
+			var x = event.pageX / gamezoom;
+			var y = event.pageY / gamezoom;
+			renderer.moveObjectTo(this, x, y);
+			document.getElementById("gamecanvas").removeEventListener('click', arguments.callee, false);
+		}.bind(this), false);
+
 	};
 };
