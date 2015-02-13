@@ -1,3 +1,12 @@
+/**
+ * @name  ExampleComplexObject
+ * @class
+ */
+
+/**
+ * ExampleSimpleObject
+ * @constructor
+ */
 var ExampleSimpleObject = function() {
 	// I have all the properties of a simple object here
 };

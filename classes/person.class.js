@@ -1,8 +1,12 @@
 /**
- * [Person]
- *
- * Mainly built to handle walking direction code, but I'm sure we can think of other things people share
+ * @name Person
+ * @class
+ */
+
+/**
+ * Person mainly built to handle walking direction code, but I'm sure we can think of other things people share
  * or maybe rename and use to just handle walking code for all things that walk?
+ * @constructor
  */
 var Person = function() {
 	this.animations;

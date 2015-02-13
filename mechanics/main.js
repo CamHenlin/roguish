@@ -1,3 +1,7 @@
+/**
+ * @name Main
+ */
+
 var loader = new createjs.LoadQueue(false);
 loader.addEventListener("complete", handleComplete);
 

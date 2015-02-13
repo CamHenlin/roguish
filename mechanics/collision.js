@@ -1,5 +1,11 @@
 /**
- * [CollisionSystem system to handle collision within a map]
+ * @name  Collision
+ * @class
+ */
+
+/**
+ * CollisionSystem system to handle collision within a map
+ * @constructor
  */
 var CollisionSystem = function() {
 	this.collisionArray = [[],[]];

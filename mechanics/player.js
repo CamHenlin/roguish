@@ -1,7 +1,13 @@
 /**
- * [Player class]
- * @param {[type]} x [description]
- * @param {[type]} y [description]
+ * @name Player
+ * @class
+ */
+
+/**
+ * Player class
+ * @param {int} x [initial coordinate]
+ * @param {int} y [initial coordinate]
+ * @constructor
  */
 var Player = function(x, y) {
 	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
@@ -107,18 +113,24 @@ var Player = function(x, y) {
 	};
 
 	/**
+	 * [turnClickHandler click handler for turn]
+	 * @param  {[type]} event [description]
+	 * @return {[type]}       [description]
+	 */
+	var turnClickHandler = function(event) {
+		var x = event.pageX / gamezoom;
+		var y = event.pageY / gamezoom;
+		renderer.moveObjectTo(this, x, y);
+		document.getElementById("gamecanvas").removeEventListener('click', arguments.callee, false);
+	};
+
+	/**
 	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
 		console.log('player turn called');
-		document.getElementById("gamecanvas").addEventListener('click', function(event) {
-			var x = event.pageX / gamezoom;
-			var y = event.pageY / gamezoom;
-			renderer.moveObjectTo(this, x, y);
-			document.getElementById("gamecanvas").removeEventListener('click', arguments.callee, false);
-		}.bind(this), false);
-
+		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
 	};
 };
 

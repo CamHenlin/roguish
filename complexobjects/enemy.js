@@ -1,3 +1,12 @@
+/**
+ * @name Enemy
+ * @class
+ */
+
+/**
+ * Enemy simple example of an enemy
+ * @constructor
+ */
 var Enemy = function(x, y) {
 	this.x = x;  // x position on canvas
 	this.y = y;  // y position on canvas

@@ -1,6 +1,10 @@
 /**
+ * @name advanceTurn
+ */
+
+/**
  * [advanceTurn function used in default game engine for determining next player turn]
- * @return {[type]} [description]
+ * @return {[void]} [description]
  */
 function advanceTurn() {
 	for (var i = 0; i < players.length; i++) {

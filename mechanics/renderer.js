@@ -1,6 +1,12 @@
 /**
- * [Renderer handles rendering a map file to the canvas]
- * @param {[type]} gamestage [EaselJS stage]
+ * @name Renderer
+ * @class
+ */
+
+/**
+ * Renderer handles rendering a map file to the canvas
+ * @param {[EaselJS stage]} gamestage [EaselJS stage]
+ * @constructor
  */
 function Renderer(gamestage) {
 	this.backgroundContainer = new createjs.Container();
