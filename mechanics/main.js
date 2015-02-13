@@ -21,7 +21,7 @@ var collisionSystem = new CollisionSystem();
 var players = []; // list of active players
 var enemies = []; // list of enemies
 var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
-
+var playerTurn = false; // note that this is turned off by the renderer at the end of a move and turned on by advanceturn, blocks other players and objects from getting their "tick"
 /**
  * [init call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler.]
  * @return {[type]} [description]
@@ -86,20 +86,21 @@ function handleTick(event) {
 
 	if (renderer.moving) {
 		renderer.movementTickActions();
-	} else {
+	} else if (!playerTurn) {
 		var i = 0; // going to need to use i multiple times here, might as well only declare it once
 
 		// iterate players and allow each player to get its tickAction
+
 		for (i = 0; i < players.length; i++) {
 			players[i].tickActions();
+		}
+		for (i = 0; i < enemies.length; i++) {
+			enemies[i].tickActions();
 		}
 
 		advanceTurn();
 	}
 
-	for (i = 0; i < enemies.length; i++) {
-		enemies[i].tickActions();
-	}
 
 	// this should be the only time the gamestage is updated anywhere in our code. Ensures that we only attempt to render 60 times per second.
 	gamestage.update();

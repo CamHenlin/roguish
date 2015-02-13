@@ -3,14 +3,14 @@ java -jar compiler.jar \
 	\
 	--js=../classes/complexobject.class.js --js=../classes/simpleobject.class.js --js=../classes/person.class.js \
 	\
-	--js=../complexobjects/examplecomplexobject.js \
+	--js=../complexobjects/examplecomplexobject.js --js=../complexobjects/enemy.js   \
 	\
 	--js=../simpleobjects/examplesimpleobject.js \
 	\
 	--js=../maps/map1.js \
 	\
 	--js=../mechanics/renderer.js --js=../mechanics/player.js --js=../mechanics/collision.js \
-	--js=../mechanics/enemy.js  --js=../mechanics/constants.js --js=../mechanics/main.js \
+	--js=../mechanics/constants.js --js=../mechanics/main.js \
 	\
 	--js=../rules/advanceturn.js \
 	\

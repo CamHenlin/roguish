@@ -76,3 +76,7 @@ var Enemy = function(x, y) {
 		counter++;
 	};
 };
+
+Enemy.prototype = new ComplexObject;
+Enemy.prototype.constructor = Enemy;
+

@@ -9,6 +9,10 @@ function advanceTurn() {
 		if (players[i].turnCounter > MAX_TURN_COUNTER) {
 			// call turn dialog here normally
 			players[i].turn();
+			playerTurn = true;
 		}
 	}
+
+	// for testing to show that turn counter is working:
+	document.getElementById("turnStatus").innerHTML = players[0].turnCounter + " / " + MAX_TURN_COUNTER;
 }

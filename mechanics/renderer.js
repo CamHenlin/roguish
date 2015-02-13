@@ -200,6 +200,22 @@ function Renderer(gamestage) {
 	};
 
 	/**
+	 * [cleanUpMovement cleans up movement fields after a player's turn is done]
+	 * @return [description]
+	 */
+	function cleanUpMovement() {
+		this.moving = false;
+		this.movingObject.animations.gotoAndPlay("stand-front");
+		this.movingObject.turnCounter = 0;
+		this.movingObject = {};
+		this.moveToX = 0;
+		this.moveToY = 0;
+		this.movingToCellTarget = {};
+		this.movementSearchResult = [];
+		playerTurn = false;
+	}
+
+	/**
 	 * [shiftMap description]
 	 * @param  {[type]} xamount [description]
 	 * @param  {[type]} yamount [description]
@@ -263,7 +279,7 @@ function Renderer(gamestage) {
 		if (!collisionSystem.checkCellValid(targetx, targety) ||
 			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x = targety &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === targety)) {
-
+			cleanUpMovement.call(this);
 			console.log('invalid target!');
 			return;
 		}
@@ -289,13 +305,7 @@ function Renderer(gamestage) {
 		}
 
 		if (this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !this.movementSearchResult || !this.movementSearchResult[0]) {
-			this.moving = false;
-			this.movingObject.animations.gotoAndPlay("stand-front");
-			this.movingObject = {};
-			this.moveToX = 0;
-			this.moveToY = 0;
-			this.movingToCellTarget = {};
-			this.movementSearchResult = [];
+			cleanUpMovement.call(this);
 			return;
 		}
 
