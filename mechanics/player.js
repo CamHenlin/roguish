@@ -121,7 +121,7 @@ var Player = function(x, y) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 		renderer.moveObjectTo(this, x, y);
-		document.getElementById("gamecanvas").removeEventListener('click', arguments.callee, false);
+		document.getElementById("gamecanvas").removeEventListener('click', turnClickHandler.bind(this), false);
 	};
 
 	/**
@@ -130,7 +130,7 @@ var Player = function(x, y) {
 	 */
 	this.turn = function() {
 		console.log('player turn called');
-		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler.bind(this), false);
 	};
 };
 
