@@ -281,13 +281,13 @@ function Renderer(gamestage) {
 	/**
 	 * [moveObjectTo shifts the map in a certain way]
 	 * @param  {[type]} trackedObject [description]
-	 * @param  {[type]} targetx             [description]
-	 * @param  {[type]} targety             [description]
+	 * @param  {[type]} targetx       [description]
+	 * @param  {[type]} targety       [description]
 	 * @return {[type]}               [description]
 	 */
 	this.moveObjectTo = function(trackedObject, targetx, targety) {
-		targetx -= this.container.x;
-		targety -= this.container.y;
+		targetx -= this.container.x - trackedObject.animations.spriteSheet._frameWidth / 2;
+		targety -= this.container.y - trackedObject.animations.spriteSheet._frameHeight / 2;
 		if (!collisionSystem.checkCellValid(targetx, targety) ||
 			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x = targety &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === targety)) {
@@ -328,7 +328,7 @@ function Renderer(gamestage) {
 		if (((this.movingObject.x > gamestage.canvas.width / 2) &&
 			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2)) &&
 			((this.movingObject.y > gamestage.canvas.height / 2) &&
-				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2))
+				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2) && this.container.x >= 0)
 			) {
 
 			shiftMap.call(this, (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed, (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed);
@@ -336,7 +336,7 @@ function Renderer(gamestage) {
 		} else if ((this.movingObject.x > gamestage.canvas.width / 2) &&
 			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2) &&
 			!((this.movingObject.y > gamestage.canvas.height / 2) &&
-				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2))) {
+				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2)) && this.container.y >= 0) {
 
 			shiftMap.call(this, (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed, 0);
 			this.movingObject.animations.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
@@ -344,7 +344,7 @@ function Renderer(gamestage) {
 		} else if ((this.movingObject.y > gamestage.canvas.height / 2) &&
 				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2) &&
 				   !((this.movingObject.x > gamestage.canvas.width / 2) &&
-			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2))) {
+			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2)) && this.container.x >= 0) {
 
 			shiftMap.call(this, 0, (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed);
 			this.movingObject.animations.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
