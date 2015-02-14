@@ -234,9 +234,9 @@ function Renderer(gamestage) {
 			enemies[i].animations.y -= yamount;
 		}
 		for (i = 0; i < players.length; i++) {
-			if (!players[i] === this.movingObject) {
-				enemies[i].animations.x -= xamount;
-				enemies[i].animations.y -= yamount;
+			if (players[i] !== this.movingObject) {
+				players[i].animations.x -= xamount;
+				players[i].animations.y -= yamount;
 			}
 		}
 
