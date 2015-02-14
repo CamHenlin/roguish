@@ -9,10 +9,10 @@
  * @param {int} y [initial coordinate]
  * @constructor
  */
-var Player = function(x, y) {
+var Player = function(x, y, initiative) {
 	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
 	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
-	this.initiative = 1; // this is a statistic used for determining player turn in default advanceturn.js
+	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
 	this.spriteSheet =  new createjs.SpriteSheet({
@@ -121,8 +121,9 @@ var Player = function(x, y) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 		renderer.moveObjectTo(this, x, y);
-		document.getElementById("gamecanvas").removeEventListener('click', turnClickHandler.bind(this), false);
+		document.getElementById("gamecanvas").removeEventListener('click', turnClickHandler, false);
 	};
+	turnClickHandler = turnClickHandler.bind(this);
 
 	/**
 	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
@@ -130,7 +131,7 @@ var Player = function(x, y) {
 	 */
 	this.turn = function() {
 		console.log('player turn called');
-		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler.bind(this), false);
+		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
 	};
 };
 

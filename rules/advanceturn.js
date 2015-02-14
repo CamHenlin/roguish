@@ -7,6 +7,7 @@
  * @return {[void]} [description]
  */
 function advanceTurn() {
+	document.getElementById("turnStatus").innerHTML = "";
 	for (var i = 0; i < players.length; i++) {
 		players[i].turnCounter += players[i].initiative;
 
@@ -15,8 +16,9 @@ function advanceTurn() {
 			players[i].turn();
 			playerTurn = true;
 		}
+
+		document.getElementById("turnStatus").innerHTML = document.getElementById("turnStatus").innerHTML + "<br>" + players[i].turnCounter + " / " + MAX_TURN_COUNTER;
 	}
 
 	// for testing to show that turn counter is working:
-	document.getElementById("turnStatus").innerHTML = players[0].turnCounter + " / " + MAX_TURN_COUNTER;
 }

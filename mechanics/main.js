@@ -53,7 +53,7 @@ function initVars() {
 	createjs.Ticker.setFPS(60);
 
 	// make ten player
-	initPlayers(1);
+	initPlayers(3);
 	initEnemies(2);
 }
 
@@ -65,7 +65,7 @@ function initVars() {
 function initPlayers(playerCount) {
 	players = [];
 	for (var i = 0; i < playerCount; i++) {
-		players.push(new Player(i * 32 + 96, i * 32 + 96));
+		players.push(new Player(i * 32 + 96, i * 32 + 96, i));
 	}
 }
 
