@@ -65,7 +65,7 @@ function initVars() {
 function initPlayers(playerCount) {
 	players = [];
 	for (var i = 0; i < playerCount; i++) {
-		players.push(new Player(i * 32 + 96, i * 32 + 96, i));
+		players.push(new Player(i * 32 + 96, i * 32 + 96, i+1));
 	}
 }
 

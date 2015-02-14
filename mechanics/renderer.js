@@ -233,6 +233,12 @@ function Renderer(gamestage) {
 			enemies[i].animations.x -= xamount;
 			enemies[i].animations.y -= yamount;
 		}
+		for (i = 0; i < players.length; i++) {
+			if (!players[i] === this.movingObject) {
+				enemies[i].animations.x -= xamount;
+				enemies[i].animations.y -= yamount;
+			}
+		}
 
 		this.backgroundContainer.x -= xamount;
 		this.backgroundContainer.y -= yamount;
