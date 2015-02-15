@@ -1,6 +1,6 @@
 $(function(){
 	var Form = function(data, callback){
-		el = data.el || $('body');
+		this.el = data.el || $('body');
 		this.data = data;
 		this.data.x = this.data.x || 0;
 		this.data.y = this.data.y || 0;
@@ -8,7 +8,7 @@ $(function(){
 
 		// public
 		this.getvalue = function(value){
-			return el.find("[name='"+ value +"']:checked").val() || el.find("[name='"+ value +"']").val();
+			return this.el.find("[name='"+ value +"']:checked").val() || this.el.find("[name='"+ value +"']").val();
 		}
 
 		this.values = function(){
@@ -20,8 +20,8 @@ $(function(){
 		}
 
 		this.render = function(){
-			el.html(template());
-			el.find("button").click(callback);
+			this.el.html(template());
+			this.el.find("button").click(callback);
 		}
 
 		// private
@@ -85,10 +85,12 @@ $(function(){
 		}
 	}
 
+
+	// example of use 
 	data = {
 		x: 100, //defaults to 0
 		y: 100, // defaults to 0
-		el: $('one'), // if a element is spesified here, the default is overriden
+		// el: $('one'), // if a element is spesified here, the default is overriden
 		fields: [
 			{name:'name', type:'text'},
 			{name:'description', type:'text'},
