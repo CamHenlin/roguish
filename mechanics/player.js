@@ -131,7 +131,9 @@ var Player = function(x, y, initiative) {
 	 */
 	this.turn = function() {
 		console.log('player turn called');
-		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+		renderer.centerMapOnObject(this, function() {
+			document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+		}.bind(this));
 	};
 };
 

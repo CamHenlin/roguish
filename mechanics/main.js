@@ -90,6 +90,8 @@ function handleTick(event) {
 
 	if (renderer.moving) {
 		renderer.movementTickActions();
+	} else if (!renderer.centered) {
+		renderer.centerMapOnObjectTick();
 	} else if (!playerTurn) {
 		var i = 0; // going to need to use i multiple times here, might as well only declare it once
 

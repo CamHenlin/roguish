@@ -31,6 +31,7 @@ function Renderer(gamestage) {
 	this.movingToCellStart = {};
 	this.movementGraph = {};
 	this.movementSearchResult = [];
+	this.centered = true;
 
 	// getting imagefile from first tileset
 	if (this.mapData.tilesets[0].image.indexOf("..\/") > -1) {
@@ -41,6 +42,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [completeRenderer run at the end of our map rendering process]
+	 * @private
 	 * @return {[type]} [none]
 	 */
 	function completeRenderer() {
@@ -53,6 +55,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [initLayers initialize all of the layers in the map]
+	 * @private
 	 * @return {[type]} [none]
 	 */
 	function initLayers() {
@@ -106,6 +109,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [initSimpleObjects initialization method for simple objects]
+	 * @private
 	 * @param  {[type]} layerData    [description]
 	 * @param  {[type]} tilesetSheet [description]
 	 * @param  {[type]} tilewidth    [description]
@@ -130,6 +134,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [initDrawableLayer draws a single visible layer to a container]
+	 * @private
 	 * @param  {[type]} layerData    [description]
 	 * @param  {[type]} tilesetSheet [description]
 	 * @param  {[type]} tilewidth    [description]
@@ -166,6 +171,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [initLayerWithCollisionArray Same as initDrawableLayer, but also builds the renderer's collision array]
+	 * @private
 	 * @param  {[type]} layerData    [description]
 	 * @param  {[type]} tilesetSheet [description]
 	 * @param  {[type]} tilewidth    [description]
@@ -207,6 +213,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [cleanUpMovement cleans up movement fields after a player's turn is done]
+	 * @private
 	 * @return [description]
 	 */
 	function cleanUpMovement() {
@@ -222,7 +229,8 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [shiftMap description]
+	 * [shiftMap shifts the entire map except for the active player]
+	 * @private
 	 * @param  {[type]} xamount [description]
 	 * @param  {[type]} yamount [description]
 	 * @return {[type]}         [description]
@@ -248,9 +256,36 @@ function Renderer(gamestage) {
 		this.foregroundContainer.y -= yamount;
 	}
 
+	/**
+	 * [shiftMap shifts the entire map without regard for active or inactive players]
+	 * @private
+	 * @param  {[type]} xamount [description]
+	 * @param  {[type]} yamount [description]
+	 * @return {[type]}         [description]
+	 */
+	function shiftEntireMap(xamount, yamount) {
+		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
+		for (i = 0; i < enemies.length; i++) {
+			enemies[i].animations.x -= xamount;
+			enemies[i].animations.y -= yamount;
+		}
+		for (i = 0; i < players.length; i++) {
+			players[i].animations.x -= xamount;
+			players[i].animations.y -= yamount;
+		}
+
+		this.backgroundContainer.x -= xamount;
+		this.backgroundContainer.y -= yamount;
+		this.container.x -= xamount;
+		this.container.y -= yamount;
+		this.foregroundContainer.x -= xamount;
+		this.foregroundContainer.y -= yamount;
+	}
+
 
 	/**
 	 * [initMap initializes the renderer, gets it ready to render a new map]
+	 * @public
 	 * @return {[type]} [none]
 	 */
 	this.initMap = function () {
@@ -305,7 +340,80 @@ function Renderer(gamestage) {
 	};
 
 	/**
+	 * [getCanvasWidth gets the canvas width in pixels]
+	 * @return {[type]} [description]
+	 */
+	this.getCanvasWidth = function() {
+		gamestage.canvas.width;
+	};
+
+	/**
+	 * [getCanvasWidth gets the canvas height in pixels]
+	 * @return {[type]} [description]
+	 */
+	this.getCanvasHeight = function() {
+		gamestage.canvas.height;
+	};
+
+	/**
+	 * [centerMapOnObject tells the renderer to attempt to center on an object]
+	 * @public
+	 * @param  {[type]} centeredObject [description]
+	 * @return {[void]}                [description]
+	 */
+	this.centerMapOnObject = function(centeredObject, centeringCallback) {
+		this.centeredObject = centeredObject;
+		this.centeringCallback = centeringCallback;
+		this.centered = false;
+	};
+
+	/**
+	 * [centerMapOnObjectTick attempts to center the map on an object. returns true once the map is either centered
+	 * or the map has reached an edge when trying to center]
+	 * @public
+	 * @return {[boolean]}                [true if centered false if not]
+	 */
+	this.centerMapOnObjectTick = function() {
+		var deltax = 0;
+		var deltay = 0;
+
+		if (this.centeredObject.animations.x > this.getCanvasWidth() / 2 - this.container.x) { // object is to right of center
+			if (this.container.x + this.getCanvasWidth() < this.getMapWidth()) {
+				deltax = 1;
+			}
+		} else if (this.centeredObject.animations.x - this.getCanvasWidth() / 2 - this.container.x < MAP_MOVE_SPEED) { // object is pretty much centered
+			deltax = 0;
+		} else { // object must be to the left then
+			if (this.container.x > 0) {
+				deltax = -1;
+			}
+		}
+
+		if (this.centeredObject.animations.y > this.getCanvasHeight() / 2 - this.container.x) { // object is below center
+			if (this.container.y + this.getCanvasHeight() < this.getMapHeight()) {
+				deltay = 1;
+			}
+		} else if (this.centeredObject.animations.y - this.getCanvasWidth() / 2 - this.container.y < MAP_MOVE_SPEED) { // object is pretty much centered
+			deltay = 0;
+		} else { // object must be above the center
+			if (this.container.y > 0) {
+				deltay = -1;
+			}
+		}
+
+		console.log('dx ' + deltax + ' dy ' + deltay);
+
+		if (deltax === 0 && deltay === 0) {
+			this.centeringCallback();
+			this.centered = true;
+		} else {
+			shiftEntireMap.call(this, deltax * MAP_MOVE_SPEED, deltay * MAP_MOVE_SPEED);
+		}
+	};
+
+	/**
 	 * [movementTickActions description]
+	 * @public
 	 * @return {[type]} [description]
 	 */
 	this.movementTickActions = function() {
@@ -321,48 +429,91 @@ function Renderer(gamestage) {
 			return;
 		}
 
+		var deltax = this.movementSearchResult[0].x - startxy.x;
+		var deltay = this.movementSearchResult[0].y - startxy.y;
+
+		// troubleshooting block:
+		console.log('-------------------');
+		console.log('this.movingObject.x > this.getCanvasWidth() / 2' + this.movingObject.x > this.getCanvasWidth() / 2);
+		console.log('this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2' + this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2);
+		console.log('this.movingObject.y > this.getCanvasHeight() / 2' + this.movingObject.y > this.getCanvasHeight() / 2);
+		console.log('this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2' + this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2);
+		console.log('this.container.x >= 0 || deltax <= 0' + this.container.x >= 0 || deltax <= 0);
+		console.log('this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0' + this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0);
+		console.log('this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0' + this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0);
+		console.log('this.container.y >= 0 || deltay <= 0' + this.container.y >= 0 || deltay <= 0);
+		console.log('-------------------');
 		// figure out if we should move the player or the map:
 		// these if statements require some explanation since they are basically unreadable
 
 		// if the player is centered on neither x nor y coordinates of map
-		if (((this.movingObject.x > gamestage.canvas.width / 2) &&
-			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2)) &&
-			((this.movingObject.y > gamestage.canvas.height / 2) &&
-				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2) && this.container.x >= 0)
-			) {
+		if (
+			(
+				(this.movingObject.x > this.getCanvasWidth() / 2) &&
+				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
+			) &&
+			(
+				(this.movingObject.y > this.getCanvasHeight() / 2) &&
+				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
+			) &&
+			(
+				(this.container.x >= 0 || deltax <= 0) &&
+				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0) &&
+				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0) &&
+				(this.container.y >= 0 || deltay <= 0)
+			)) {
 
-			shiftMap.call(this, (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed, (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed);
+			shiftMap.call(this, deltax * this.movingObject.moveSpeed, deltay * this.movingObject.moveSpeed);
 		// if the player is centered on x but not y
-		} else if ((this.movingObject.x > gamestage.canvas.width / 2) &&
-			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2) &&
-			!((this.movingObject.y > gamestage.canvas.height / 2) &&
-				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2)) && this.container.y >= 0) {
+		} else if (
+			(
+				(this.movingObject.x > this.getCanvasWidth() / 2) &&
+				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
+			) &&
+			!(
+				(this.movingObject.y > this.getCanvasHeight() / 2) &&
+				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
+			) &&
+			(
+				(this.container.y >= 0 || deltay <= 0) &&
+				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0)
+			)) {
 
-			shiftMap.call(this, (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed, 0);
-			this.movingObject.animations.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
+			shiftMap.call(this, deltax * this.movingObject.moveSpeed, 0);
+			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
 		// if the player is centered on y but not x
-		} else if ((this.movingObject.y > gamestage.canvas.height / 2) &&
-				   (this.getMapHeight() > this.movingObject.y + gamestage.canvas.height / 2) &&
-				   !((this.movingObject.x > gamestage.canvas.width / 2) &&
-			(this.getMapWidth() > this.movingObject.x + gamestage.canvas.width / 2)) && this.container.x >= 0) {
+		} else if (
+			(
+				(this.movingObject.y > this.getCanvasHeight() / 2) &&
+				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
+			) &&
+			!(
+				(this.movingObject.x > this.getCanvasWidth() / 2) &&
+				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
+			) &&
+			(
+				(this.container.x >= 0 || deltax <= 0) &&
+				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0)
+			)) {
 
-			shiftMap.call(this, 0, (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed);
-			this.movingObject.animations.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
-		// if the player is not centered at all
+			shiftMap.call(this, 0, deltay * this.movingObject.moveSpeed);
+			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
+		// if the player is centered
 		} else {
-			this.movingObject.animations.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
-			this.movingObject.animations.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
+			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
+			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
 		}
 
 		// inherited from person class
-		this.movingObject.updateMovementAnimation(this.movementSearchResult[0].x - startxy.x, this.movementSearchResult[0].y - startxy.y);
+		this.movingObject.updateMovementAnimation(deltax, deltay);
 
-		this.movingObject.x += (this.movementSearchResult[0].x - startxy.x) * this.movingObject.moveSpeed;
-		this.movingObject.y += (this.movementSearchResult[0].y - startxy.y) * this.movingObject.moveSpeed;
+		this.movingObject.x += deltax * this.movingObject.moveSpeed;
+		this.movingObject.y += deltay * this.movingObject.moveSpeed;
 	};
 
 	/**
 	 * [getMapWidth returns map width]
+	 * @public
 	 * @return {[type]} [description]
 	 */
 	this.getMapWidth = function() {
@@ -371,6 +522,7 @@ function Renderer(gamestage) {
 
 	/**
 	 * [getMapHeight returns map width]
+	 * @public
 	 * @return {[type]} [description]
 	 */
 	this.getMapHeight = function() {
