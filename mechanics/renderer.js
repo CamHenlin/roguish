@@ -379,25 +379,13 @@ function Renderer(gamestage) {
 		var centerx = false;
 		var centery = false;
 
-		console.log('-----------------------');
-		console.log(this.centeredObject.x);
-		console.log(this.getCanvasWidth());
-		console.log(this.getCanvasWidth() / 2);
-		console.log(this.container.x);
-		console.log(this.centeredObject.x - this.getCanvasWidth() / 2 + this.container.x);
-		console.log(this.centeredObject.y - this.getCanvasWidth() / 2 + this.container.y);
-		console.log(this.centeredObject.y);
-		console.log(this.container.y);
-
 		if (this.centeredObject.x > this.getCanvasWidth() / 2 - this.container.x) { // object is to right of center
 			if (this.container.x + this.getCanvasWidth() < this.getMapWidth()) {
 				deltax = 1;
 			} else {
-				console.log('cant center x because map would go out of bounds');
 				centerx = true;
 			}
 		} else if (Math.abs(this.centeredObject.x - this.getCanvasWidth() / 2 + this.container.x) < MAP_MOVE_SPEED) { // object is pretty much centered
-			console.log('centered on x');
 			centerx = true;
 			deltax = 0;
 		} else { // object must be to the left then
@@ -412,11 +400,9 @@ function Renderer(gamestage) {
 			if (this.container.y - this.getCanvasHeight() < this.getMapHeight()) {
 				deltay = 1;
 			} else {
-				console.log('cant center y because map would go out of bounds');
 				centery = true;
 			}
 		} else if (Math.abs(this.centeredObject.y - this.getCanvasHeight() / 2 + this.container.y) - this.centeredObject.animations.spriteSheet._frameHeight < MAP_MOVE_SPEED) { // object is pretty much centered
-			console.log('centered on y');
 			centery = true;
 			deltay = 0;
 		} else { // object must be above the center
@@ -430,11 +416,9 @@ function Renderer(gamestage) {
 		if (centery && centerx) {
 			this.centeringCallback();
 			this.centered = true;
-			console.log('done centering!');
 		} else {
 			shiftEntireMap.call(this, deltax * MAP_MOVE_SPEED, deltay * MAP_MOVE_SPEED);
 		}
-		console.log('-----------------------');
 	};
 
 	/**
