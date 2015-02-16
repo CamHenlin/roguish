@@ -1,7 +1,7 @@
 java -jar compiler.jar `
-	--js=../libs/easeljs-0.8.min.js --js=../libs/preload-0.6.min.js --js=../libs/astar.js `
+	--js=../libs/easeljs-0.8.min.js --js=../libs/preload-0.6.min.js --js=../libs/astar.js --js=../libs/jquery-2.1.3.min.js `
 	`
-	--js=../classes/complexobject.class.js --js=../classes/simpleobject.class.js --js=../classes/person.class.js `
+	--js=../classes/complexobject.class.js --js=../classes/simpleobject.class.js --js=../classes/person.class.js --js=../classes/form.js `
 	`
 	--js=../complexobjects/examplecomplexobject.js `
 	`
