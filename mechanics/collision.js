@@ -25,11 +25,11 @@ var CollisionSystem = function() {
 			var a = ~~(y / tilesize);
 			var b = ~~(x / tilesize);
 
-			if (a <= -1 || a > this.collisionArray.length) {
+			if (a <= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b <= -1 || b > this.collisionArray[a].length) {
+			if (b <= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -56,11 +56,11 @@ var CollisionSystem = function() {
 			var a = x;
 			var b = x;
 
-			if (a <= -1 || a > this.collisionArray.length) {
+			if (a <= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b <= -1 || b > this.collisionArray[a].length) {
+			if (b <= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -87,11 +87,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y / tilesize);
 			var b = ~~(object.x / tilesize);
 
-			if (a <= -1 || a > this.collisionArray.length) {
+			if (a <= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b <= -1 || b > this.collisionArray[a].length) {
+			if (b <= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -99,11 +99,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y / tilesize);
 			var b = ~~(object.x + object.animations.spriteSheet._frameWidth / tilesize);
 
-			if (a <= -1 || a > this.collisionArray.length) {
+			if (a <= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b <= -1 || b > this.collisionArray[a].length) {
+			if (b <= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -115,11 +115,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y + object.animations.spriteSheet._frameHeight / tilesize);
 			var b = ~~(object.x / tilesize);
 
-			if (a <= -1 || a > this.collisionArray.length) {
+			if (a <= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b <= -1 || b > this.collisionArray[a].length) {
+			if (b <= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -131,11 +131,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y + object.animations.spriteSheet._frameHeight / tilesize);
 			var b = ~~(object.x + object.animations.spriteSheet._frameWidth / tilesize);
 
-			if (a <= -1 || a > this.collisionArray.length) {
+			if (a <= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b <= -1 || b > this.collisionArray[a].length) {
+			if (b <= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -161,11 +161,11 @@ var CollisionSystem = function() {
 		var a = ~~(y / tilesize);
 		var b = ~~(x / tilesize);
 
-		if (a <= -1 || a > this.collisionArray.length) {
+		if (a <= -1 || a >= this.collisionArray.length) {
 			a = 0;
 		}
 
-		if (b <= -1 || b > this.collisionArray[a].length) {
+		if (b <= -1 || b >= this.collisionArray[a].length) {
 			b = 0;
 		}
 

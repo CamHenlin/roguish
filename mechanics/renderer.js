@@ -324,7 +324,7 @@ function Renderer(gamestage) {
 		targetx -= this.container.x - trackedObject.animations.spriteSheet._frameWidth / 2;
 		targety -= this.container.y - trackedObject.animations.spriteSheet._frameHeight / 2;
 		if (!collisionSystem.checkCellValid(targetx, targety) ||
-			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x = targety &&
+			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x === targetx &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === targety)) {
 			cleanUpMovement.call(this);
 			console.log('invalid target!');
