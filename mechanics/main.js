@@ -26,6 +26,17 @@ var players = []; // list of active players
 var enemies = []; // list of enemies
 var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
 var playerTurn = false; // note that this is turned off by the renderer at the end of a move and turned on by advanceturn, blocks other players and objects from getting their "tick"
+
+/**
+ * [fixViewport fixes the viewport on a window resize event]
+ * @return {[type]} [description]
+ */
+function fixViewport() {
+	gamestage.canvas.width = window.innerWidth / gamezoom;
+	gamestage.canvas.height = window.innerHeight / gamezoom;
+	gamestage.update(); // note that I'm sort of breaking the rules here calling an update without the game loop, but this will force a redraw, otherwise the screen will flash black
+}
+
 /**
  * [init call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler.]
  * @return {[type]} [description]
@@ -33,6 +44,8 @@ var playerTurn = false; // note that this is turned off by the renderer at the e
 function init() {
 	console.log('initializing');
 	initVars();
+
+	window.onresize = fixViewport;
 }
 
 /**
