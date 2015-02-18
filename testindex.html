@@ -20,34 +20,59 @@ canvas {
 	image-rendering: -o-crisp-edges;
 	image-rendering: optimize-contrast;
 	-ms-interpolation-mode: nearest-neighbor;
+	-webkit-tap-highlight-color: transparent;
+}
+.second, .forms{
+	position: absolute;
+	z-index: 100;
+}
+.forms .autoForm, .second .autoForm{
+	background: grey;
+	position: absolute;
 }
 </style>
+ <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-1.17.1.css">
+
 </head>
 <body style="padding: 0px; margin: 0px; width: 100%; height: 100%; background-color: #000;">
-
+	<div style="border: 2px dark-gray solid; padding: 40px; font-size: 50px; background-color: gray; z-index: 2; position: absolute; right: 10px; top: 10px; font-family: 'Helvetica Neue'; border-radius: 20px;" id="turnStatus"></div>
 	<center>
-		<canvas id="gamecanvas" style="zoom: 100%;-moz-transform: scale(1); -moz-transform-origin: 0 0; z-index: 1; position: absolute; top: 0px; left: 0px; -ms-touch-action: none; touch-action: none;"></canvas>
+		<canvas id="gamecanvas" style="width: 100%; height: 100%; zoom: 100%;-moz-transform: scale(1); -moz-transform-origin: 0 0; z-index: 1; top: 0px; left: 0px; -ms-touch-action: none; touch-action: none;"></canvas>
 	</center>
+	<div class="forms"></div>
+	<div class="second"></div>
 
 	<!-- required libs -->
 	<script src="libs/preload-0.6.min.js" type="text/javascript"></script>
 	<script src="libs/easeljs-0.8.min.js" type="text/javascript"></script>
-
-	<!-- maps -->
+	<script src='libs/astar.js' type='text/javascript'></script>
+	<script src="libs/jquery-2.1.3.min.js"></script>
 
 	<!-- classes -->
+	<script src="classes/person.class.js" type="text/javascript"></script>
+	<script src="classes/complexobject.class.js" type="text/javascript"></script>
+	<script src="classes/form.js"></script>
+	<script src="classes/menu.js"></script>
 
 	<!-- objects -->
+	<script src="complexobjects/enemy.js" type="text/javascript"></script>
+
+	<!-- game rules -->
+	<script src="rules/advanceturn.js" type="text/javascript"></script>
 
 	<!-- game mechanics -->
+	<script src="mechanics/collision.js" type="text/javascript"></script>
+	<script src="mechanics/constants.js" type="text/javascript"></script>
+	<script src="mechanics/maploader.js" type="text/javascript"></script>
 	<script src="mechanics/main.js" type="text/javascript"></script>
 	<script src="mechanics/player.js" type="text/javascript"></script>
 	<script src="mechanics/renderer.js" type="text/javascript"></script>
-	<script src="mechanics/menu.js" type="text/javascript"></script>
-
-	<!-- game tests -->
-	<script src="tests/tests.js" type="text/javascript"></script>
-
+	<!-- <script src="mechanics/menu.js" type="text/javascript"></script> -->
+	<!-- testing -->
+	 <div id="qunit"></div>
+	<div id="qunit-fixture" style="position:bottom;"></div>
+	<script src="https://code.jquery.com/qunit/qunit-1.17.1.js"></script>
+	<script src="tests/tests.js"></script>
 	<script>
 		// google analytics placeholder
 	</script>
