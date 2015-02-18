@@ -5,13 +5,10 @@
 
 /**
  * MapLoader handles loading the Tiled map file and passing it to a Renderer
- * @param {[CreateJS loader] loader [CreateJS loader]}
- * @param {[Renderer renderer] renderer [Renderer renderer]}
  * @constructor
  */
- function MapLoader(loader,renderer) {
-  var maploader = new createjs.LoadQueue(false);
-  var maprenderer = renderer;
+ function MapLoader(loader) {
+  var map;
 
    /**
   * [loadMap loads the given map file ]
@@ -19,20 +16,39 @@
   * @return {[type]} [none]
   */
   this.loadMap = function(mapname) {
-    maploader.addEventListener('fileload', handleComplete);
-    maploader.loadManifest( [ { id: 'map', src: mapname } ],true,'maps/');
+    loader.removeAllEventListeners();
+    loader.addEventListener('fileload', handleMapLoad);
+    loader.loadManifest( [ { id: 'map', src: mapname }],true,'maps/');
     console.log('map loaded.');
     };
 
   /**
-  * [handleComplete handler for preload complete]
+  * [handleMapLoad handler for preload complete]
   * @return {[type] [description]}
   */ 
-  function handleComplete() {
-    maprenderer.prepareRenderer(maploader.getResult('map'));
-    maprenderer.initMap();
-    initPlayers(3);
-    initEnemies(2);
+  function handleMapLoad() {
+    map = loader.getResult('map');
+    loader.removeAllEventListeners();
+    loader.addEventListener('fileload', handleTilesetLoad);
+    loader.loadManifest( [ { id: 'tileset', src: map.tilesets[0].name+TILESET_FILE_TYPE } ], true, 'graphics/');
     };
+
+  function handleTilesetLoad() {
+    var image = loader.getResult('tileset');
+    renderer.prepareRenderer(map);
+    renderer.setImage(image);
+    renderer.initMap();
+    initPlayers(NUM_PLAYERS);
+    initEnemies(2);
+  };
+
+  function isValidMap() {
+    //Runs some basic checks on the map to make sure it is a good map
+    //checks for starting point
+    //checks for end point
+    //checks to make sure you can get from the start to the end point? using A*?
+    //checks the size, 16-4096 I think
+    //maybe if starting/ending pont don't exist it can randomly generate?
+  };
 
   }

@@ -19,6 +19,7 @@ function Renderer(gamestage) {
 	this.gamestage = gamestage; // this is a link to the parent gamestage
 	this.mapcounter = 0;
 	this.mapData = undefined; // this will be our tiled JSON data
+	this.imageData = undefined; // this will be the tileset graphic
 	this.simpleObjects = [];
 	this.tileset = new Image();
 
@@ -40,6 +41,7 @@ function Renderer(gamestage) {
 	 * @return {[type]} [none]
 	 */
 	function completeRenderer() {
+		console.log();
 		this.gamestage.removeAllChildren(); // clear the gamestage since we are ready to render.
 		this.doneRendering = true;
 		this.gamestage.addChild(this.backgroundContainer);
@@ -58,12 +60,8 @@ function Renderer(gamestage) {
 		this.simpleobjects = [];
 		this.complexObjects = [];
 
-		if (this.mapData.tilesets[0].image.indexOf("..\/") > -1) {
-			this.mapData.tilesets[0].image = this.mapData.tilesets[0].image.replace("..\/", "");
-		}
-
 		var imageData = {
-			images : [ loader.getResult(this.mapData.tilesets[0].image.split("/")[1].split(".")[0]) ],
+			images : [ this.imageData ],
 			frames : {
 				width : w,
 				height : h
@@ -545,5 +543,9 @@ function Renderer(gamestage) {
 	this.getMapHeight = function() {
 		return this.mapData.tileheight * (this.mapData.height - 1);
 	};
+
+	this.setImage = function(image){
+		this.imageData = image;
+	}
 }
 

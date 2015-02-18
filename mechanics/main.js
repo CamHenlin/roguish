@@ -6,10 +6,8 @@ var loader = new createjs.LoadQueue(false);
 loader.addEventListener("complete", handleComplete);
 
 loader.loadManifest([
-	{id: "dungeon_tiles_0", src: "graphics/dungeon_tiles_0.png"},
-	{id: "tmw_desert_spacing", src: "graphics/tmw_desert_spacing.png"},
 	{id: "player", src: "graphics/player.png"},
-	{id: "enemy", src: "graphics/treadbot1sheet.png"},
+	{id: "enemy", src: "graphics/treadbot1sheet.png"}
 ]);
 
 /**
@@ -62,7 +60,7 @@ function initVars() {
 	gamestage.clear();
 	gamestage.snapToPixelEnabled = true;
 	renderer = new Renderer(gamestage);
-	maploader = new MapLoader(loader,renderer);
+	maploader = new MapLoader(loader);
 	maploader.loadMap('map1.json'); //change this to the name of the map you want to load. the map must be in maps to work
 	createjs.Ticker.addEventListener("tick", handleTick);
 	createjs.Ticker.useRAF = true
