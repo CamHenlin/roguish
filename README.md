@@ -14,6 +14,7 @@ git clone https://github.com/CamHenlin/roguish.git
 cd roguish
 
 python -m SimpleHTTPServer 8000
+
 ```
 
 And then point your favorite web browser at [http://localhost:8000](http://localhost:8000) or [http://localhost:8000/devindex.html](http://localhost:8000/devindex.html)

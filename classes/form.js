@@ -1,8 +1,6 @@
 var Form = function(data, callback) {
-	this.el = data.el || $('body');
-	this.data = data;
-	this.data.x = this.data.x || 0;
-	this.data.y = this.data.y || 0;
+	// constructor
+	Widget.apply(this, arguments);
 	this.callback = callback;
 
 	// public
@@ -20,15 +18,22 @@ var Form = function(data, callback) {
 
 	this.render = function() {
 		this.el.html(template.call(this));
+		this.container.append(this.el);
 		this.el.find("button").click(this.callback);
 	}
 
 	// private
-	textField = function(name) {
+
+	function template() {
+		return "<form class='autoForm' onsubmit='return false' style='left:" + this.x + "px; top:" + this.y + "px;' >" + inputFields.call(this) + "<button type='button'>print me</button>"
+		"</form>";
+	}
+
+	function textField(name) {
 		return "<input placeholder='" + name + "' name='" + name + "''></input>";
 	}
 
-	selectField = function(name, options) {
+	function selectField(name, options) {
 		var html = "<select name='" + name + "'>";
 		options.forEach(function(option) {
 			html += "<option name='" + option + "'>" + option + "</option>";
@@ -37,7 +42,7 @@ var Form = function(data, callback) {
 		return html;
 	}
 
-	radioField = function(name, options) {
+	function radioField(name, options) {
 		var html = "<p>choose the " + name + "</p>";
 		firstOption = options.shift();
 		html += "<input checked type='radio' name='" + name + "' value='" + firstOption + "'>" + firstOption + "</br> "
@@ -47,15 +52,15 @@ var Form = function(data, callback) {
 		return html;
 	}
 
-	numberField = function(name, min, max) {
+	function numberField(name, min, max) {
 		return "<input placeholder='number of players (" + min + "-" + max + ")' type='number' name='" + name + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
-	rangeField = function(name, min, max) {
+	function rangeField(name, min, max) {
 		return "</br>" + name + "</br><input type='range' name='" + name + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
-	inputFields = function() {
+	function inputFields() {
 		var html = "";
 		this.data.fields.forEach(function(field) {
 			if (field.type == 'text') {
@@ -73,19 +78,15 @@ var Form = function(data, callback) {
 		return html;
 	}
 
-	template = function() {
-		return "<form class='autoForm' onsubmit='return false' style='left:" + this.data.x + "px; top:" + this.data.y + "px;' >" + inputFields.call(this) + "<button type='button'>print me</button>"
-		"</form>";
-	}
 	this.render();
 }
 
 
 // example of use
-data = {
-	x: 500, //defaults to 0
+newgame = {
+	x: 100, //defaults to 0
 	y: 100, // defaults to 0
-	el: $('.forms'), // if a element is spesified here, the default is overriden
+	// el: $('.forms'), // if a element is spesified here, the default is overriden
 	fields: [{
 		name: 'name',
 		type: 'text'
@@ -112,31 +113,9 @@ data = {
 		options: ['capture the flag', 'war']
 	}]
 };
-secondData = {
-	x: 000, //defaults to 0
-	y: 100, // defaults to 0
-	el: $('.second'), // if a element is spesified here, the default is overriden
-	fields: [{
-		name: 'name',
-		type: 'text'
-	}, {
-		name: 'description',
-		type: 'text'
-	}]
-};
-
-// NewGame.render();
-// SecondGame.render();
-
 
 $(function() {
-
-	NewGame = new Form(data, function() {
+	NewGame = new Form(newgame, function() {
 		console.log(NewGame.values());
 	});
-
-	// SecondGame = new Form(secondData, function(){
-	// 	console.log(SecondGame.values());
-	// });
-
 });

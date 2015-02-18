@@ -1,18 +1,21 @@
+/**
+ * creates a series of buttons from a list of callbacks
+ * @param {object} data: used to initialize position and containers via the widget constructor
+ */
 var Menu = function(data) {
-	this.data = data || {};
-	this.data.actions = data.actions || [];
-	this.data.x = this.data.x || 0;
-	this.data.y = this.data.y || 0;
-	this.el = this.data.el || $('body');
+	// constructor
+	Widget.apply(this, arguments);
+	this.actions = data.actions || [];
 
+	// public
 	this.registerAction = function(action) {
-		this.data.actions.push(action);
+		this.actions.push(action);
 	}
 
 	this.render = function() {
 		this.el.html(template.call(this));
-		// console.log(template.call(this))
-		this.data.actions.forEach(function(action) {
+		this.container.append(this.el);
+		this.actions.forEach(function(action) {
 			this.el.find("button[name='" + action.name + "']").click(function(event) {
 				event.preventDefault();
 				action.callback();
@@ -20,30 +23,36 @@ var Menu = function(data) {
 		}, this);
 	}
 
+	// private
 	function template() {
-		html = "<form class='autoForm' style='left:" + this.data.x + "px; top:" + this.data.y + "px;' >";
-		this.data.actions.forEach(function(action) {
+		html = "<form class='autoForm' style='left:" + this.x + "px; top:" + this.y + "px;' >";
+		this.actions.forEach(function(action) {
 			html += "<button name='" + action.name + "'>" + action.name + "</button>";
 		})
 		html += "</form>";
 		return html;
 	}
+
+	this.render();
 };
 
 
 $(function() {
 	attack = function() {
-		console.log('attack');
+		console.log(NewGame.values());
 	}
 
 	move = function() {
 		console.log('move');
 	}
 
-	data = {
-		el: $('.forms'),
-		x: 100,
-		y: 400,
+	console.log(NewGame.el);
+
+	menuData = {
+		x: 0,
+		y: NewGame.el.find('form').height(),
+		container: NewGame.el.find('form'),
+		el: $("<div></div>"),
 		actions: [{
 			name: 'attack',
 			callback: attack
@@ -53,6 +62,5 @@ $(function() {
 		}]
 	}
 
-	menu = new Menu(data);
-	menu.render();
+	menu = new Menu(menuData);
 });
