@@ -7,8 +7,9 @@ loader.addEventListener("complete", handleComplete);
 
 loader.loadManifest([
 	{id: "dungeon_tiles_0", src: "graphics/dungeon_tiles_0.png"},
+	{id: "tmw_desert_spacing", src: "graphics/tmw_desert_spacing.png"},
 	{id: "player", src: "graphics/player.png"},
-	{id: "enemy", src: "graphics/treadbot1sheet.png"}
+	{id: "enemy", src: "graphics/treadbot1sheet.png"},
 ]);
 
 /**
@@ -21,6 +22,7 @@ function handleComplete() {
 
 var gamestage; // this is the global canvas object that everything canvas-related in the game will attach to
 var renderer;
+var maploader;
 var collisionSystem = new CollisionSystem();
 var players = []; // list of active players
 var enemies = []; // list of enemies
@@ -60,14 +62,13 @@ function initVars() {
 	gamestage.clear();
 	gamestage.snapToPixelEnabled = true;
 	renderer = new Renderer(gamestage);
-	renderer.initMap();
+	maploader = new MapLoader(loader,renderer);
+	maploader.loadMap('map1.json'); //change this to the name of the map you want to load. the map must be in maps to work
 	createjs.Ticker.addEventListener("tick", handleTick);
 	createjs.Ticker.useRAF = true
 	createjs.Ticker.setFPS(60);
 
-	// make ten player
-	initPlayers(3);
-	initEnemies(2);
+
 }
 
 /**

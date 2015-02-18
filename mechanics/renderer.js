@@ -18,7 +18,7 @@ function Renderer(gamestage) {
 	this.foregroundContainer = new createjs.Container();
 	this.gamestage = gamestage; // this is a link to the parent gamestage
 	this.mapcounter = 0;
-	this.mapData = map1; // this is our tiled JSON data
+	this.mapData = undefined; // this will be our tiled JSON data
 	this.simpleObjects = [];
 	this.tileset = new Image();
 
@@ -33,12 +33,6 @@ function Renderer(gamestage) {
 	this.movementSearchResult = [];
 	this.centered = true;
 
-	// getting imagefile from first tileset
-	if (this.mapData.tilesets[0].image.indexOf("..\/") > -1) {
-		this.mapData.tilesets[0].image = this.mapData.tilesets[0].image.replace("..\/", "");
-	}
-
-	this.tileset.src = this.mapData.tilesets[0].image;
 
 	/**
 	 * [completeRenderer run at the end of our map rendering process]
@@ -289,6 +283,13 @@ function Renderer(gamestage) {
 	 * @return {[type]} [none]
 	 */
 	this.initMap = function () {
+		// getting imagefile from first tileset
+		if (this.mapData.tilesets[0].image.indexOf("..\/") > -1) {
+			this.mapData.tilesets[0].image = this.mapData.tilesets[0].image.replace("..\/", "");
+		}
+
+		this.tileset.src = this.mapData.tilesets[0].image;
+
 		initLayers.call(this);
 		completeRenderer.call(this);
 		this.doneRendering = true;

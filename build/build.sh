@@ -10,7 +10,7 @@ java -jar compiler.jar \
 	--js=../maps/map1.js \
 	\
 	--js=../mechanics/renderer.js --js=../mechanics/player.js --js=../mechanics/collision.js \
-	--js=../mechanics/constants.js --js=../mechanics/main.js \
+	--js=../mechanics/constants.js --js=../mechanics/main.js --js=../mechanics/maploader.js \
 	\
 	--js=../rules/advanceturn.js \
 	\
