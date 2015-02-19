@@ -3,7 +3,7 @@ java -jar compiler.jar `
 	`
 	--js=../classes/complexobject.class.js --js=../classes/simpleobject.class.js --js=../classes/person.class.js --js=../classes/form.js `
 	`
-	--js=../complexobjects/examplecomplexobject.js `
+	--js=../complexobjects/examplecomplexobject.js --js=../complexobjects/robot.js --js=../complexobjects/dragon.js `
 	`
 	--js=../simpleobjects/examplesimpleobject.js `
 	`

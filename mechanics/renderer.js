@@ -511,6 +511,79 @@ function Renderer(gamestage) {
 		var deltax = this.movementSearchResult[0].x - startxy.x;
 		var deltay = this.movementSearchResult[0].y - startxy.y;
 
+		// troubleshooting block:
+		console.log('-------------------');
+		console.log('this.movingObject.x > this.getCanvasWidth() / 2' + this.movingObject.x > this.getCanvasWidth() / 2);
+		console.log('this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2' + this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2);
+		console.log('this.movingObject.y > this.getCanvasHeight() / 2' + this.movingObject.y > this.getCanvasHeight() / 2);
+		console.log('this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2' + this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2);
+		console.log('this.container.x >= 0 || deltax <= 0' + this.container.x >= 0 || deltax <= 0);
+		console.log('this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0' + this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0);
+		console.log('this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0' + this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0);
+		console.log('this.container.y >= 0 || deltay <= 0' + this.container.y >= 0 || deltay <= 0);
+		console.log('-------------------');
+		// figure out if we should move the player or the map:
+		// these if statements require some explanation since they are basically unreadable
+
+		// if the player is centered on neither x nor y coordinates of map
+		if (
+			(
+				(this.movingObject.x > this.getCanvasWidth() / 2) &&
+				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
+			) &&
+			(
+				(this.movingObject.y > this.getCanvasHeight() / 2) &&
+				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
+			) &&
+			(
+				(this.container.x >= 0 || deltax <= 0) &&
+				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0) &&
+				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0) &&
+				(this.container.y >= 0 || deltay <= 0)
+			)) {
+
+			shiftMap.call(this, deltax * this.movingObject.moveSpeed, deltay * this.movingObject.moveSpeed);
+		// if the player is centered on x but not y
+		} else if (
+			(
+				(this.movingObject.x > this.getCanvasWidth() / 2) &&
+				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
+			) &&
+			!(
+				(this.movingObject.y > this.getCanvasHeight() / 2) &&
+				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
+			) &&
+			(
+				(this.container.y >= 0 || deltay <= 0) &&
+				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0)
+			)) {
+
+			shiftMap.call(this, deltax * this.movingObject.moveSpeed, 0);
+			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
+		// if the player is centered on y but not x
+		} else if (
+			(
+				(this.movingObject.y > this.getCanvasHeight() / 2) &&
+				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
+			) &&
+			!(
+				(this.movingObject.x > this.getCanvasWidth() / 2) &&
+				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
+			) &&
+			(
+				(this.container.x >= 0 || deltax <= 0) &&
+				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0)
+			)) {
+
+			shiftMap.call(this, 0, deltay * this.movingObject.moveSpeed);
+			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
+		// if the player is centered
+		} else {
+			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
+			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
+		}
+
+		// inherited from person class
 		this.movingObject.updateMovementAnimation(deltax, deltay);
 
 		this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;

@@ -7,7 +7,7 @@ loader.addEventListener("complete", handleComplete);
 
 loader.loadManifest([
 	{id: "player", src: "graphics/player.png"},
-	{id: "enemy", src: "graphics/treadbot1sheet.png"}
+	{id: "robot", src: "graphics/treadbot1sheet.png"}
 ]);
 
 /**
@@ -22,8 +22,7 @@ var gamestage; // this is the global canvas object that everything canvas-relate
 var renderer;
 var maploader;
 var collisionSystem = new CollisionSystem();
-var players = []; // list of active players
-var enemies = []; // list of enemies
+var activeObjects = [];
 var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
 var playerTurn = false; // note that this is turned off by the renderer at the end of a move and turned on by advanceturn, blocks other players and objects from getting their "tick"
 
@@ -63,29 +62,27 @@ function initVars() {
 	maploader = new MapLoader(loader);
 	maploader.loadMap('map1.json'); //change this to the name of the map you want to load. the map must be in maps to work
 	createjs.Ticker.addEventListener("tick", handleTick);
-	createjs.Ticker.useRAF = true
+	createjs.Ticker.useRAF = true;
 	createjs.Ticker.setFPS(60);
 
-
+	initActiveObjects(1, 10);
 }
 
 /**
- * [initPlayers reset players array and initialize it]
+ * [initActiveObjects reset activeObjects array and initialize it]
  * @param  {[type]} playerCount [description]
+ * @param  {[type]} enemyCount  [description]
  * @return {[type]}             [description]
  */
-function initPlayers(playerCount) {
-	players = [];
-	for (var i = 0; i < playerCount; i++) {
-		players.push(new Player(i * 32 + 96, i * 32 + 96, i+1));
+function initActiveObjects(playerCount, enemyCount) {
+	activeObjects = [];
+	var i = 0;
+	for (i = 0; i < playerCount; i++) {
+		activeObjects.push(new Player(i * 32 + 96, i * 32 + 96, 10));
 	}
-}
 
-
-function initEnemies(enemyCount) {
-	enemies = [];
-	for (var i = 0; i < enemyCount; i++) {
-		enemies.push(new Enemy(i * 32 + 32 + 180, i * 32 + 180));
+	for (i = 0; i < enemyCount; i++) {
+		activeObjects.push(new Robot(i * 32 + 32 + 180, i * 32 + 180, 1));
 	}
 }
 
@@ -105,15 +102,8 @@ function handleTick(event) {
 	} else if (!renderer.centered) {
 		renderer.centerMapOnObjectTick();
 	} else if (!playerTurn) {
-		var i = 0; // going to need to use i multiple times here, might as well only declare it once
-
-		// iterate players and allow each player to get its tickAction
-
-		for (i = 0; i < players.length; i++) {
-			players[i].tickActions();
-		}
-		for (i = 0; i < enemies.length; i++) {
-			enemies[i].tickActions();
+		for (var i = 0; i < activeObjects.length; i++) {
+			activeObjects[i].tickActions();
 		}
 
 		advanceTurn();

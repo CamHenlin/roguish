@@ -130,6 +130,7 @@ var Player = function(x, y, initiative) {
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
+		playerTurn = true;
 		console.log('player turn called');
 		renderer.centerMapOnObject(this, function() {
 			document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
@@ -139,8 +140,3 @@ var Player = function(x, y, initiative) {
 
 Player.prototype = new Person;
 Player.prototype.constructor = Player;
-
-
-
-
-

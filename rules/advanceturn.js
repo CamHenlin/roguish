@@ -8,16 +8,16 @@
  */
 function advanceTurn() {
 	document.getElementById("turnStatus").innerHTML = "";
-	for (var i = 0; i < players.length; i++) {
-		players[i].turnCounter += players[i].initiative;
 
-		if (players[i].turnCounter > MAX_TURN_COUNTER) {
+	for (var i = 0; i < activeObjects.length; i++) {
+		activeObjects[i].turnCounter += activeObjects[i].initiative;
+
+		if (activeObjects[i].turnCounter > MAX_TURN_COUNTER) {
 			// call turn dialog here normally
-			players[i].turn();
-			playerTurn = true;
+			activeObjects[i].turn();
 		}
 
-		document.getElementById("turnStatus").innerHTML = document.getElementById("turnStatus").innerHTML + "<br>" + players[i].turnCounter + " / " + MAX_TURN_COUNTER;
+		document.getElementById("turnStatus").innerHTML = document.getElementById("turnStatus").innerHTML + "<br>" + activeObjects[i].turnCounter + " / " + MAX_TURN_COUNTER;
 	}
 
 	// for testing to show that turn counter is working:
