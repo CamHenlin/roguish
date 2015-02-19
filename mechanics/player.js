@@ -136,6 +136,11 @@ var Player = function(x, y, initiative) {
 			document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
 		}.bind(this));
 	};
+
+	this.cleanUpMovement = function() {
+		this.animations.gotoAndPlay("stand-front");
+		this.turnCounter = 0;
+	};
 };
 
 Player.prototype = new Person;

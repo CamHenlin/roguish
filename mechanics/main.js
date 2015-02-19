@@ -65,7 +65,7 @@ function initVars() {
 	createjs.Ticker.useRAF = true;
 	createjs.Ticker.setFPS(60);
 
-	initActiveObjects(1, 10);
+	initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
 }
 
 /**

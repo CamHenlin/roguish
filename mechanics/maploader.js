@@ -38,8 +38,7 @@
     renderer.prepareRenderer(map);
     renderer.setImage(image);
     renderer.initMap();
-    initPlayers(NUM_PLAYERS);
-    initEnemies(2);
+    initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
   };
 
   function isValidMap() {

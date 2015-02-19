@@ -210,8 +210,7 @@ function Renderer(gamestage) {
 	 */
 	function cleanUpMovement() {
 		this.moving = false;
-		this.movingObject.animations.gotoAndPlay("stand-front");
-		this.movingObject.turnCounter = 0;
+		this.movingObject.cleanUpMovement();
 		this.movingObject = {};
 		this.moveToX = 0;
 		this.moveToY = 0;
@@ -229,14 +228,10 @@ function Renderer(gamestage) {
 	 */
 	function shiftMap(xamount, yamount) {
 		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
-		for (i = 0; i < enemies.length; i++) {
-			enemies[i].animations.x -= xamount;
-			enemies[i].animations.y -= yamount;
-		}
-		for (i = 0; i < players.length; i++) {
-			if (players[i] !== this.movingObject) {
-				players[i].animations.x -= xamount;
-				players[i].animations.y -= yamount;
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] !== this.movingObject) {
+				activeObjects[i].animations.x -= xamount;
+				activeObjects[i].animations.y -= yamount;
 			}
 		}
 
@@ -257,13 +252,10 @@ function Renderer(gamestage) {
 	 */
 	function shiftEntireMap(xamount, yamount) {
 		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
-		for (i = 0; i < enemies.length; i++) {
-			enemies[i].animations.x -= xamount;
-			enemies[i].animations.y -= yamount;
-		}
-		for (i = 0; i < players.length; i++) {
-			players[i].animations.x -= xamount;
-			players[i].animations.y -= yamount;
+
+		for (var i = 0; i < activeObjects.length; i++) {
+			activeObjects[i].animations.x -= xamount;
+			activeObjects[i].animations.y -= yamount;
 		}
 
 		this.backgroundContainer.x -= xamount;
@@ -320,6 +312,8 @@ function Renderer(gamestage) {
 	 * @return {[type]}               [description]
 	 */
 	this.moveObjectTo = function(trackedObject, targetx, targety) {
+		this.movingObject = trackedObject;
+
 		targetx -= this.container.x - trackedObject.animations.spriteSheet._frameWidth / 2;
 		targety -= this.container.y - trackedObject.animations.spriteSheet._frameHeight / 2;
 		if (!collisionSystem.checkCellValid(targetx, targety) ||
@@ -335,7 +329,6 @@ function Renderer(gamestage) {
 		this.movingToCellTarget = collisionSystem.getCollisionCoordinateFromCell(this.moveToX, this.moveToY);
 		this.movingToCellStart = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
 		this.moving = true;
-		this.movingObject = trackedObject;
 	};
 
 	/**
@@ -511,79 +504,6 @@ function Renderer(gamestage) {
 		var deltax = this.movementSearchResult[0].x - startxy.x;
 		var deltay = this.movementSearchResult[0].y - startxy.y;
 
-		// troubleshooting block:
-		console.log('-------------------');
-		console.log('this.movingObject.x > this.getCanvasWidth() / 2' + this.movingObject.x > this.getCanvasWidth() / 2);
-		console.log('this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2' + this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2);
-		console.log('this.movingObject.y > this.getCanvasHeight() / 2' + this.movingObject.y > this.getCanvasHeight() / 2);
-		console.log('this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2' + this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2);
-		console.log('this.container.x >= 0 || deltax <= 0' + this.container.x >= 0 || deltax <= 0);
-		console.log('this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0' + this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0);
-		console.log('this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0' + this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0);
-		console.log('this.container.y >= 0 || deltay <= 0' + this.container.y >= 0 || deltay <= 0);
-		console.log('-------------------');
-		// figure out if we should move the player or the map:
-		// these if statements require some explanation since they are basically unreadable
-
-		// if the player is centered on neither x nor y coordinates of map
-		if (
-			(
-				(this.movingObject.x > this.getCanvasWidth() / 2) &&
-				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
-			) &&
-			(
-				(this.movingObject.y > this.getCanvasHeight() / 2) &&
-				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
-			) &&
-			(
-				(this.container.x >= 0 || deltax <= 0) &&
-				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0) &&
-				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0) &&
-				(this.container.y >= 0 || deltay <= 0)
-			)) {
-
-			shiftMap.call(this, deltax * this.movingObject.moveSpeed, deltay * this.movingObject.moveSpeed);
-		// if the player is centered on x but not y
-		} else if (
-			(
-				(this.movingObject.x > this.getCanvasWidth() / 2) &&
-				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
-			) &&
-			!(
-				(this.movingObject.y > this.getCanvasHeight() / 2) &&
-				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
-			) &&
-			(
-				(this.container.y >= 0 || deltay <= 0) &&
-				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0)
-			)) {
-
-			shiftMap.call(this, deltax * this.movingObject.moveSpeed, 0);
-			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
-		// if the player is centered on y but not x
-		} else if (
-			(
-				(this.movingObject.y > this.getCanvasHeight() / 2) &&
-				(this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2)
-			) &&
-			!(
-				(this.movingObject.x > this.getCanvasWidth() / 2) &&
-				(this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2)
-			) &&
-			(
-				(this.container.x >= 0 || deltax <= 0) &&
-				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0)
-			)) {
-
-			shiftMap.call(this, 0, deltay * this.movingObject.moveSpeed);
-			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
-		// if the player is centered
-		} else {
-			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
-			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
-		}
-
-		// inherited from person class
 		this.movingObject.updateMovementAnimation(deltax, deltay);
 
 		this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;

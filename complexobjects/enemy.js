@@ -35,7 +35,7 @@ var Enemy = function(x, y, level) {
 	 */
 	this.turn = function() {
 		console.log("enemy turn called");
-		this.turnCounter = 0;
+		playerTurn = true;
 		this.doMovement();
 	};
 
@@ -60,6 +60,10 @@ var Enemy = function(x, y, level) {
 		if (this.hp <= 0) {
 			this.die();
 		}
+	};
+
+	this.cleanUpMovement = function() {
+		this.turnCounter = 0;
 	};
 };
 
