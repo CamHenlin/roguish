@@ -321,7 +321,7 @@ function Renderer(gamestage) {
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x + trackedObject.animations.spriteSheet._frameWidth / 2, trackedObject.y - trackedObject.animations.spriteSheet._frameHeight / 2).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {
 			cleanUpMovement.call(this);
 
-			return;
+			return false;
 		}
 
 		this.moveToX = targetx;

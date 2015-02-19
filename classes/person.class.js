@@ -12,6 +12,7 @@ var Person = function() {
 	this.animations;
 	this.currentDirection = "";
 	this.lastFrameDirection = "";
+	this.sightDistance = DEFAULT_PERSON_SIGHT_DISTANCE;
 
 	/**
 	 * [updateMovementAnimation note that this currently makes assumptions about what animations are available
