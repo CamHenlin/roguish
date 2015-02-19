@@ -47,6 +47,7 @@ var astar = {
     *          astar.heuristics).
     */
     search: function(graph, start, end, options) {
+
         graph.cleanDirty();
         options = options || {};
         var heuristic = options.heuristic || astar.heuristics.manhattan,
@@ -58,7 +59,7 @@ var astar = {
         start.h = heuristic(start, end);
 
         openHeap.push(start);
-
+        graph.markDirty(start);
         while(openHeap.size() > 0) {
 
             // Grab the lowest f(x) to process next.  Heap keeps this sorted for us.

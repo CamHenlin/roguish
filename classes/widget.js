@@ -1,7 +1,7 @@
 /**
  * Widget is a 'abstract class used to construct form and menu classes for example'
  * @param {Object} data object with x, y, container and el
- */					
+ */
 var Widget = function(data){
 	this.data = data || {};
 	this.x = this.data.x || 0;
