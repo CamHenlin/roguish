@@ -121,6 +121,7 @@ var Player = function(x, y, initiative) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 		renderer.moveObjectTo(this, x, y);
+		removeSelectableArea();
 		document.getElementById("gamecanvas").removeEventListener('click', turnClickHandler, false);
 	};
 	turnClickHandler = turnClickHandler.bind(this);
@@ -135,6 +136,7 @@ var Player = function(x, y, initiative) {
 		renderer.centerMapOnObject(this, function() {
 			document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
 		}.bind(this));
+		showSelectableArea(this);
 	};
 
 	this.cleanUpMovement = function() {

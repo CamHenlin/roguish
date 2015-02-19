@@ -10,7 +10,9 @@ function updateFogOfWar(playerObject) {
 
 	for (var i = coordinates.x - distance; i < coordinates.x + distance; i++) {
 		for (var j = coordinates.y - distance; j < coordinates.y + distance; j++) {
-			renderer.fogOfWarContainer.removeChild(renderer.fogOfWarGrid[j][i]);
+			if (renderer.fogOfWarGrid[j][i]) {
+				renderer.fogOfWarContainer.removeChild(renderer.fogOfWarGrid[j][i]);
+			}
 		}
 	}
 }
