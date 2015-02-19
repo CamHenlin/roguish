@@ -9,7 +9,7 @@ var Robot = function(x, y, level) {
 	if (this.defense < 1)
 		this.defense = 1;
 
-	this.spriteSheet =  new createjs.SpriteSheet({
+	this.spriteSheet = new createjs.SpriteSheet({
 		"images": [loader.getResult("robot")],
 		"frames": {
 			"width": 28,

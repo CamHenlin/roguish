@@ -15,6 +15,8 @@ function Renderer(gamestage) {
 	this.container.x = 0;
 	this.container.y = 0;
 	this.doneRendering = false;
+	this.fogOfWarContainer = new createjs.Container();
+	this.fogOfWarGrid = [[],[]];
 	this.foregroundContainer = new createjs.Container();
 	this.gamestage = gamestage; // this is a link to the parent gamestage
 	this.mapcounter = 0;
@@ -34,6 +36,22 @@ function Renderer(gamestage) {
 	this.movementSearchResult = [];
 	this.centered = true;
 
+	var fogOfWarSpriteSheet = new createjs.SpriteSheet({
+		"images": [loader.getResult("fogofwar")],
+		"frames": {
+			"width": 16,
+			"height": 16,
+			"count": 0
+		},
+		"animations": {
+			"still": {
+				"frames": [0],
+				"next": "still",
+				"speed": 1
+			}
+		}
+	});
+
 
 	/**
 	 * [completeRenderer run at the end of our map rendering process]
@@ -47,6 +65,7 @@ function Renderer(gamestage) {
 		this.gamestage.addChild(this.backgroundContainer);
 		this.gamestage.addChild(this.container);
 		this.gamestage.addChild(this.foregroundContainer);
+		this.gamestage.addChild(this.fogOfWarContainer);
 	};
 
 	/**
@@ -96,7 +115,9 @@ function Renderer(gamestage) {
 					// this is where we will handle cases for object files
 				}
 			}
+
 		}
+		initFogOfWar.call(this, this.mapData.layers[0], this.mapData.tilewidth, this.mapData.tileheight);
 	}
 
 	/**
@@ -159,6 +180,35 @@ function Renderer(gamestage) {
 		container.snapToPixel = true;
 
 		return container;
+	}
+
+	/**
+	 * [initFogOfWar draws fog of war]
+	 * @private
+	 * @param  {[type]} layerData    [description]
+	 * @param  {[type]} tilesetSheet [description]
+	 * @param  {[type]} tilewidth    [description]
+	 * @param  {[type]} tileheight   [description]
+	 * @return {[type]}              [EaselJS container]
+	 */
+	function initFogOfWar(layerData, tilewidth, tileheight) {
+		this.fogOfWarContainer = new createjs.Container();
+
+		this.fogOfWarGrid = new Array(layerData.height);
+		for (var y = 0; y < layerData.height; y++) {
+			this.fogOfWarGrid[y] = new Array(layerData.width);
+			for (var x = 0; x < layerData.width; x++) {
+				var fog = new createjs.Sprite(fogOfWarSpriteSheet);
+				this.fogOfWarGrid[y][x] = fog;
+				fog.x = x * tilewidth;
+				fog.y = y * tileheight;
+				// add bitmap to gamestage
+				this.fogOfWarContainer.addChild(fog);
+			}
+		}
+
+		this.fogOfWarContainer.tickEnabled = false;
+		this.fogOfWarContainer.snapToPixel = true;
 	}
 
 	/**
@@ -241,6 +291,8 @@ function Renderer(gamestage) {
 		this.container.y -= yamount;
 		this.foregroundContainer.x -= xamount;
 		this.foregroundContainer.y -= yamount;
+		this.fogOfWarContainer.x -= xamount;
+		this.fogOfWarContainer.y -= yamount;
 	}
 
 	/**
@@ -264,6 +316,8 @@ function Renderer(gamestage) {
 		this.container.y -= yamount;
 		this.foregroundContainer.x -= xamount;
 		this.foregroundContainer.y -= yamount;
+		this.fogOfWarContainer.x -= xamount;
+		this.fogOfWarContainer.y -= yamount;
 	}
 
 
@@ -495,9 +549,15 @@ function Renderer(gamestage) {
 	this.movementTickActions = function() {
 		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.animations.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.animations.spriteSheet._frameHeight);
 		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
+			// this section basically means we are looking to move to a new cell
 			var start = this.movementGraph.grid[startxy.x][startxy.y];
 			var end = this.movementGraph.grid[this.movingToCellTarget.x][this.movingToCellTarget.y];
 			this.movementSearchResult = astar.search(this.movementGraph, start, end);
+
+			// update our fog of war
+			if (this.movingObject.constructor === Player) {
+				updateFogOfWar.call(this, this.movingObject);
+			}
 		}
 
 		if ((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !this.movementSearchResult || !this.movementSearchResult[0]) {

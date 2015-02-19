@@ -7,7 +7,8 @@ loader.addEventListener("complete", handleComplete);
 
 loader.loadManifest([
 	{id: "player", src: "graphics/player.png"},
-	{id: "robot", src: "graphics/treadbot1sheet.png"}
+	{id: "robot", src: "graphics/treadbot1sheet.png"},
+	{id: "fogofwar", src: "graphics/fogofwar.png"}
 ]);
 
 /**
