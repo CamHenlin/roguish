@@ -46,7 +46,7 @@ function Renderer(gamestage) {
 		this.doneRendering = true;
 		this.gamestage.addChild(this.backgroundContainer);
 		this.gamestage.addChild(this.container);
-		this.gamestage.addChild(this.foregroundContainer);9
+		this.gamestage.addChild(this.foregroundContainer);
 	};
 
 	/**
@@ -385,6 +385,10 @@ function Renderer(gamestage) {
 
 		if (Math.abs(distanceX) < speed) {
 			distanceX = 0;
+		}
+
+		if (Math.abs(distanceY) < speed) {
+			distanceY = 0;
 		}
 
 		var mapShiftX = 0;
