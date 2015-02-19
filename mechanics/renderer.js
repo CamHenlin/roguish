@@ -373,52 +373,122 @@ function Renderer(gamestage) {
 	 * @return {[boolean]}                [true if centered false if not]
 	 */
 	this.centerMapOnObjectTick = function() {
-		var deltax = 0;
-		var deltay = 0;
-		var centerx = false;
-		var centery = false;
-
-		if (this.centeredObject.x > this.getCanvasWidth() / 2 - this.container.x) { // object is to right of center
-			if (this.container.x + this.getCanvasWidth() < this.getMapWidth()) {
-				deltax = 1;
-			} else {
-				centerx = true;
-			}
-		} else if (Math.abs(this.centeredObject.x - this.getCanvasWidth() / 2 + this.container.x) < MAP_MOVE_SPEED) { // object is pretty much centered
-			centerx = true;
-			deltax = 0;
-		} else { // object must be to the left then
-			if (this.container.x < 0) {
-				deltax = -1;
-			} else {
-				centerx = true;
-			}
-		}
-
-		if (this.centeredObject.y > this.getCanvasHeight() / 2 - this.container.y) { // object is below center
-			if (this.container.y - this.getCanvasHeight() < this.getMapHeight()) {
-				deltay = 1;
-			} else {
-				centery = true;
-			}
-		} else if (Math.abs(this.centeredObject.y - this.getCanvasHeight() / 2 + this.container.y) - this.centeredObject.animations.spriteSheet._frameHeight < MAP_MOVE_SPEED) { // object is pretty much centered
-			centery = true;
-			deltay = 0;
-		} else { // object must be above the center
-			if (this.container.y < 0) {
-				deltay = -1;
-			} else {
-				centery = true;
-			}
-		}
-
-		if (centery && centerx) {
+		if (tryCentering.call(this, this.centeredObject, MAP_MOVE_SPEED) === false) {
+			console.log('done centering!');
 			this.centeringCallback();
 			this.centered = true;
-		} else {
-			shiftEntireMap.call(this, deltax * MAP_MOVE_SPEED, deltay * MAP_MOVE_SPEED);
 		}
 	};
+
+	/**
+	 * [tryCentering attempts to center the screen, should get closer every frame]
+	 * @param  {[type]} obj   [description]
+	 * @param  {[type]} speed [description]
+	 * @return {[type]}       [false if the screen can't get more centered]
+	 */
+	function tryCentering(obj, speed) {
+		var distanceX = distanceFromCenteredX.call(this, obj);
+		var distanceY = distanceFromCenteredY.call(this, obj);
+
+		if (Math.abs(distanceX) < speed) {
+			distanceX = 0;
+		}
+
+		var mapShiftX = 0;
+		var mapShiftY = 0;
+
+		if (distanceX > 0) { // we need to shift map right
+			mapShiftX = speed;
+
+			if (!canShiftMapRight.call(this, speed)) {
+				mapShiftX = 0;
+			}
+		} else if (distanceX < 0) { // we need to shfit map left
+			mapShiftX = -speed;
+
+			if (!canShiftMapLeft.call(this, speed)) {
+				mapShiftX = 0;
+			}
+		}
+
+		if (distanceY > 0) { // we need to shift map down
+			mapShiftY = speed;
+
+			if (!canShiftMapUp.call(this, speed)) {
+				mapShiftY = 0;
+			}
+		} else if (distanceY < 0) { // we need to shift map up
+			mapShiftY = -speed;
+
+			if (!canShiftMapDown.call(this, speed)) {
+				mapShiftY = 0;
+			}
+		}
+
+		if (mapShiftX === 0 && mapShiftY === 0) {
+			return false;
+		}
+
+		shiftEntireMap.call(this, mapShiftX, mapShiftY);
+	}
+
+	/**
+	 * [distanceFromCenteredX returns distance from the center of the screen]
+	 * positive means needs containers need to shift right by half returned number of pixels to be centered
+	 * positive means needs object need to shift left by half returned number of pixels to be centered
+	 * @param  {[type]} obj [description]
+	 * @return {[type]}     [description]
+	 */
+	function distanceFromCenteredX(obj) {
+		return ((obj.animations.x + obj.animations.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2)) / gamezoom;
+	}
+
+	/**
+	 * [canShiftMapLeft returns true if the map can shift left, false if not]
+	 * @param  {[type]} speed [description]
+	 * @return {[type]}       [description]
+	 */
+	function canShiftMapLeft(speed) {
+		return renderer.container.x + (speed / 2) < 0;
+	}
+
+	/**
+	 * [canShiftMapRight returns true if the map can shift right, false if not]
+	 * @param  {[type]} speed [description]
+	 * @return {[type]}       [description]
+	 */
+	function canShiftMapRight(speed) {
+		return renderer.container.x + renderer.getMapWidth() - (speed / 2) > gamestage.canvas.width;
+	}
+
+	/**
+	 * [distanceFromCenteredY returns distance from the center of the screen]
+	 * positive means containers needs to go up by half returned number of pixels to be centered
+	 * positive means object needs to go down by half returned number of pixels to be centered
+	 * @param  {[type]} obj [description]
+	 * @return {[type]}     [description]
+	 */
+	function distanceFromCenteredY(obj) {
+		return ((obj.animations.y + obj.animations.spriteSheet._frameHeight / 2) - renderer.container.y - (gamestage.canvas.height / 2)) / gamezoom;
+	}
+
+	/**
+	 * [canShiftMapDown returns true if the map can shift down, false if not]
+	 * @param  {[type]} speed [description]
+	 * @return {[type]}       [description]
+	 */
+	function canShiftMapDown(speed) {
+		return renderer.container.y + (speed / 2) < 0;
+	}
+
+	/**
+	 * [canShiftMapUp returns true if the map can shift up, false if not]
+	 * @param  {[type]} speed [description]
+	 * @return {[type]}       [description]
+	 */
+	function canShiftMapUp(speed) {
+		return renderer.container.y + renderer.getMapHeight() - (speed / 2) > gamestage.canvas.height;
+	}
 
 	/**
 	 * [movementTickActions description]
@@ -441,89 +511,13 @@ function Renderer(gamestage) {
 		var deltax = this.movementSearchResult[0].x - startxy.x;
 		var deltay = this.movementSearchResult[0].y - startxy.y;
 
-		// troubleshooting block:
-		console.log('-------------------');
-		console.log(this.movingObject.x);
-		console.log(this.movingObject.y);
-		console.log(this.getCanvasWidth());
-		console.log(this.getCanvasHeight());
-		console.log(deltax);
-		console.log(deltay);
-		console.log('this.movingObject.x > this.getCanvasWidth() / 2' + this.movingObject.x > this.getCanvasWidth() / 2);
-		console.log('this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2' + this.getMapWidth() > this.movingObject.x + this.getCanvasWidth() / 2);
-		console.log('this.movingObject.y > this.getCanvasHeight() / 2' + this.movingObject.y > this.getCanvasHeight() / 2);
-		console.log('this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2' + this.getMapHeight() > this.movingObject.y + this.getCanvasHeight() / 2);
-		console.log('this.container.x >= 0 || deltax <= 0' + this.container.x >= 0 || deltax <= 0);
-		console.log('this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0' + this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0);
-		console.log('this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0' + this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay >= 0);
-		console.log('this.container.y >= 0 || deltay <= 0' + this.container.y >= 0 || deltay <= 0);
-		console.log('-------------------');
-		// figure out if we should move the player or the map:
-		// these if statements require some explanation since they are basically unreadable
-
-		// if the player is centered on neither x nor y coordinates of map
-		if (
-			(
-				(this.movingObject.animations.x > this.getCanvasWidth() / 2) ||
-				(this.getMapWidth() > this.movingObject.animations.x + this.getCanvasWidth() / 2)
-			) &&
-			(
-				(this.movingObject.animations.y > this.getCanvasHeight() / 2) ||
-				(this.getMapHeight() > this.movingObject.animations.y + this.getCanvasHeight() / 2)
-			) &&
-			(
-				(this.container.x >= 0 || deltax <= 0) &&
-				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0) &&
-				(this.container.y >= 0 || deltay >= 0) &&
-				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay <= 0)
-			)) {
-
-			shiftMap.call(this, deltax * this.movingObject.moveSpeed, deltay * this.movingObject.moveSpeed);
-		// if the player is centered on x but not y
-		} else if (
-			(
-				(this.movingObject.animations.x > this.getCanvasWidth() / 2) ||
-				(this.getMapWidth() > this.movingObject.animations.x + this.getCanvasWidth() / 2)
-			) &&
-			!(
-				(this.movingObject.animations.y > this.getCanvasHeight() / 2) ||
-				(this.getMapHeight() > this.movingObject.animations.y + this.getCanvasHeight() / 2)
-			) &&
-			(
-				(this.container.y >= 0 || deltay >= 0) &&
-				(this.container.y + this.getCanvasHeight() < this.getMapHeight() || deltay <= 0)
-			)) {
-
-			shiftMap.call(this, deltax * this.movingObject.moveSpeed, 0);
-			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
-		// if the player is centered on y but not x
-		} else if (
-			(
-				(this.movingObject.animations.y > this.getCanvasHeight() / 2) ||
-				(this.getMapHeight() > this.movingObject.animations.y + this.getCanvasHeight() / 2)
-			) &&
-			!(
-				(this.movingObject.animations.x > this.getCanvasWidth() / 2) ||
-				(this.getMapWidth() > this.movingObject.animations.x + this.getCanvasWidth() / 2)
-			) &&
-			(
-				(this.container.x >= 0 || deltax <= 0) &&
-				(this.container.x + this.getCanvasWidth() < this.getMapWidth() || deltax >= 0)
-			)) {
-
-			shiftMap.call(this, 0, deltay * this.movingObject.moveSpeed);
-			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
-		// if the player is centered
-		} else {
-			this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
-			this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
-		}
-
-		// inherited from person class
 		this.movingObject.updateMovementAnimation(deltax, deltay);
 
+		this.movingObject.animations.x += deltax * this.movingObject.moveSpeed;
+		this.movingObject.animations.y += deltay * this.movingObject.moveSpeed;
 		this.movingObject.x += deltax * this.movingObject.moveSpeed;
 		this.movingObject.y += deltay * this.movingObject.moveSpeed;
+		tryCentering.call(this, this.movingObject, this.movingObject.moveSpeed);
 	};
 
 	/**
@@ -541,7 +535,7 @@ function Renderer(gamestage) {
 	 * @return {[type]} [description]
 	 */
 	this.getMapHeight = function() {
-		return this.mapData.tileheight * (this.mapData.height - 1);
+		return this.mapData.tileheight * (this.mapData.height);
 	};
 
 	this.setImage = function(image){
