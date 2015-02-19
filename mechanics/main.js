@@ -80,6 +80,7 @@ function initActiveObjects(playerCount, enemyCount) {
 	var i = 0;
 	for (i = 0; i < playerCount; i++) {
 		activeObjects.push(new Player(i * 32 + 96, i * 32 + 96, 10));
+		updateFogOfWar(activeObjects[i]);
 	}
 
 	for (i = 0; i < enemyCount; i++) {

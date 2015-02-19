@@ -556,7 +556,7 @@ function Renderer(gamestage) {
 
 			// update our fog of war
 			if (this.movingObject.constructor === Player) {
-				updateFogOfWar.call(this, this.movingObject);
+				updateFogOfWar(this.movingObject);
 			}
 		}
 
