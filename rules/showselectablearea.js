@@ -47,3 +47,17 @@ function removeSelectableArea() {
 	}
 	selectableAreas = [];
 }
+
+/**
+ * [isSelectionInSelectableBounds true if selection location is in selectable area bounds]
+ * @param  {[type]}  x [description]
+ * @param  {[type]}  y [description]
+ * @return {Boolean}   [description]
+ */
+function isSelectionInSelectableBounds(playerObject, x, y) {
+	var selection = collisionSystem.getCollisionCoordinateFromCell(x, y);
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.y + playerObject.animations.spriteSheet._frameHeight);
+	var distance = playerObject.sightDistance;
+
+	return (selection.x > coordinates.x - distance && selection.x < coordinates.x + distance) && (selection.y > coordinates.y - distance && selection.y < coordinates.y + distance);
+}
