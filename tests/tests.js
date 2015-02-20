@@ -1,5 +1,4 @@
 //QUnit.module("collision detection");
-<<<<<<< HEAD
 
 QUnit.test("QUnit Example", function(assert) {
 	assert.ok(2+2 == 4, "2+2 equals 4");
@@ -24,9 +23,6 @@ QUnit.test("Player can move 0, 0 tile on default map", function(assert) {
 	assertionFunction();
 });
 
-=======
-//
->>>>>>> Added async to collision tests
 QUnit.test("collision test", function(assert) {
 	var async = assert.async();
 
