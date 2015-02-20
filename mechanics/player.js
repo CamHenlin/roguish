@@ -121,7 +121,8 @@ var Player = function(x, y, initiative) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 
-		if (isSelectionInSelectableBounds(this, x, y) && renderer.moveObjectTo(this, x, y)) {
+		if (isSelectionInSelectableBounds(this, x, y)) {
+			renderer.moveObjectTo(this, x, y)
 			removeSelectableArea();
 			document.getElementById("gamecanvas").removeEventListener('click', turnClickHandler, false);
 		}
