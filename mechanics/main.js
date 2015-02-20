@@ -27,6 +27,7 @@ var collisionSystem = new CollisionSystem();
 var activeObjects = [];
 var gamezoom = 2; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
 var playerTurn = false; // note that this is turned off by the renderer at the end of a move and turned on by advanceturn, blocks other players and objects from getting their "tick"
+var activePlayer = {}; // this is set to the currently active player by the advance turn function
 var selectableAreas = []; // global container for selectablearea blocks
 
 /**

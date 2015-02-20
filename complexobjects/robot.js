@@ -1,3 +1,9 @@
+/**
+ * [Robot description]
+ * @param {[type]} x     [description]
+ * @param {[type]} y     [description]
+ * @param {[type]} level [description]
+ */
 var Robot = function(x, y, level) {
 	Enemy.call(this, x, y, level); // Call super constructor
 
@@ -38,6 +44,10 @@ var Robot = function(x, y, level) {
 
 	gamestage.addChild(this.animations);
 
+	/**
+	 * [getNearestPlayer description]
+	 * @return {[type]} [description]
+	 */
 	this.getNearestPlayer = function() {
 		var leastDistance = -1;
 		var nearestPlayer;
@@ -58,6 +68,10 @@ var Robot = function(x, y, level) {
 		return nearestPlayer;
 	}
 
+	/**
+	 * [doMovement description]
+	 * @return {[type]} [description]
+	 */
 	this.doMovement = function() {
 		var nearestPlayer = this.getNearestPlayer();
 
@@ -79,6 +93,12 @@ var Robot = function(x, y, level) {
 		}
 	};
 
+	/**
+	 * [updateMovementAnimation description]
+	 * @param  {[type]} deltax [description]
+	 * @param  {[type]} deltay [description]
+	 * @return {[type]}        [description]
+	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {
 			this.animations.scaleX = 1;

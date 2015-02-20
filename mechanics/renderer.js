@@ -369,7 +369,7 @@ function Renderer(gamestage) {
 		this.movingObject = trackedObject;
 
 		targetx -= this.container.x - trackedObject.animations.spriteSheet._frameWidth / 2;
-		targety -= this.container.y + trackedObject.animations.spriteSheet._frameHeight / 2;
+		targety -= this.container.y - trackedObject.animations.spriteSheet._frameHeight / 2;
 		if (!collisionSystem.checkCellValid(targetx, targety) ||
 			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x + trackedObject.animations.spriteSheet._frameWidth / 2, trackedObject.y - trackedObject.animations.spriteSheet._frameHeight / 2).x === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).x &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x + trackedObject.animations.spriteSheet._frameWidth / 2, trackedObject.y - trackedObject.animations.spriteSheet._frameHeight / 2).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {

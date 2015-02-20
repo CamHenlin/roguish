@@ -15,10 +15,11 @@ function advanceTurn() {
 		if (activeObjects[i].turnCounter > MAX_TURN_COUNTER) {
 			// call turn dialog here normally
 			activeObjects[i].turn();
+			if (activeObjects[i].constructor === Player) {
+				activePlayer = activeObjects[i];
+			}
 		}
 
 		document.getElementById("turnStatus").innerHTML = document.getElementById("turnStatus").innerHTML + "<br>" + activeObjects[i].turnCounter + " / " + MAX_TURN_COUNTER;
 	}
-
-	// for testing to show that turn counter is working:
 }

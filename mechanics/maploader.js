@@ -42,12 +42,12 @@ function MapLoader(loader) {
 	}
 
 	function isValidMap() {
-		//Runs some basic checks on the map to make sure it is a good map
-		//checks for starting point
-		//checks for end point
-		//checks to make sure you can get from the start to the end point? using A*?
-		//checks the size, 16-4096 I think
-		//maybe if starting/ending pont don't exist it can randomly generate?
+		// Runs some basic checks on the map to make sure it is a good map
+		// checks for starting point
+		// checks for end point
+		// checks to make sure you can get from the start to the end point? using A*?
+		// checks the size, 16-4096 I think
+		// maybe if starting/ending point doesn't exist it can randomly generate?
 	}
 
 }
