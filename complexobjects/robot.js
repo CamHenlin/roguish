@@ -66,29 +66,60 @@ var Robot = function(x, y, level) {
 		}
 
 		return nearestPlayer;
-	}
+	};
+
+	/**
+	 * [moveUpOrDown decides whether robot should move up or down based on nearest player location]
+	 * @private
+	 * @param {[type]} [dy] [difference between nearest player's y position and this robot's y position]
+	 * @return [true if move succeeded, false otherwise]
+	 */
+	function moveUpOrDown(dy) {
+		if (dy >= 0) {
+			return renderer.moveObjectTo(this, x, y + this.movementSpeed); // Move down
+		}
+
+		return renderer.moveObjectTo(this, x, y - this.movementSpeed); // Move up
+	};
+
+	/**
+	 * [moveRightOrLeft decides whether robot should move right or left based on nearest player location]
+	 * @private
+	 * @param {[type]} [dx] [difference between nearest player's x position and this robot's x position]
+	 * @return [true if move succeeded, false otherwise]
+	 */
+	function moveRightOrLeft(dx) {
+		if (dx >= 0) {
+			return renderer.moveObjectTo(this, x + this.movementSpeed, y); // move right
+		}
+
+		return renderer.moveObjectTo(this, x - this.movementSpeed, y); // move left
+	};
 
 	/**
 	 * [doMovement description]
 	 * @return {[type]} [description]
 	 */
 	this.doMovement = function() {
+		this.animations.gotoAndPlay("attack");
+
 		var nearestPlayer = this.getNearestPlayer();
 
 		var dx = nearestPlayer.x - this.x;
 		var dy = nearestPlayer.y - this.y;
+		var success = false;
 
 		if (Math.abs(dx) > Math.abs(dy)) { // Move right or left
-			if (dx >= 0) {  // move right
-				renderer.moveObjectTo(this, x + this.movementSpeed, y);
-			} else {        // move left
-				renderer.moveObjectTo(this, x - this.movementSpeed, y);
+			success = moveRightOrLeft.call(this, dx);
+
+			if (!success) {
+				moveUpOrDown.call(this, dy);
 			}
 		} else {  // Move up or down
-			if (dy >= 0) {  // Move down
-				renderer.moveObjectTo(this, x, y + this.movementSpeed);
-			} else {    // Move up
-				renderer.moveObjectTo(this, x, y - this.movementSpeed);
+			success = moveUpOrDown.call(this, dy);
+
+			if (!success) {
+				moveRightOrLeft.call(this, dx);
 			}
 		}
 	};
@@ -107,6 +138,11 @@ var Robot = function(x, y, level) {
 			this.animations.scaleX = -1;
 			this.lastFrameDirection = "walk-left";
 		}
+	};
+
+	this.cleanUpMovement = function() {
+		this.turnCounter = 0;
+		this.animations.gotoAndPlay("still");
 	};
 };
 

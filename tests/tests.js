@@ -55,19 +55,18 @@ QUnit.test("enemy tests", function(assert) {
 	assert.ok(playerTurn, "enemy turn verified");   // Key part in enemy movement
 
 	// Ensure that all of the robot's stats are correct based on its passed level (1)
-	assert.equal(enemy.x, 50, "enemy x position"); 
-	assert.equal(enemy.y, 60, "enemy y position"); 
-	assert.equal(enemy.level, 1, "enemy level"); 
-	assert.equal(enemy.hp, 10, "enemy hp"); 
-	assert.equal(enemy.xp, 100, "enemy xp"); 
-	assert.equal(enemy.movementSpeed, 50, "enemy movement speed"); 
-	assert.equal(enemy.attackSpeed, 2, "enemy attack speed"); 
+	assert.equal(enemy.x, 50, "enemy x position");
+	assert.equal(enemy.y, 60, "enemy y position");
+	assert.equal(enemy.level, 1, "enemy level");
+	assert.equal(enemy.hp, 10, "enemy hp");
+	assert.equal(enemy.xp, 100, "enemy xp");
+	assert.equal(enemy.movementSpeed, 50, "enemy movement speed");
+	assert.equal(enemy.attackSpeed, 2, "enemy attack speed");
 	assert.equal(enemy.attack, 16, "enemy attack");
 	assert.equal(enemy.defense, 1, "enemy defense");
 	assert.equal(enemy.scout, 25, "enemy scout");
 	assert.equal(enemy.magic, 1, "enemy magic");
-	assert.equal(enemy.initiative, 10, "enemy initiative");	
-	
+	assert.equal(enemy.initiative, 10, "enemy initiative");
 
 	enemy.die();
 	assert.equal(activeObjects.indexOf(enemy), -1, "enemy death");  // When enemies die, they should no longer be active
