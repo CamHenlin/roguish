@@ -1,7 +1,20 @@
-var Form = function(data, callback) {
+/**
+ * the form class is responsible for rendering html inputs to the dom and provides an interface for retrieveing this information
+ * @param {[type]}
+ * @param {Function}
+ */
+var Form = function(options, action) {
 	// constructor
 	Widget.apply(this, arguments);
-	this.callback = callback;
+
+	if(typeof action == "function" || typeof action == "undefined"){
+		this.action = action || null;
+		this.buttonText = options.buttonText || 'submit';
+	}else if(typeof action == "object"){
+		this.menu = new Menu(action);
+		this.menu.setForm(this);
+	}
+	
 
 	// public
 	this.getvalue = function(value) {
@@ -10,7 +23,7 @@ var Form = function(data, callback) {
 
 	this.values = function() {
 		obj = {};
-		this.data.fields.forEach(function(field) {
+		this.options.fields.forEach(function(field) {
 			obj[field.name] = this.getvalue(field.name);
 		}, this);
 		return obj;
@@ -19,14 +32,23 @@ var Form = function(data, callback) {
 	this.render = function() {
 		this.el.html(template.call(this));
 		this.container.append(this.el);
-		this.el.find("button").click(this.callback);
+		if(this.menu){
+			this.menu.render();
+		}else{
+			this.el.find("button").click(this.action);	
+		}	
 	}
 
 	// private
 
 	function template() {
-		return "<form class='autoForm' onsubmit='return false' style='left:" + this.x + "px; top:" + this.y + "px;' >" + inputFields.call(this) + "<button type='button'>print me</button>"
-		"</form>";
+		var html = "<form class='autoForm' onsubmit='return false' "+this.positionStyling()+" >" 
+			+ inputFields.call(this);
+		if(this.action != null){
+			html+="<button type='button'>" +this.buttonText+ "</button>"
+		}
+		html+="</form>";
+		return html;
 	}
 
 	function textField(name) {
@@ -62,7 +84,7 @@ var Form = function(data, callback) {
 
 	function inputFields() {
 		var html = "";
-		this.data.fields.forEach(function(field) {
+		this.options.fields.forEach(function(field) {
 			if (field.type == 'text') {
 				html += textField(field.name);
 			} else if (field.type == 'select') {
@@ -77,45 +99,6 @@ var Form = function(data, callback) {
 		});
 		return html;
 	}
-
-	this.render();
 }
 
 
-// example of use
-newgame = {
-	x: 100, //defaults to 0
-	y: 100, // defaults to 0
-	// el: $('.forms'), // if a element is spesified here, the default is overriden
-	fields: [{
-		name: 'name',
-		type: 'text'
-	}, {
-		name: 'description',
-		type: 'text'
-	}, {
-		name: 'players',
-		type: 'number',
-		min: 1,
-		max: 5
-	}, {
-		name: 'difficulty',
-		type: 'range',
-		min: 1,
-		max: 5
-	}, {
-		name: 'map',
-		type: 'select',
-		options: ['forrest', 'dungeon']
-	}, {
-		name: 'victory condition',
-		type: 'radio',
-		options: ['capture the flag', 'war']
-	}]
-};
-
-$(function() {
-	NewGame = new Form(newgame, function() {
-		console.log(NewGame.values());
-	});
-});
