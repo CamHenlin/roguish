@@ -3,7 +3,7 @@ QUnit.test("QUnit Example", function(assert) {
 	assert.ok(2+2 == 4, "2+2 equals 4");
 });
 
-QUnit.test("Player can move right one tile on default map", function(assert) {
+QUnit.test("Player can move 0, 0 tile on default map", function(assert) {
 	var done = assert.async();
 	var assertionFunction = function() {
 		if (!playerTurn) {
