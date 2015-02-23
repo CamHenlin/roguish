@@ -137,7 +137,26 @@ var Player = function(x, y, initiative) {
 		playerTurn = true;
 		console.log('player turn called');
 		renderer.centerMapOnObject(this, function() {
-			document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+			var menu = {
+				x: (this.x + this.animations.spriteSheet._frameWidth + 8) * gamezoom,
+				y: this.y * gamezoom,
+				actions: [{
+					name: 'Move',
+					callback: function() {
+						document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+						mainMenu.destroy();
+					}
+				}, {
+					name: 'Attack',
+					callback: function() {
+
+					}
+				}]
+			};
+
+			var mainMenu = new Menu(menu);
+			mainMenu.render();
+			//
 		}.bind(this));
 		showSelectableArea(this);
 	};

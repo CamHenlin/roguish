@@ -18,8 +18,7 @@ function MapLoader(loader) {
 	this.loadMap = function(mapname) {
 		loader.removeAllEventListeners();
 		loader.addEventListener('fileload', handleMapLoad);
-		loader.loadManifest( [ { id: 'map', src: mapname }],true,'maps/');
-		console.log('map loaded.');
+		loader.loadManifest( [ { id: 'map', src: mapname }], true, 'maps/');
 	};
 
 	/**
@@ -30,7 +29,7 @@ function MapLoader(loader) {
 		map = loader.getResult('map');
 		loader.removeAllEventListeners();
 		loader.addEventListener('fileload', handleTilesetLoad);
-		loader.loadManifest( [ { id: 'tileset', src: map.tilesets[0].name+TILESET_FILE_TYPE } ], true, 'graphics/');
+		loader.loadManifest( [{ id: 'tileset', src: map.tilesets[0].name+TILESET_FILE_TYPE }], true, 'graphics/');
 	}
 
 	function handleTilesetLoad() {

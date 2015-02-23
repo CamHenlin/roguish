@@ -4,6 +4,7 @@
  */
 var Menu = function(options) {
 	// constructor
+	console.log(arguments);
 	Widget.apply(this, arguments);
 	this.actions = options.actions || [];
 
@@ -40,10 +41,10 @@ var Menu = function(options) {
 
 	// private
 	function template() {
-		html = "<div class='menu' "+this.positionStyling()+" >";
+		html = "<div class='menu button-default' " + this.positionStyling() + " >";
 		this.actions.forEach(function(action) {
-			html += "<button name='" + action.name + "'>" + action.name + "</button>";
-		})
+			html += "<button class='button-default' name='" + action.name + "'>" + action.name + "</button>";
+		});
 		html += "</div>";
 		return html;
 	}
