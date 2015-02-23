@@ -113,21 +113,36 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * [turnClickHandler click handler for turn]
+	 * [attackClickHandler click handler for attack]
+	 * @return {[type]} [description]
+	 */
+	var attackClickHandler = function() {
+		// TODO: write isObjectAtLocation and objectAtLocation
+		/*if (isSelectionInSelectableBounds(this, x, y) && isObjectAtLocation(x, y)) {
+			renderer.moveObjectTo(this, x, y);
+			removeSelectableArea();
+			calculateAttack(this, objectAtLocation(x, y));
+			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
+		}*/
+	}
+	attackClickHandler = attackClickHandler.bind(this);
+
+	/**
+	 * [moveClickHandler click handler for move]
 	 * @param  {[type]} event [description]
 	 * @return {[type]}       [description]
 	 */
-	var turnClickHandler = function(event) {
+	var moveClickHandler = function(event) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 
 		if (isSelectionInSelectableBounds(this, x, y)) {
-			renderer.moveObjectTo(this, x, y)
+			renderer.moveObjectTo(this, x, y);
 			removeSelectableArea();
-			document.getElementById("gamecanvas").removeEventListener('click', turnClickHandler, false);
+			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
 		}
 	};
-	turnClickHandler = turnClickHandler.bind(this);
+	moveClickHandler = moveClickHandler.bind(this);
 
 	/**
 	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
@@ -143,13 +158,14 @@ var Player = function(x, y, initiative) {
 				actions: [{
 					name: 'Move',
 					callback: function() {
-						document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+						document.getElementById("gamecanvas").addEventListener('click', moveClickHandler, false);
 						mainMenu.destroy();
 					}
 				}, {
 					name: 'Attack',
 					callback: function() {
-
+						document.getElementById("gamecanvas").addEventListener('click', attackClickHandler, false);
+						mainMenu.destroy();
 					}
 				}]
 			};

@@ -13,6 +13,8 @@ var Person = function() {
 	this.currentDirection = "";
 	this.lastFrameDirection = "";
 	this.sightDistance = DEFAULT_PERSON_SIGHT_DISTANCE;
+	this.health = DEFAULT_PERSON_HEALTH;
+	this.attack = DEFAULT_PERSON_ATTACK;
 
 	/**
 	 * [updateMovementAnimation note that this currently makes assumptions about what animations are available
