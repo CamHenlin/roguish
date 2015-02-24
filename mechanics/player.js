@@ -189,7 +189,7 @@ var Player = function(x, y, initiative) {
 		playerTurn = true;
 		console.log('player turn called');
 		renderer.centerMapOnObject(this, function() {
-			var actionMenu = new Form((this.x + this.animations.spriteSheet._frameWidth + 8) * gamezoom, this.y * gamezoom, [{
+			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',
 					type: 'button',
 					callback: function() {

@@ -303,8 +303,6 @@ function Renderer(gamestage) {
 	 * @return {[type]}         [description]
 	 */
 	function shiftEntireMap(xamount, yamount) {
-		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
-
 		for (var i = 0; i < activeObjects.length; i++) {
 			activeObjects[i].animations.x -= xamount;
 			activeObjects[i].animations.y -= yamount;
@@ -520,7 +518,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredY(obj) {
-		return ((obj.animations.y + obj.animations.spriteSheet._frameHeight / 2) - renderer.container.y - (gamestage.canvas.height / 2)) / gamezoom;
+		return ((obj.animations.y + obj.animations.spriteSheet._frameHeight / 2) + renderer.container.y - (gamestage.canvas.height / 2) / gamezoom);
 	}
 
 	/**
@@ -595,7 +593,11 @@ function Renderer(gamestage) {
 		return this.mapData.tileheight * (this.mapData.height);
 	};
 
-	this.setImage = function(image){
+	/**
+	 * [setImage description]
+	 * @param {[type]} image [description]
+	 */
+	this.setImage = function(image) {
 		this.imageData = image;
 	}
 }
