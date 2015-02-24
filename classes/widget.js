@@ -3,15 +3,14 @@
  * @param {Object} data object with x, y, container and el
  */
 var Widget = function(options) {
-	this.options = options || {};
-	this.x = this.options.x || null;
-	this.y = this.options.y || null;
-	this.cssClass = this.options.cssClass || null;
-	this.cssId = this.options.cssId || null;
-	this.container = this.options.container || $('body');
-	this.el = this.options.el || $("<div class='forms forms-default'></div>");
+	this.x = options.x || null;
+	this.y = options.y || null;
+	this.cssClass = null;
+	this.cssId = null;
+	this.container = $('body');
+	this.el = $("<div class='forms forms-default'></div>");
 
-	this.positionStyling = function() {
+	this.getPositionCSS = function() {
 		if (!this.x && !this.y) {
 			return "";
 		} else {
