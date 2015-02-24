@@ -116,14 +116,45 @@ var Player = function(x, y, initiative) {
 	 * [attackClickHandler click handler for attack]
 	 * @return {[type]} [description]
 	 */
-	var attackClickHandler = function() {
+	var attackClickHandler = function(event) {
+		var x = event.pageX / gamezoom;
+		var y = event.pageY / gamezoom;
 		// TODO: write isObjectAtLocation and objectAtLocation
-		/*if (isSelectionInSelectableBounds(this, x, y) && isObjectAtLocation(x, y)) {
+		if (isSelectionInSelectableBounds(this, x, y)) {
+			var clickEventSpriteSheet = new createjs.SpriteSheet({
+				"images": [loader.getResult("player")], // who cares, it's already preloaded
+				"frames": {
+					"width": 1, "height": 1, "count": 1
+				},
+				"animations": {
+					"exist": {
+						"frames" : [0],
+						"next" : "exist"
+					}
+				}
+			});
+			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
+
+			clickSprite.x = x;
+			clickSprite.y = y;
+			console.log(clickSprite);
+
+			var clickedEnemy = null;
+
+			for (var i = 0; i < activeObjects.length; i++) {
+				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
+					clickedEnemy = activeObjects[i];
+					break;
+				}
+			}
+
+			if (!clickedEnemy) { return; }
+
 			renderer.moveObjectTo(this, x, y);
 			removeSelectableArea();
-			calculateAttack(this, objectAtLocation(x, y));
+			calculateDamage(this, clickedEnemy);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
-		}*/
+		}
 	}
 	attackClickHandler = attackClickHandler.bind(this);
 
@@ -149,6 +180,10 @@ var Player = function(x, y, initiative) {
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
+		if (this !== activePlayer) {
+			return;
+		}
+
 		playerTurn = true;
 		console.log('player turn called');
 		renderer.centerMapOnObject(this, function() {

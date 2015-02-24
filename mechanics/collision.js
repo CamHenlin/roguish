@@ -171,4 +171,36 @@ var CollisionSystem = function() {
 
 		return {x: b, y: a};
 	};
+
+	/**
+	 * [simpleCollision description]
+	 * @param  {[type]} object1 [description]
+	 * @param  {[type]} object2 [description]
+	 * @return {[type]}         [description]
+	 */
+	this.simpleCollision = function(object1, object2) {
+		var obj1 = object1;
+		var obj2 = object2.animations;
+
+		return !(
+				obj1.y + obj1.spriteSheet._frameHeight < obj2.y ||
+				obj1.y > obj2.y + obj2.spriteSheet._frameHeight ||
+				obj1.x > obj2.x + obj2.spriteSheet._frameWidth  ||
+				obj1.x + obj1.spriteSheet._frameWidth < obj2.x
+		);
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

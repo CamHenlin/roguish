@@ -11,9 +11,11 @@ var Robot = function(x, y, level) {
 	this.movementSpeed = 50;
 	this.attack = level + 15;
 	this.defense = level - 15;
+	this.health = 5;
 
-	if (this.defense < 1)
+	if (this.defense < 1) {
 		this.defense = 1;
+	}
 
 	this.spriteSheet = new createjs.SpriteSheet({
 		"images": [loader.getResult("robot")],
@@ -140,6 +142,10 @@ var Robot = function(x, y, level) {
 		}
 	};
 
+	/**
+	 * [cleanUpMovement description]
+	 * @return {[type]} [description]
+	 */
 	this.cleanUpMovement = function() {
 		this.turnCounter = 0;
 		this.animations.gotoAndPlay("still");

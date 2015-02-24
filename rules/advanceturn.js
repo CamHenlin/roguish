@@ -8,13 +8,13 @@
  */
 function advanceTurn() {
 	document.getElementById("turnStatus").innerHTML = "";
-
+	var turnFlag = false;
 	for (var i = 0; i < activeObjects.length; i++) {
 		activeObjects[i].turnCounter += activeObjects[i].initiative;
 
-		if (activeObjects[i].turnCounter > MAX_TURN_COUNTER) {
-			// call turn dialog here normally
+		if (activeObjects[i].turnCounter > MAX_TURN_COUNTER && !turnFlag) {
 			activeObjects[i].turn();
+			turnFlag = true;
 			if (activeObjects[i].constructor === Player) {
 				activePlayer = activeObjects[i];
 			}
