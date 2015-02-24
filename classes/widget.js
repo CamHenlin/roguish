@@ -8,7 +8,7 @@ var Widget = function(options) {
 	this.cssClass = null;
 	this.cssId = null;
 	this.container = $('body');
-	this.el = $("<div class='forms forms-default'></div>");
+	this.el = {}; // going to reset slightly later in the code
 
 	this.getPositionCSS = function() {
 		if (!this.x && !this.y) {
@@ -17,6 +17,9 @@ var Widget = function(options) {
 			return "style='position:absolute; top:" + this.y + "px; left: " + this.x + "px;'";
 		}
 	}
+
+	// ugly hack to have to move this declaration here, since we want to use the getPositionCSS method:
+	this.el = $("<div class='forms forms-default' " + this.getPositionCSS() + "></div>");
 
 	this.hide = function() {
 		this.el.hide();

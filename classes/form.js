@@ -54,9 +54,7 @@ var Form = function(x, y, fields) {
 	}
 
 	function template() {
-		var html = "<form class='autoForm forms-default' onsubmit='return false' " + this.getPositionCSS() + " >" + inputFields.call(this);
-		html += "</form>";
-		return html;
+		return inputFields.call(this);
 	}
 
 	function textField(name, index) {
