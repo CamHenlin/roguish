@@ -183,9 +183,8 @@ var Player = function(x, y, initiative) {
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
-		if (this !== activePlayer) {
-			return;
-		}
+		this.currentDirection = "";
+		this.lastFrameDirection = "";
 
 		playerTurn = true;
 		console.log('player turn called');
