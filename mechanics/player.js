@@ -148,12 +148,15 @@ var Player = function(x, y, initiative) {
 				}
 			}
 
-			if (!clickedEnemy) { return; }
-
 			renderer.moveObjectTo(this, x, y);
-			removeSelectableArea();
-			calculateDamage(this, clickedEnemy);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
+			removeSelectableArea();
+
+			if (!clickedEnemy) {
+				return;
+			}
+
+			calculateDamage(this, clickedEnemy);
 		}
 	}
 	attackClickHandler = attackClickHandler.bind(this);
