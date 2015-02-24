@@ -119,7 +119,7 @@ var Player = function(x, y, initiative) {
 	var attackClickHandler = function(event) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
-		// TODO: write isObjectAtLocation and objectAtLocation
+
 		if (isSelectionInSelectableBounds(this, x, y)) {
 			var clickEventSpriteSheet = new createjs.SpriteSheet({
 				"images": [loader.getResult("player")], // who cares, it's already preloaded
