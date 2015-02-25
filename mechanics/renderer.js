@@ -59,7 +59,6 @@ function Renderer(gamestage) {
 	 * @return {[type]} [none]
 	 */
 	function completeRenderer() {
-		console.log();
 		this.gamestage.removeAllChildren(); // clear the gamestage since we are ready to render.
 		this.doneRendering = true;
 		this.gamestage.addChild(this.backgroundContainer);
@@ -95,7 +94,6 @@ function Renderer(gamestage) {
 		// loading each layer one at a time
 		for (var i = 0; i < this.mapData.layers.length; i++) {
 			var layer = this.mapData.layers[i];
-			// console.log(layer);
 			if (layer.type === 'tilelayer') { // one of these for each tile layer we add in tiled
 				if (i === 0) { // background 2
 					this.backgroundContainer.addChild(initDrawableLayer.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
@@ -419,8 +417,6 @@ function Renderer(gamestage) {
 	 */
 	this.centerMapOnObjectTick = function() {
 		if (tryCentering.call(this, this.centeredObject, MAP_MOVE_SPEED) === false) {
-			console.log('done centering!');
-			//shiftEntireMap.call(this, this.container.x % 16, this.container.y % 16);
 			this.centeringCallback();
 			this.centered = true;
 		}
@@ -528,7 +524,6 @@ function Renderer(gamestage) {
 	 * @return {[type]}       [description]
 	 */
 	function canShiftMapDown(speed) {
-		if (!renderer.container.y + (speed / 2) < 0) console.log('cant shift map down any further');
 		return renderer.container.y + (speed / 2) < 0;
 	}
 
@@ -538,8 +533,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}       [description]
 	 */
 	function canShiftMapUp(speed) {
-		if (!renderer.container.y + renderer.getMapHeight() - (speed / 2) > gamestage.canvas.height) console.log('cant shift map up any further');
-		return renderer.container.y + renderer.getMapHeight() - (speed / 2) > gamestage.canvas.height;
+		return gamestage.canvas.height - this.container.y + speed < this.getMapHeight();
 	}
 
 	/**

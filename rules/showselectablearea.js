@@ -22,17 +22,21 @@ function showSelectableArea(playerObject) {
 
 	removeSelectableArea();
 
-	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.y + playerObject.animations.spriteSheet._frameHeight);
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.animations.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.animations.y + playerObject.animations.spriteSheet._frameHeight / 2);
 	var distance = playerObject.sightDistance;
-	//console.log(renderer.fogOfWarGrid);
 
 	for (var i = coordinates.x - distance; i < coordinates.x + distance; i++) {
 		for (var j = coordinates.y - distance; j < coordinates.y + distance; j++) {
-			var selectableArea = new createjs.Sprite(fogOfWarSpriteSheet);
-			selectableArea.x = i * renderer.mapData.tilewidth;
-			selectableArea.y = j * renderer.mapData.tileheight;
-			renderer.fogOfWarContainer.addChild(selectableArea);
-			selectableAreas.push(selectableArea);
+			var deltax = Math.pow(Math.abs(coordinates.x - i), 2);
+			var deltay = Math.pow(Math.abs(coordinates.y - j), 2);
+
+			if (Math.sqrt(deltax + deltay) < distance) {
+				var selectableArea = new createjs.Sprite(fogOfWarSpriteSheet);
+				selectableArea.x = i * renderer.mapData.tilewidth;
+				selectableArea.y = j * renderer.mapData.tileheight;
+				renderer.fogOfWarContainer.addChild(selectableArea);
+				selectableAreas.push(selectableArea);
+			}
 		}
 	}
 }
@@ -55,13 +59,10 @@ function removeSelectableArea() {
  * @return {Boolean}   [description]
  */
 function isSelectionInSelectableBounds(playerObject, x, y) {
-	var selection = collisionSystem.getCollisionCoordinateFromCell(x, y);
-	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x, playerObject.y);
+	var selectCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.animations.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.animations.y + playerObject.animations.spriteSheet._frameHeight / 2);
+	var deltax = Math.pow(Math.abs(coordinates.x - selectCoordinate.x), 2);
+	var deltay = Math.pow(Math.abs(coordinates.y - selectCoordinate.y), 2);
 	var distance = playerObject.sightDistance;
-	var tilewidth = 16;
-	var playerWidthInCells = (playerObject.spriteSheet._frameWidth - (playerObject.spriteSheet._frameWidth / 2) % 16) / 16 - 1;
-	var playerHeightInCells = (playerObject.spriteSheet._frameHeight - (playerObject.spriteSheet._frameHeight / 2) % 16) / 16;
-
-	return 	(selection.x > coordinates.x - distance && selection.x < coordinates.x + playerWidthInCells + distance) &&
-			(selection.y > coordinates.y - distance + 1 && selection.y < coordinates.y + playerHeightInCells + distance);
+	return distance > Math.sqrt(deltax + deltay);
 }

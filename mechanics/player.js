@@ -97,8 +97,8 @@ var Player = function(x, y, initiative) {
 	});
 
 	this.animations = new createjs.Sprite(this.spriteSheet, "stand-front"); // change the second string to an animation from the spritesheet
-	this.animations.x = this.x;
-	this.animations.y = this.y;
+	this.animations.x = this.x + this.animations.spriteSheet._frameWidth / 4;
+	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
 	this.watchedElements = [];
 
 	// add our animations to global gamestage:
@@ -248,9 +248,9 @@ var Player = function(x, y, initiative) {
 					}
 				}]);
 			actionMenu.render();
+			showSelectableArea(this);
 			$("body").mousemove(mouseMoveHandler);
 		}.bind(this));
-		showSelectableArea(this);
 	};
 
 	this.cleanUpMovement = function() {
