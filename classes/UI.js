@@ -16,6 +16,9 @@ function mainForm() {
 	mainMenu.render();
 }
 
+/**
+* [select map menu form]
+*/
 function selectMap(previous) {
 	previous.hide();
 	var fields = [{
@@ -41,6 +44,9 @@ function selectMap(previous) {
 	newGame.render();
 }
 
+/**
+* [select map menu form]
+*/
 function selectPlayers(previous) {
 	previous.hide();
 

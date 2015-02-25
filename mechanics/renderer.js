@@ -47,7 +47,7 @@ function Renderer(gamestage) {
 			"still": {
 				"frames": [0],
 				"next": "still",
-				"speed": 1
+				"speed": 2
 			}
 		}
 	});
