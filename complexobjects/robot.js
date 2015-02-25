@@ -78,10 +78,10 @@ var Robot = function(x, y, level) {
 	 */
 	function moveUpOrDown(dy) {
 		if (dy >= 0) {
-			return renderer.moveObjectTo(this, x, y + this.movementSpeed); // Move down
+			return renderer.moveObjectTo(this, x, y + this.movementSpeed, false); // Move down
 		}
 
-		return renderer.moveObjectTo(this, x, y - this.movementSpeed); // Move up
+		return renderer.moveObjectTo(this, x, y - this.movementSpeed, false); // Move up
 	};
 
 	/**
@@ -92,10 +92,10 @@ var Robot = function(x, y, level) {
 	 */
 	function moveRightOrLeft(dx) {
 		if (dx >= 0) {
-			return renderer.moveObjectTo(this, x + this.movementSpeed, y); // move right
+			return renderer.moveObjectTo(this, x + this.movementSpeed, y, false); // move right
 		}
 
-		return renderer.moveObjectTo(this, x - this.movementSpeed, y); // move left
+		return renderer.moveObjectTo(this, x - this.movementSpeed, y, false); // move left
 	};
 
 	/**

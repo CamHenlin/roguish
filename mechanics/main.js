@@ -9,7 +9,8 @@ loader.loadManifest([
 	{id: "player", src: "graphics/player.png"},
 	{id: "robot", src: "graphics/treadbot1sheet.png"},
 	{id: "fogofwar", src: "graphics/fogofwar.png"},
-	{id: "selectablearea", src: "graphics/selectablearea.png"}
+	{id: "selectablearea", src: "graphics/selectablearea.png"},
+	{id: "validtile", src: "graphics/validtile.png"}
 ]);
 
 /**

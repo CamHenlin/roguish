@@ -148,7 +148,7 @@ var Player = function(x, y, initiative) {
 				}
 			}
 
-			renderer.moveObjectTo(this, x, y);
+			renderer.moveObjectTo(this, x, y, true);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
 			removeSelectableArea();
 
@@ -171,12 +171,55 @@ var Player = function(x, y, initiative) {
 		var y = event.pageY / gamezoom;
 
 		if (isSelectionInSelectableBounds(this, x, y)) {
-			renderer.moveObjectTo(this, x, y);
+			renderer.moveObjectTo(this, x, y, true);
 			removeSelectableArea();
 			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
 		}
 	};
 	moveClickHandler = moveClickHandler.bind(this);
+
+	var mouseMoveHandler = function(event) {
+		if (this !== activePlayer) {
+			$("body").unbund("mousemove", mouseMoveHandler);
+			renderer.gamestage.removeChild(this.mouseMoveSprite);
+			return;
+		}
+
+		var x = (event.pageX / gamezoom) - ((event.pageX / gamezoom) % 16);
+		var y = (event.pageY / gamezoom) - ((event.pageY / gamezoom) % 16);
+
+		if (!this.mouseMoveSprite) {
+			var mouseMoveEventSpriteSheet = new createjs.SpriteSheet({
+				"images": [loader.getResult("validtile")], // who cares, it's already preloaded
+				"frames": {
+					"width": 16, "height": 16, "count": 2
+				},
+				"animations": {
+					"valid": {
+						"frames" : [0],
+						"next" : "valid"
+					},
+					"invalid": {
+						"frames" : [1],
+						"next" : "invalid"
+					}
+				}
+			});
+			this.mouseMoveSprite = new createjs.Sprite(mouseMoveEventSpriteSheet, "exist");
+
+			renderer.gamestage.addChild(this.mouseMoveSprite);
+		}
+
+		if (isSelectionInSelectableBounds(this, x, y)) {
+			this.mouseMoveSprite.gotoAndPlay("valid");
+		} else {
+			this.mouseMoveSprite.gotoAndPlay("invalid");
+		}
+
+		this.mouseMoveSprite.x = x;
+		this.mouseMoveSprite.y = y;
+	};
+	mouseMoveHandler = mouseMoveHandler.bind(this);
 
 	/**
 	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
@@ -205,7 +248,7 @@ var Player = function(x, y, initiative) {
 					}
 				}]);
 			actionMenu.render();
-			//
+			$("body").mousemove(mouseMoveHandler);
 		}.bind(this));
 		showSelectableArea(this);
 	};

@@ -366,11 +366,11 @@ function Renderer(gamestage) {
 	this.moveObjectTo = function(trackedObject, targetx, targety) {
 		this.movingObject = trackedObject;
 
-		targetx -= this.container.x - trackedObject.animations.spriteSheet._frameWidth / 2;
-		targety -= this.container.y - trackedObject.animations.spriteSheet._frameHeight / 2;
+		targetx -= this.container.x;
+		targety -= this.container.y;
 		if (!collisionSystem.checkCellValid(targetx, targety) ||
-			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x + trackedObject.animations.spriteSheet._frameWidth / 2, trackedObject.y - trackedObject.animations.spriteSheet._frameHeight / 2).x === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).x &&
-			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x + trackedObject.animations.spriteSheet._frameWidth / 2, trackedObject.y - trackedObject.animations.spriteSheet._frameHeight / 2).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {
+			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).x &&
+			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {
 			cleanUpMovement.call(this);
 
 			return false;
@@ -420,6 +420,7 @@ function Renderer(gamestage) {
 	this.centerMapOnObjectTick = function() {
 		if (tryCentering.call(this, this.centeredObject, MAP_MOVE_SPEED) === false) {
 			console.log('done centering!');
+			shiftEntireMap.call(this, this.container.x % 16, this.container.y % 16);
 			this.centeringCallback();
 			this.centered = true;
 		}
@@ -435,11 +436,11 @@ function Renderer(gamestage) {
 		var distanceX = distanceFromCenteredX.call(this, obj);
 		var distanceY = distanceFromCenteredY.call(this, obj);
 
-		if (Math.abs(distanceX) < speed) {
+		if (Math.abs(distanceX) < 2 * speed) {
 			distanceX = 0;
 		}
 
-		if (Math.abs(distanceY) < speed) {
+		if (Math.abs(distanceY) < 2 * speed) {
 			distanceY = 0;
 		}
 
@@ -518,7 +519,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredY(obj) {
-		return ((obj.animations.y + obj.animations.spriteSheet._frameHeight / 2) + renderer.container.y - (gamestage.canvas.height / 2) / gamezoom);
+		return (obj.animations.y + obj.animations.spriteSheet._frameHeight / 2) + renderer.container.y - (gamestage.canvas.height / 2);
 	}
 
 	/**

@@ -34,8 +34,6 @@ var Enemy = function(x, y, level) {
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
-		console.log("enemy turn called");
-		playerTurn = true;
 		this.doMovement();
 	};
 

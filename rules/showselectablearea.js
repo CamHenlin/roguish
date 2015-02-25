@@ -56,8 +56,12 @@ function removeSelectableArea() {
  */
 function isSelectionInSelectableBounds(playerObject, x, y) {
 	var selection = collisionSystem.getCollisionCoordinateFromCell(x, y);
-	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.y + playerObject.animations.spriteSheet._frameHeight);
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x, playerObject.y);
 	var distance = playerObject.sightDistance;
+	var tilewidth = 16;
+	var playerWidthInCells = (playerObject.spriteSheet._frameWidth - (playerObject.spriteSheet._frameWidth / 2) % 16) / 16 - 1;
+	var playerHeightInCells = (playerObject.spriteSheet._frameHeight - (playerObject.spriteSheet._frameHeight / 2) % 16) / 16;
 
-	return (selection.x > coordinates.x - distance && selection.x < coordinates.x + distance) && (selection.y > coordinates.y - distance && selection.y < coordinates.y + distance);
+	return 	(selection.x > coordinates.x - distance && selection.x < coordinates.x + playerWidthInCells + distance) &&
+			(selection.y > coordinates.y - distance + 1 && selection.y < coordinates.y + playerHeightInCells + distance);
 }
