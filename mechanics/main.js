@@ -10,7 +10,8 @@ loader.loadManifest([
 	{id: "robot", src: "graphics/treadbot1sheet.png"},
 	{id: "fogofwar", src: "graphics/fogofwar.png"},
 	{id: "selectablearea", src: "graphics/selectablearea.png"},
-	{id: "validtile", src: "graphics/validtile.png"}
+	{id: "validtile", src: "graphics/validtile.png"},
+	{id: "dragon", src: "graphics/dragon.png"}
 ]);
 
 /**
@@ -87,8 +88,14 @@ function initActiveObjects(playerCount, enemyCount) {
 		updateFogOfWar(activeObjects[i]);
 	}
 
+	var random = 0;
 	for (i = 0; i < enemyCount; i++) {
-		activeObjects.push(new Robot(i * 32 + 32 + 180, i * 32 + 180, 1));
+		random = Math.random();
+
+		if (random < 0.55)
+			activeObjects.push(new Robot(i * 32 + 32 + 180, i * 32 + 180, 1));
+		else
+			activeObjects.push(new Dragon(i * 32 + 32 + 180, i * 32 + 180, 1));
 	}
 }
 

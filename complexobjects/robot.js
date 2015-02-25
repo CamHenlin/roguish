@@ -1,14 +1,15 @@
 /**
- * [Robot description]
- * @param {[type]} x     [description]
- * @param {[type]} y     [description]
- * @param {[type]} level [description]
+ * [Robot Class that defines the attributes of a robot Enemy]
+ * @param {[type]} x     [Initial x position]
+ * @param {[type]} y     [Initial y position]
+ * @param {[type]} level [Initial level]
+ * @constructor
  */
 var Robot = function(x, y, level) {
 	Enemy.call(this, x, y, level); // Call super constructor
 
 	this.attackSpeed = level * 2;
-	this.movementSpeed = 50;
+	this.movementSpeed = 100;
 	this.attack = level + 15;
 	this.defense = level - 15;
 	this.health = 5;
@@ -47,30 +48,6 @@ var Robot = function(x, y, level) {
 	gamestage.addChild(this.animations);
 
 	/**
-	 * [getNearestPlayer description]
-	 * @return {[type]} [description]
-	 */
-	this.getNearestPlayer = function() {
-		var leastDistance = -1;
-		var nearestPlayer;
-
-		for (var i = 0; i < activeObjects.length; i++) {
-			if (activeObjects[i] instanceof Player) {
-				var dx = Math.abs(activeObjects[i].x - this.x);
-				var dy = Math.abs(activeObjects[i].y - this.y);
-				var distance = dy + dx;
-
-				if (leastDistance == -1 || leastDistance > distance) {
-					leastDistance = distance;
-					nearestPlayer = activeObjects[i];
-				}
-			}
-		}
-
-		return nearestPlayer;
-	};
-
-	/**
 	 * [moveUpOrDown decides whether robot should move up or down based on nearest player location]
 	 * @private
 	 * @param {[type]} [dy] [difference between nearest player's y position and this robot's y position]
@@ -99,8 +76,7 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [doMovement description]
-	 * @return {[type]} [description]
+	 * [doMovement Robots move towards the nearest player]
 	 */
 	this.doMovement = function() {
 		this.animations.gotoAndPlay("attack");
@@ -127,10 +103,9 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [updateMovementAnimation description]
-	 * @param  {[type]} deltax [description]
-	 * @param  {[type]} deltay [description]
-	 * @return {[type]}        [description]
+	 * [updateMovementAnimation Updates the robot's animation based on what direction it is moving]
+	 * @param  {[type]} deltax [Robot's movement on the x-axis]
+	 * @param  {[type]} deltay [Robot's movement on the y-axis]
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {
@@ -143,8 +118,7 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [cleanUpMovement description]
-	 * @return {[type]} [description]
+	 * [cleanUpMovement Function that is called when the robot is done moving]
 	 */
 	this.cleanUpMovement = function() {
 		this.turnCounter = 0;
