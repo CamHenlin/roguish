@@ -420,7 +420,7 @@ function Renderer(gamestage) {
 	this.centerMapOnObjectTick = function() {
 		if (tryCentering.call(this, this.centeredObject, MAP_MOVE_SPEED) === false) {
 			console.log('done centering!');
-			shiftEntireMap.call(this, this.container.x % 16, this.container.y % 16);
+			//shiftEntireMap.call(this, this.container.x % 16, this.container.y % 16);
 			this.centeringCallback();
 			this.centered = true;
 		}
@@ -490,7 +490,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredX(obj) {
-		return ((obj.animations.x + obj.animations.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2)) / gamezoom;
+		return (obj.animations.x + obj.animations.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
 	}
 
 	/**
@@ -528,6 +528,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}       [description]
 	 */
 	function canShiftMapDown(speed) {
+		if (!renderer.container.y + (speed / 2) < 0) console.log('cant shift map down any further');
 		return renderer.container.y + (speed / 2) < 0;
 	}
 
@@ -537,6 +538,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}       [description]
 	 */
 	function canShiftMapUp(speed) {
+		if (!renderer.container.y + renderer.getMapHeight() - (speed / 2) > gamestage.canvas.height) console.log('cant shift map up any further');
 		return renderer.container.y + renderer.getMapHeight() - (speed / 2) > gamestage.canvas.height;
 	}
 
