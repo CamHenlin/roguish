@@ -32,8 +32,8 @@ function showSelectableArea(playerObject) {
 
 			if (Math.sqrt(deltax + deltay) < distance) {
 				var selectableArea = new createjs.Sprite(fogOfWarSpriteSheet);
-				selectableArea.x = i * renderer.mapData.tilewidth;
-				selectableArea.y = j * renderer.mapData.tileheight;
+				selectableArea.x = i * renderer.mapData.tilewidth - renderer.container.x;
+				selectableArea.y = j * renderer.mapData.tileheight - renderer.container.y;
 				renderer.fogOfWarContainer.addChild(selectableArea);
 				selectableAreas.push(selectableArea);
 			}
