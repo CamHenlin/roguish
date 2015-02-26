@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: simpleobjects/examplesimpleobject.js</title>
+    <title>JSDoc: Source: rules/calculatedamage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: simpleobjects/examplesimpleobject.js</h1>
+    <h1 class="page-title">Source: rules/calculatedamage.js</h1>
 
     
 
@@ -27,22 +27,14 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @name  ExampleComplexObject
- * @class
+ * [calculateDamage used to calculate damage during an attack]
+ * @param  {[type]} attackingObject [description]
+ * @param  {[type]} defendingObject [description]
+ * @return {[type]}              [description]
  */
-
-/**
- * ExampleSimpleObject
- * @constructor
- */
-var ExampleSimpleObject = function() {
-	// I have all the properties of a simple object here
-};
-
-ExampleSimpleObject.prototype = new SimpleObject;
-ExampleSimpleObject.prototype.constructor = ExampleSimpleObject
-
-</code></pre>
+function calculateDamage(attackingObject, defendingObject) {
+	defendingObject.hp -= attackingObject.attack;
+}</code></pre>
         </article>
     </section>
 

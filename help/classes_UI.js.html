@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: simpleobjects/examplesimpleobject.js</title>
+    <title>JSDoc: Source: classes/UI.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: simpleobjects/examplesimpleobject.js</h1>
+    <h1 class="page-title">Source: classes/UI.js</h1>
 
     
 
@@ -27,22 +27,77 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @name  ExampleComplexObject
- * @class
+ * [mainForm main menu form]
+ * @return {[type]} [description]
  */
+function mainForm() {
+	var fields = [{
+		text: 'New Game',
+		type: 'button',
+		callback: function() {
+			console.log('click')
+			selectMap(mainMenu);
+		}
+	}];
+
+	var mainMenu = new Form(fields);
+	mainMenu.render();
+}
 
 /**
- * ExampleSimpleObject
- * @constructor
- */
-var ExampleSimpleObject = function() {
-	// I have all the properties of a simple object here
-};
+* [select map menu form]
+*/
+function selectMap(previous) {
+	previous.hide();
+	var fields = [{
+		text: 'back',
+		type: 'button',
+		callback: function() {
+			newGame.hide();
+			mainForm();
+		}
+	}, {
+		text: 'next',
+		type: 'button',
+		callback: function() {
+			selectPlayers(newGame);
+		}
+	}, {
+		text: 'map',
+		type: 'select',
+		options: ['forrest', 'dungeon']
+	}];
 
-ExampleSimpleObject.prototype = new SimpleObject;
-ExampleSimpleObject.prototype.constructor = ExampleSimpleObject
+	var newGame = new Form(100, 100, fields);
+	newGame.render();
+}
 
-</code></pre>
+/**
+* [select map menu form]
+*/
+function selectPlayers(previous) {
+	previous.hide();
+
+	var fields = [{
+		text: 'Start Game',
+		type: 'button',
+		callback: function() {
+			startGame.hide();
+			alert(startGame.getValue('numberOfPlayers'));
+		}
+	}, {
+		text: 'Number of Players',
+		type: 'range',
+		id: 'numberOfPlayers',
+		min: 1,
+		max: 4
+	}];
+
+	var startGame = new Form(200, 200, fields);
+	startGame.render();
+}
+
+mainForm();</code></pre>
         </article>
     </section>
 

@@ -26,73 +26,64 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @name Enemy
- * @class
- */
+            <pre class="prettyprint source linenums"><code>
 
 /**
- * Enemy simple example of an enemy
+ * [Enemy Base class of an enemy. All enemies will extend this class]
+ * @param {[type]} x     [Initial x position of enemy]
+ * @param {[type]} y     [Initial y position of enemy]
+ * @param {[type]} level [Initial level of enemy]
  * @constructor
  */
-var Enemy = function(x, y) {
+var Enemy = function(x, y, level) {
 	this.x = x;  // x position on canvas
 	this.y = y;  // y position on canvas
-
-	this.spriteSheet =  new createjs.SpriteSheet({
-		"images": [loader.getResult("enemy")],
-		"frames": {
-			"width": 28,
-			"height": 30,
-			"count": 5
-		},
-		"animations": {
-			"move": {
-				"frames": [0, 1, 2, 3, 4],
-				"next": "move",
-				"speed": 1
-			}
-		}
-	});
-
-	this.animations = new createjs.Sprite(this.spriteSheet, "move");
-	this.animations.x = this.x;
-	this.animations.y = this.y;
-	this.animations.regX = 14;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
+	this.level = level;
+	this.hp = 10 * level;
+	this.xp = 100 * level;
+	this.movementSpeed = level * 25;
+	this.attackSpeed = level;
+	this.attack = level;
+	this.defense = level;
+	this.scout = level * 25;
+	this.magic = level;
+	this.initiative = 10;
+	this.turnCounter = 0;  // Determines when the enemy should perform its turn
 
 	this.watchedElements = [];
-
-	var counter = 0;
-	gamestage.addChild(this.animations);
-
-	var dy = 0; // change in y and x respectively, used for movement.
-	var dx = 0;
-	var SPEED = 1; // constants, I don't know where else I should be declaring these.
-	var TURN_RATE = 60;
+	this.counter = 0;
+	this.moveSpeed = 4;         // How fast the enemy moves on the screen.
+								// moveSpeed is different from movementSpeed as movementSpeed determines how far
+								// the enemy moves per turn.
 
 	/**
-	 * Picks a random direction to move every TURN_RATE ticks and updates the current position.
+	 * [doMovement This function will be inherited by child classes that handle how the enemy moves]
 	 */
 	this.doMovement = function() {
-		if (counter % TURN_RATE == 0) { // pick a new random direction to move in every TURN_RATE ticks
-			dx = dy = 0;
-			var randomNumber = Math.floor(Math.random() * 4); // Random integer in range [0-3]
+	};
 
-			if (randomNumber == 0) {        // Move up
-				dy = -SPEED;
-			} else if (randomNumber == 1) { // Move down
-				dy = SPEED;
-			} else if (randomNumber == 2) { // Move right
-				dx = SPEED;
-				this.animations.scaleX = 1;
-			} else { 						// Move left
-				dx = -SPEED;
-				this.animations.scaleX = -1;
+	/**
+	 * [getNearestPlayer Finds the player on the gamestage that is closest to this enemy]
+	 * @return {[Player]} [The nearest player to this enemy]
+	 */
+	this.getNearestPlayer = function() {
+		var leastDistance = -1;
+		var nearestPlayer;
+
+		for (var i = 0; i &lt; activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				var dx = Math.abs(activeObjects[i].x - this.x);
+				var dy = Math.abs(activeObjects[i].y - this.y);
+				var distance = dy + dx;
+
+				if (leastDistance == -1 || leastDistance > distance) {
+					leastDistance = distance;
+					nearestPlayer = activeObjects[i];
+				}
 			}
 		}
 
-		this.animations.x += dx;
-		this.animations.y += dy;
+		return nearestPlayer;
 	};
 
 	/**
@@ -100,24 +91,48 @@ var Enemy = function(x, y) {
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
-
+		this.doMovement();
 	};
 
+	/**
+	 * [die Kills this enemy, removing the enemy from activeObjects and the gamestage]
+	 */
+	this.die = function() {
+		gamestage.removeChild(this.animations);
+		var index = activeObjects.indexOf(this);
 
+		if (index > -1) {
+			activeObjects.splice(index, 1);
+		}
+
+		console.log("enemy has died");
+	};
+
+	/**
+	 * [tickActions Keeps track of watchedElements and what the enemy should be doing]
+	 */
 	this.tickActions = function() {
 		for (var i = 0; i &lt; this.watchedElements.length; i++) {
 			this.watchedElements[i].tickActions(); // tick watched elements
 		}
 
-		this.doMovement();
-		counter++;
+		this.counter++;
+
+		if (this.hp &lt;= 0) {
+			this.die();
+		}
+	};
+
+	/**
+	 * [cleanUpMovement Gets called after enemy has finished moving]
+	 */
+	this.cleanUpMovement = function() {
+		this.turnCounter = 0;
 	};
 };
 
 Enemy.prototype = new ComplexObject;
-Enemy.prototype.constructor = Enemy;
-
-</code></pre>
+Enemy.prototype.constructor = Enemy;</code></pre>
         </article>
     </section>
 
@@ -127,13 +142,13 @@ Enemy.prototype.constructor = Enemy;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collision.html">Collision</a></li><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="SimpleObject.html">SimpleObject</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initPlayers">initPlayers</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#Main">Main</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collision.html">Collision</a></li><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initActiveObjects">initActiveObjects</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#mainForm">mainForm</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Fri Feb 13 2015 08:43:20 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Feb 26 2015 14:44:34 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

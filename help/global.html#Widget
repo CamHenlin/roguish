@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: simpleobjects/examplesimpleobject.js</title>
+    <title>JSDoc: Class: Widget</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,34 +17,127 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: simpleobjects/examplesimpleobject.js</h1>
+    <h1 class="page-title">Class: Widget</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @name  ExampleComplexObject
- * @class
- */
+        <h2>
+        Widget
+        </h2>
+        
+    
+</header>
 
-/**
- * ExampleSimpleObject
- * @constructor
- */
-var ExampleSimpleObject = function() {
-	// I have all the properties of a simple object here
-};
+<article>
+    <div class="container-overview">
+    
+        
 
-ExampleSimpleObject.prototype = new SimpleObject;
-ExampleSimpleObject.prototype.constructor = ExampleSimpleObject
+    
 
-</code></pre>
-        </article>
-    </section>
+    <h4 class="name" id="Widget"><span class="type-signature"></span>new Widget<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="classes_widget.js.html">classes/widget.js</a>, <a href="classes_widget.js.html#line1">line 1</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

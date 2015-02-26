@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: simpleobjects/examplesimpleobject.js</title>
+    <title>JSDoc: Source: rules/fogofwar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: simpleobjects/examplesimpleobject.js</h1>
+    <h1 class="page-title">Source: rules/fogofwar.js</h1>
 
     
 
@@ -27,22 +27,27 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @name  ExampleComplexObject
- * @class
+ * [updateFogOfWar updates the fog of war around a player]
+ * @param  {[type]} playerObject [description]
+ * @return {[type]}              [description]
  */
+function updateFogOfWar(playerObject) {
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.y + playerObject.animations.spriteSheet._frameHeight);
+	var distance = playerObject.sightDistance;
 
-/**
- * ExampleSimpleObject
- * @constructor
- */
-var ExampleSimpleObject = function() {
-	// I have all the properties of a simple object here
-};
+	for (var i = coordinates.x - distance; i &lt; coordinates.x + distance; i++) {
+		for (var j = coordinates.y - distance; j &lt; coordinates.y + distance; j++) {
+			var deltax = Math.pow(Math.abs(coordinates.x - i), 2);
+			var deltay = Math.pow(Math.abs(coordinates.y - j), 2);
 
-ExampleSimpleObject.prototype = new SimpleObject;
-ExampleSimpleObject.prototype.constructor = ExampleSimpleObject
-
-</code></pre>
+			if (Math.sqrt(deltax + deltay) &lt; distance) {
+				if (renderer.fogOfWarGrid[j]) {
+					renderer.fogOfWarContainer.removeChild(renderer.fogOfWarGrid[j][i]);
+				}
+			}
+		}
+	}
+}</code></pre>
         </article>
     </section>
 

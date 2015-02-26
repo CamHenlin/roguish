@@ -37,17 +37,17 @@
  * @param {int} y [initial coordinate]
  * @constructor
  */
-var Player = function(x, y) {
+var Player = function(x, y, initiative) {
 	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
 	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
-	this.initiative = 1; // this is a statistic used for determining player turn in default advanceturn.js
+	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
 		"frames": {
-			"width": 32,
-			"height": 32,
+			"width": 16,
+			"height": 16,
 			"count": 16
 		},
 		"animations": {
@@ -125,9 +125,11 @@ var Player = function(x, y) {
 	});
 
 	this.animations = new createjs.Sprite(this.spriteSheet, "stand-front"); // change the second string to an animation from the spritesheet
-	this.animations.x = this.x;
-	this.animations.y = this.y;
+	this.animations.x = this.x + this.animations.spriteSheet._frameWidth / 3;
+	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
 	this.watchedElements = [];
+
+	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
 
 	// add our animations to global gamestage:
 	gamestage.addChild(this.animations);
@@ -141,34 +143,177 @@ var Player = function(x, y) {
 	};
 
 	/**
-	 * [turnClickHandler click handler for turn]
+	 * [attackClickHandler click handler for attack]
+	 * @return {[type]} [description]
+	 */
+	var attackClickHandler = function(event) {
+		var x = event.pageX / gamezoom;
+		var y = event.pageY / gamezoom;
+
+		if (isSelectionInSelectableBounds(this, x, y)) {
+			var clickEventSpriteSheet = new createjs.SpriteSheet({
+				"images": [loader.getResult("player")], // who cares, it's already preloaded
+				"frames": {
+					"width": 1, "height": 1, "count": 1
+				},
+				"animations": {
+					"exist": {
+						"frames" : [0],
+						"next" : "exist"
+					}
+				}
+			});
+			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
+
+			clickSprite.x = x;
+			clickSprite.y = y;
+			console.log(clickSprite);
+
+			var clickedEnemy = null;
+
+			for (var i = 0; i &lt; activeObjects.length; i++) {
+				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
+					clickedEnemy = activeObjects[i];
+					break;
+				}
+			}
+
+			renderer.moveObjectTo(this, x, y, true);
+			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
+			removeSelectableArea();
+
+			if (!clickedEnemy) {
+				return;
+			}
+
+			calculateDamage(this, clickedEnemy);
+		}
+	}
+	attackClickHandler = attackClickHandler.bind(this);
+
+	/**
+	 * [moveClickHandler click handler for move]
 	 * @param  {[type]} event [description]
 	 * @return {[type]}       [description]
 	 */
-	var turnClickHandler = function(event) {
+	var moveClickHandler = function(event) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
-		renderer.moveObjectTo(this, x, y);
-		document.getElementById("gamecanvas").removeEventListener('click', arguments.callee, false);
+
+		if (isSelectionInSelectableBounds(this, x, y)) {
+			renderer.moveObjectTo(this, x, y, true);
+			removeSelectableArea();
+			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
+		}
 	};
+	moveClickHandler = moveClickHandler.bind(this);
+
+	var mouseMoveHandler = function(event) {
+		if (this !== activePlayer) {
+			$("body").unbind("mousemove");
+			renderer.gamestage.removeChild(this.mouseMoveSprite);
+			return;
+		}
+
+		var x = (event.pageX / gamezoom) - ((event.pageX / gamezoom) % 16);
+		var y = (event.pageY / gamezoom) - ((event.pageY / gamezoom) % 16);
+
+		if (!this.mouseMoveSprite) {
+			var mouseMoveEventSpriteSheet = new createjs.SpriteSheet({
+				"images": [loader.getResult("validtile")], // who cares, it's already preloaded
+				"frames": {
+					"width": 16, "height": 16, "count": 2
+				},
+				"animations": {
+					"valid": {
+						"frames" : [0],
+						"next" : "valid"
+					},
+					"invalid": {
+						"frames" : [1],
+						"next" : "invalid"
+					}
+				}
+			});
+			this.mouseMoveSprite = new createjs.Sprite(mouseMoveEventSpriteSheet, "exist");
+
+			renderer.gamestage.addChild(this.mouseMoveSprite);
+		}
+
+		if (isSelectionInSelectableBounds(this, x, y)) {
+			this.mouseMoveSprite.gotoAndPlay("valid");
+		} else {
+			this.mouseMoveSprite.gotoAndPlay("invalid");
+		}
+
+		this.mouseMoveSprite.x = x;
+		this.mouseMoveSprite.y = y;
+	};
+	mouseMoveHandler = mouseMoveHandler.bind(this);
 
 	/**
 	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
 	 * @return {[type]} [description]
 	 */
 	this.turn = function() {
+		this.currentDirection = "";
+		this.lastFrameDirection = "";
+
+		playerTurn = true;
 		console.log('player turn called');
-		document.getElementById("gamecanvas").addEventListener('click', turnClickHandler, false);
+		renderer.centerMapOnObject(this, function() {
+			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
+					text: 'Move',
+					type: 'button',
+					callback: function() {
+						document.getElementById("gamecanvas").addEventListener('click', moveClickHandler, false);
+						if (this.mouseMoveSprite) {
+							renderer.gamestage.addChild(this.mouseMoveSprite);
+						}
+						$("body").mousemove(mouseMoveHandler);
+						actionMenu.destroy();
+					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
+				}, {
+					text: 'Attack',
+					type: 'button',
+					callback: function() {
+						document.getElementById("gamecanvas").addEventListener('click', attackClickHandler, false);
+						if (this.mouseMoveSprite) {
+							renderer.gamestage.addChild(this.mouseMoveSprite);
+						}
+						$("body").mousemove(mouseMoveHandler);
+						actionMenu.destroy();
+					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
+				}]);
+			actionMenu.render();
+			showSelectableArea(this);
+		}.bind(this));
+	};
+
+	this.cleanUpMovement = function() {
+		this.animations.gotoAndPlay("stand-front");
+		this.turnCounter = 0;
+	};
+
+	/**
+	 * [setName Sets the name of the player]
+	 * @param {[type]} name [The name to be set]
+	 */
+	this.setName = function(name) {
+		playerName = name;
+	};
+
+	/**
+	 * [getName Gets the name of the player]
+	 * @return {[type]} [The name of the player]
+	 */
+	this.getName = function() {
+		return playerName;
 	};
 };
 
 Player.prototype = new Person;
 Player.prototype.constructor = Player;
-
-
-
-
-
 </code></pre>
         </article>
     </section>
@@ -179,13 +324,13 @@ Player.prototype.constructor = Player;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collision.html">Collision</a></li><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="SimpleObject.html">SimpleObject</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initPlayers">initPlayers</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#Main">Main</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collision.html">Collision</a></li><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initActiveObjects">initActiveObjects</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#mainForm">mainForm</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Fri Feb 13 2015 08:43:20 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Feb 26 2015 14:44:34 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -53,11 +53,11 @@ var CollisionSystem = function() {
 			var a = ~~(y / tilesize);
 			var b = ~~(x / tilesize);
 
-			if (a &lt;= -1 || a > this.collisionArray.length) {
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b &lt;= -1 || b > this.collisionArray[a].length) {
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -84,11 +84,11 @@ var CollisionSystem = function() {
 			var a = x;
 			var b = x;
 
-			if (a &lt;= -1 || a > this.collisionArray.length) {
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b &lt;= -1 || b > this.collisionArray[a].length) {
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -115,11 +115,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y / tilesize);
 			var b = ~~(object.x / tilesize);
 
-			if (a &lt;= -1 || a > this.collisionArray.length) {
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b &lt;= -1 || b > this.collisionArray[a].length) {
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -127,11 +127,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y / tilesize);
 			var b = ~~(object.x + object.animations.spriteSheet._frameWidth / tilesize);
 
-			if (a &lt;= -1 || a > this.collisionArray.length) {
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b &lt;= -1 || b > this.collisionArray[a].length) {
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -143,11 +143,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y + object.animations.spriteSheet._frameHeight / tilesize);
 			var b = ~~(object.x / tilesize);
 
-			if (a &lt;= -1 || a > this.collisionArray.length) {
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b &lt;= -1 || b > this.collisionArray[a].length) {
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -159,11 +159,11 @@ var CollisionSystem = function() {
 			var a = ~~(object.y + object.animations.spriteSheet._frameHeight / tilesize);
 			var b = ~~(object.x + object.animations.spriteSheet._frameWidth / tilesize);
 
-			if (a &lt;= -1 || a > this.collisionArray.length) {
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
 				return false;
 			}
 
-			if (b &lt;= -1 || b > this.collisionArray[a].length) {
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 				return false;
 			}
 
@@ -189,17 +189,50 @@ var CollisionSystem = function() {
 		var a = ~~(y / tilesize);
 		var b = ~~(x / tilesize);
 
-		if (a &lt;= -1 || a > this.collisionArray.length) {
+		if (a &lt;= -1 || a >= this.collisionArray.length) {
 			a = 0;
 		}
 
-		if (b &lt;= -1 || b > this.collisionArray[a].length) {
+		if (b &lt;= -1 || b >= this.collisionArray[a].length) {
 			b = 0;
 		}
 
 		return {x: b, y: a};
 	};
-}</code></pre>
+
+	/**
+	 * [simpleCollision description]
+	 * @param  {[type]} object1 [description]
+	 * @param  {[type]} object2 [description]
+	 * @return {[type]}         [description]
+	 */
+	this.simpleCollision = function(object1, object2) {
+		var obj1 = object1;
+		var obj2 = object2.animations;
+
+		return !(
+				obj1.y + obj1.spriteSheet._frameHeight &lt; obj2.y ||
+				obj1.y > obj2.y + obj2.spriteSheet._frameHeight ||
+				obj1.x > obj2.x + obj2.spriteSheet._frameWidth  ||
+				obj1.x + obj1.spriteSheet._frameWidth &lt; obj2.x
+		);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
         </article>
     </section>
 
@@ -209,13 +242,13 @@ var CollisionSystem = function() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collision.html">Collision</a></li><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="SimpleObject.html">SimpleObject</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initPlayers">initPlayers</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#Main">Main</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Collision.html">Collision</a></li><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initActiveObjects">initActiveObjects</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#mainForm">mainForm</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Fri Feb 13 2015 08:43:20 GMT-0800 (PST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Feb 26 2015 14:44:34 GMT-0800 (PST)
 </footer>
 
 <script> prettyPrint(); </script>

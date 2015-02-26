@@ -1,0 +1,3 @@
+ROBOT = 0
+DRAGON = 1
+TREASURE = 2
