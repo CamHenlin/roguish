@@ -21,8 +21,8 @@ var Dragon = function(x, y, level) {
 	this.spriteSheet = new createjs.SpriteSheet({  // set sprite for the dragon
 		"images": [loader.getResult("dragon")],
 		"frames": {
-			"width": 67,
-			"height": 40,
+			"width": 34,
+			"height": 20,
 			"count": 3
 		},
 		"animations": {

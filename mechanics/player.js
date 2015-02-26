@@ -18,8 +18,8 @@ var Player = function(x, y, initiative) {
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
 		"frames": {
-			"width": 32,
-			"height": 32,
+			"width": 16,
+			"height": 16,
 			"count": 16
 		},
 		"animations": {
@@ -97,7 +97,7 @@ var Player = function(x, y, initiative) {
 	});
 
 	this.animations = new createjs.Sprite(this.spriteSheet, "stand-front"); // change the second string to an animation from the spritesheet
-	this.animations.x = this.x + this.animations.spriteSheet._frameWidth / 4;
+	this.animations.x = this.x + this.animations.spriteSheet._frameWidth / 3;
 	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
 	this.watchedElements = [];
 

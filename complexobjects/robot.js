@@ -21,8 +21,8 @@ var Robot = function(x, y, level) {
 	this.spriteSheet = new createjs.SpriteSheet({
 		"images": [loader.getResult("robot")],
 		"frames": {
-			"width": 28,
-			"height": 30,
+			"width": 14,
+			"height": 16,
 			"count": 5
 		},
 		"animations": {
@@ -31,9 +31,14 @@ var Robot = function(x, y, level) {
 				"next": "still",
 				"speed": 1
 			},
+			"move": {
+				"frames": [0, 1, 2],
+				"next": "move",
+				"speed": 1
+			},
 
 			"attack": {
-				"frames": [0, 1, 2, 3, 4],
+				"frames": [3, 4],
 				"next": "attack",
 				"speed": 1
 			}
@@ -79,7 +84,7 @@ var Robot = function(x, y, level) {
 	 * [doMovement Robots move towards the nearest player]
 	 */
 	this.doMovement = function() {
-		this.animations.gotoAndPlay("attack");
+		this.animations.gotoAndPlay("move");
 
 		var nearestPlayer = this.getNearestPlayer();
 
