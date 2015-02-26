@@ -11,7 +11,8 @@ loader.loadManifest([
 	{id: "fogofwar", src: "graphics/fogofwar.png"},
 	{id: "selectablearea", src: "graphics/selectablearea.png"},
 	{id: "validtile", src: "graphics/validtile.png"},
-	{id: "dragon", src: "graphics/dragon.png"}
+	{id: "dragon", src: "graphics/dragon.png"},
+	{id: "chest", src: "graphics/chest.png"}
 ]);
 
 /**
@@ -31,6 +32,7 @@ var gamezoom = 3; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is rea
 var playerTurn = false; // note that this is turned off by the renderer at the end of a move and turned on by advanceturn, blocks other players and objects from getting their "tick"
 var activePlayer = {}; // this is set to the currently active player by the advance turn function
 var selectableAreas = []; // global container for selectablearea blocks
+var gameOver = false;  // gets set to true when the end game goal has been collided with, prevents objects from being updated
 
 /**
  * [fixViewport fixes the viewport on a window resize event]
@@ -70,6 +72,7 @@ function initVars() {
 	createjs.Ticker.addEventListener("tick", handleTick);
 	createjs.Ticker.useRAF = true;
 	createjs.Ticker.setFPS(60);
+	gameOver = false;
 
 	initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
 }
@@ -84,8 +87,11 @@ function initActiveObjects(playerCount, enemyCount) {
 	activeObjects = [];
 	var i = 0;
 	for (i = 0; i < playerCount; i++) {
-		activeObjects.push(new Player(i * 32 + 96, i * 32 + 96, 10));
-		updateFogOfWar(activeObjects[i]);
+		var player = new Player(i * 32 + 96, i * 32 + 96, 10);
+
+		player.setName("Player " + (i + 1));
+		activeObjects.push(player);
+		updateFogOfWar(player);
 	}
 
 	var random = 0;
@@ -114,9 +120,13 @@ function handleTick(event) {
 		renderer.movementTickActions();
 	} else if (!renderer.centered) {
 		renderer.centerMapOnObjectTick();
-	} else if (!playerTurn) {
+	} else if (!playerTurn && !gameOver) {
 		for (var i = 0; i < activeObjects.length; i++) {
 			activeObjects[i].tickActions();
+		}
+
+		for (var i = 0; i < renderer.simpleobjects.length; i++) {
+			renderer.simpleobjects[i].tickActions();
 		}
 
 		advanceTurn();

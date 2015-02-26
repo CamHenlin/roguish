@@ -101,6 +101,8 @@ var Player = function(x, y, initiative) {
 	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
 	this.watchedElements = [];
 
+	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
+
 	// add our animations to global gamestage:
 	gamestage.addChild(this.animations);
 
@@ -180,7 +182,7 @@ var Player = function(x, y, initiative) {
 
 	var mouseMoveHandler = function(event) {
 		if (this !== activePlayer) {
-			$("body").unbund("mousemove", mouseMoveHandler);
+			$("body").unbind("mousemove");
 			renderer.gamestage.removeChild(this.mouseMoveSprite);
 			return;
 		}
@@ -256,6 +258,22 @@ var Player = function(x, y, initiative) {
 	this.cleanUpMovement = function() {
 		this.animations.gotoAndPlay("stand-front");
 		this.turnCounter = 0;
+	};
+
+	/**
+	 * [setName Sets the name of the player]
+	 * @param {[type]} name [The name to be set]
+	 */
+	this.setName = function(name) {
+		playerName = name;
+	};
+
+	/**
+	 * [getName Gets the name of the player]
+	 * @return {[type]} [The name of the player]
+	 */
+	this.getName = function() {
+		return playerName;
 	};
 };
 

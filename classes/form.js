@@ -81,6 +81,15 @@ var Form = function(x, y, fields) {
 	}
 
 	/**
+	 * [basicText Displays raw text]
+	 * @param  {[type]} textToRender [The string of text to render]
+	 * @return {[type]}              [HTML code to be injected to display text]
+	 */
+	function basicText(textToRender) {
+		return "<p class='basic-text'>" + textToRender + "</p>";
+	}
+
+	/**
 	 * [textField description]
 	 * @param  {[type]} name  [description]
 	 * @param  {[type]} index [description]
@@ -177,6 +186,8 @@ var Form = function(x, y, fields) {
 				html += rangeField.call(this, field.text, field.min, field.max, (field.id) ? field.id : index);
 			} else if (field.type === 'button') {
 				html += buttonField.call(this, field.text, (field.id) ? field.id : index);
+			} else if (field.type === 'basic-text') {
+				html += basicText.call(this, field.text);
 			}
 			index++;
 		}.bind(this));

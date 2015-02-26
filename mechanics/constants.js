@@ -7,7 +7,7 @@ var MAX_TURN_COUNTER = 100;
 
 var MAP_MOVE_SPEED = 2;
 
-var NUM_PLAYERS = 1;
+var NUM_PLAYERS = 2;
 
 var NUM_ENEMIES = 1;
 

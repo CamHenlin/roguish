@@ -100,7 +100,7 @@ function Renderer(gamestage) {
 				} else if (i === 1) { // background 1
 					this.backgroundContainer.addChild(initDrawableLayer.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
 				} else if (i === 2) { // simpleobjects
-					this.simpleobjects = initSimpleObjects.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight);
+					this.container.addChild(initSimpleObjects.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
 				} else if (i === 3) { // collision
 					this.container.addChild(initDrawableLayerWithCollisionArray.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
 				} else if (i === 4) { // foreground
@@ -128,7 +128,8 @@ function Renderer(gamestage) {
 	 * @return {[type]}              [description]
 	 */
 	function initSimpleObjects(layerData, tilesetSheet, tilewidth, tileheight) {
-		var enemyArray = [];
+		var container = new createjs.Container();
+
 		for (var y = 0; y < layerData.height; y++) {
 			for (var x = 0; x < layerData.width; x++) {
 				// layer data has single dimension array
@@ -136,11 +137,21 @@ function Renderer(gamestage) {
 
 				if (layerData.data[idx] !== 0) {
 					// each different simple object will have an idx entry here
+					if (layerData.data[idx] == 1) { // This is the chest (end game goal)
+						var endGame = new EndGame(x * tilewidth, y * tileheight);
+						var cellBitmap = endGame.animations;
+						cellBitmap.gotoAndStop("closed");
+						cellBitmap.x = endGame.x;
+						cellBitmap.y = endGame.y;
+
+						container.addChild(cellBitmap);
+						this.simpleobjects.push(endGame);
+					}
 				}
 			}
 		}
 
-		return enemyArray;
+		return container;
 	}
 
 	/**
