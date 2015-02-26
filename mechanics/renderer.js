@@ -137,7 +137,7 @@ function Renderer(gamestage) {
 
 				if (layerData.data[idx] !== 0) {
 					// each different simple object will have an idx entry here
-					if (layerData.data[idx] == 1) { // This is the chest (end game goal)
+					if (layerData.data[idx] == 0) { // This is the chest (end game goal)
 						var endGame = new EndGame(x * tilewidth, y * tileheight);
 						var cellBitmap = endGame.animations;
 						cellBitmap.gotoAndStop("closed");
@@ -146,6 +146,10 @@ function Renderer(gamestage) {
 
 						container.addChild(cellBitmap);
 						this.simpleobjects.push(endGame);
+					} else if (layerData.data[idx] == 1) {
+						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 1));
+					} else if (layerData.data[idx] == 2) {
+						activeObjects.push(new Dragon(x * tilewidth, y * tileheight, 1));
 					}
 				}
 			}
@@ -443,11 +447,11 @@ function Renderer(gamestage) {
 		var distanceX = distanceFromCenteredX.call(this, obj);
 		var distanceY = distanceFromCenteredY.call(this, obj);
 
-		if (Math.abs(distanceX) < 2 * speed) {
+		if (Math.abs(distanceX) < (2 * speed)) {
 			distanceX = 0;
 		}
 
-		if (Math.abs(distanceY) < 2 * speed) {
+		if (Math.abs(distanceY) < (2 * speed)) {
 			distanceY = 0;
 		}
 
@@ -497,7 +501,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredX(obj) {
-		return (obj.animations.x + obj.animations.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
+		return (obj.x + obj.animations.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
 	}
 
 	/**
@@ -526,7 +530,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredY(obj) {
-		return (obj.animations.y + obj.animations.spriteSheet._frameHeight / 2) + renderer.container.y - (gamestage.canvas.height / 2);
+		return ((obj.y + obj.animations.spriteSheet._frameHeight / 2) + (renderer.container.y) - (gamestage.canvas.height / 2));
 	}
 
 	/**

@@ -239,19 +239,26 @@ var Player = function(x, y, initiative) {
 					type: 'button',
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', moveClickHandler, false);
+						if (this.mouseMoveSprite) {
+							renderer.gamestage.addChild(this.mouseMoveSprite);
+						}
+						$("body").mousemove(mouseMoveHandler);
 						actionMenu.destroy();
-					}
+					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
 				}, {
 					text: 'Attack',
 					type: 'button',
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', attackClickHandler, false);
+						if (this.mouseMoveSprite) {
+							renderer.gamestage.addChild(this.mouseMoveSprite);
+						}
+						$("body").mousemove(mouseMoveHandler);
 						actionMenu.destroy();
-					}
+					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
 				}]);
 			actionMenu.render();
 			showSelectableArea(this);
-			$("body").mousemove(mouseMoveHandler);
 		}.bind(this));
 	};
 

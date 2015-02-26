@@ -87,21 +87,11 @@ function initActiveObjects(playerCount, enemyCount) {
 	activeObjects = [];
 	var i = 0;
 	for (i = 0; i < playerCount; i++) {
-		var player = new Player(i * 32 + 96, i * 32 + 96, 10);
+		var player = new Player(i * 16 + 32, i * 16 + 32, 10);
 
 		player.setName("Player " + (i + 1));
 		activeObjects.push(player);
 		updateFogOfWar(player);
-	}
-
-	var random = 0;
-	for (i = 0; i < enemyCount; i++) {
-		random = Math.random();
-
-		if (random < 0.55)
-			activeObjects.push(new Robot(i * 32 + 32 + 180, i * 32 + 180, 1));
-		else
-			activeObjects.push(new Dragon(i * 32 + 32 + 180, i * 32 + 180, 1));
 	}
 }
 
