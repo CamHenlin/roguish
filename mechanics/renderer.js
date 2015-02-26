@@ -65,6 +65,9 @@ function Renderer(gamestage) {
 		this.gamestage.addChild(this.container);
 		this.gamestage.addChild(this.foregroundContainer);
 		this.gamestage.addChild(this.fogOfWarContainer);
+		if (LOG_FPS) {
+			this.gamestage.addChild(fpsLabel);
+		}
 	};
 
 	/**

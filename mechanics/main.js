@@ -33,6 +33,7 @@ var playerTurn = false; // note that this is turned off by the renderer at the e
 var activePlayer = {}; // this is set to the currently active player by the advance turn function
 var selectableAreas = []; // global container for selectablearea blocks
 var gameOver = false;  // gets set to true when the end game goal has been collided with, prevents objects from being updated
+var fpsLabel = {};
 
 /**
  * [fixViewport fixes the viewport on a window resize event]
@@ -73,6 +74,13 @@ function initVars() {
 	createjs.Ticker.useRAF = true;
 	createjs.Ticker.setFPS(60);
 	gameOver = false;
+
+	if (LOG_FPS) {
+		fpsLabel = new createjs.Text("", "14px 'Helvetica'", "#FFF");
+
+		fpsLabel.x = gamestage.canvas.width - 64;
+		fpsLabel.y = gamestage.canvas.height - 64;
+	}
 
 	initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
 }
@@ -122,6 +130,9 @@ function handleTick(event) {
 		advanceTurn();
 	}
 
+	if (LOG_FPS) {
+		fpsLabel.text = Math.round(createjs.Ticker.getMeasuredFPS()) + " / " + Math.round(createjs.Ticker.getFPS());
+	}
 
 	// this should be the only time the gamestage is updated anywhere in our code. Ensures that we only attempt to render 60 times per second.
 	gamestage.update();
