@@ -24,6 +24,7 @@ function showSelectableArea(playerObject) {
 
 	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.animations.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.animations.y + playerObject.animations.spriteSheet._frameHeight / 2);
 	var distance = playerObject.sightDistance;
+	renderer.fogOfWarContainer.uncache();
 
 	for (var i = coordinates.x - distance; i < coordinates.x + distance; i++) {
 		for (var j = coordinates.y - distance; j < coordinates.y + distance; j++) {
@@ -39,6 +40,8 @@ function showSelectableArea(playerObject) {
 			}
 		}
 	}
+
+	renderer.beginCaching(renderer.fogOfWarContainer);
 }
 
 /**
@@ -46,10 +49,12 @@ function showSelectableArea(playerObject) {
  * @return {[type]} [description]
  */
 function removeSelectableArea() {
+	renderer.fogOfWarContainer.uncache();
 	for (var i = 0; i < selectableAreas.length; i++) {
 		renderer.fogOfWarContainer.removeChild(selectableAreas[i]);
 	}
 	selectableAreas = [];
+	renderer.beginCaching(renderer.fogOfWarContainer);
 }
 
 /**

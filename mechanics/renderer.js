@@ -65,9 +65,18 @@ function Renderer(gamestage) {
 		this.gamestage.addChild(this.container);
 		this.gamestage.addChild(this.foregroundContainer);
 		this.gamestage.addChild(this.fogOfWarContainer);
+		this.beginCaching(this.backgroundContainer);
+		this.beginCaching(this.container);
+		this.beginCaching(this.foregroundContainer);
 		if (LOG_FPS) {
 			this.gamestage.addChild(fpsLabel);
 		}
+
+		// this is kind of a hack. what it does is it waits approx 2 frames before caching fogofwar container
+		// this forces the fog of war to be removed from around the player's initial location
+		setTimeout(function() {
+			this.beginCaching(this.fogOfWarContainer);
+		}.bind(this), 120);
 	};
 
 	/**
@@ -334,6 +343,14 @@ function Renderer(gamestage) {
 		this.fogOfWarContainer.y -= yamount;
 	}
 
+	/**
+	 * [beginCaching forces caching on a container, caching the entire map size. disallows in animations in map]
+	 * @param  {[type]} container [description]
+	 * @return {[type]}           [description]
+	 */
+	this.beginCaching = function(container) {
+		container.cache(0, 0, this.getMapWidth(), this.getMapHeight()); //this.mapData.tilesets[0].tileheight * this.mapData.layers[0].height);
+	};
 
 	/**
 	 * [initMap initializes the renderer, gets it ready to render a new map]
@@ -569,7 +586,9 @@ function Renderer(gamestage) {
 
 			// update our fog of war
 			if (this.movingObject.constructor === Player) {
+				this.fogOfWarContainer.uncache();
 				updateFogOfWar(this.movingObject);
+				this.beginCaching(this.fogOfWarContainer);
 			}
 		}
 
