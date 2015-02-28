@@ -9,6 +9,7 @@
  * @constructor
  */
 function Renderer(gamestage) {
+	this.activeObjectsContainer = new createjs.Container();
 	this.backgroundContainer = new createjs.Container();
 	this.complexObjects = [];
 	this.container = new createjs.Container();
@@ -64,12 +65,13 @@ function Renderer(gamestage) {
 		this.gamestage.addChild(this.backgroundContainer);
 		this.gamestage.addChild(this.container);
 		this.gamestage.addChild(this.foregroundContainer);
+		this.gamestage.addChild(this.activeObjectsContainer);
 		this.gamestage.addChild(this.fogOfWarContainer);
 		this.beginCaching(this.backgroundContainer);
 		this.beginCaching(this.container);
 		this.beginCaching(this.foregroundContainer);
 		if (LOG_FPS) {
-			this.gamestage.addChild(fpsLabel);
+			renderer.activeObjectsContainer.addChild(fpsLabel);
 		}
 
 		// this is kind of a hack. what it does is it waits approx 2 frames before caching fogofwar container
@@ -112,7 +114,7 @@ function Renderer(gamestage) {
 				} else if (i === 1) { // background 1
 					this.backgroundContainer.addChild(initDrawableLayer.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
 				} else if (i === 2) { // simpleobjects
-					this.container.addChild(initSimpleObjects.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
+					this.activeObjectsContainer.addChild(initSimpleObjects.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
 				} else if (i === 3) { // collision
 					this.container.addChild(initDrawableLayerWithCollisionArray.call(this, layer, tilesetSheet, this.mapData.tilewidth, this.mapData.tileheight));
 				} else if (i === 4) { // foreground
@@ -159,9 +161,9 @@ function Renderer(gamestage) {
 						container.addChild(cellBitmap);
 						this.simpleobjects.push(endGame);
 					} else if (layerData.data[idx] == 1) {
-						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 1));
+						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 5));
 					} else if (layerData.data[idx] == 2) {
-						activeObjects.push(new Dragon(x * tilewidth, y * tileheight, 1));
+						activeObjects.push(new Dragon(x * tilewidth, y * tileheight, 5));
 					}
 				}
 			}

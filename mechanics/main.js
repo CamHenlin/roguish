@@ -83,6 +83,26 @@ function initVars() {
 	}
 
 	initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
+
+	// this initiates sort of a demo mode I guess?
+	setTimeout(function() {
+		var activeObjectsLength = activeObjects.length;
+		var i = 0;
+		var callNextActiveObject = function(i) {
+			if (i < activeObjectsLength) {
+				renderer.centerMapOnObject(activeObjects[i], function() {
+					renderer.fogOfWarContainer.uncache();
+					updateFogOfWar(activeObjects[i]);
+					renderer.beginCaching(renderer.fogOfWarContainer);
+					setTimeout(function() {
+						callNextActiveObject(i+1);
+					}, 120);
+					return;
+				});
+			}
+		}
+		callNextActiveObject(i);
+	}, 1000);
 }
 
 /**
@@ -92,15 +112,7 @@ function initVars() {
  * @return {[type]}             [description]
  */
 function initActiveObjects(playerCount, enemyCount) {
-	activeObjects = [];
-	var i = 0;
-	for (i = 0; i < playerCount; i++) {
-		var player = new Player(i * 16 + 32, i * 16 + 32, 10);
 
-		player.setName("Player " + (i + 1));
-		activeObjects.push(player);
-		updateFogOfWar(player);
-	}
 }
 
 /**

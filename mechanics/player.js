@@ -104,7 +104,7 @@ var Player = function(x, y, initiative) {
 	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
 
 	// add our animations to global gamestage:
-	gamestage.addChild(this.animations);
+	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
 	 * [tickActions run on each frame rendering in main loop]
@@ -183,7 +183,7 @@ var Player = function(x, y, initiative) {
 	var mouseMoveHandler = function(event) {
 		if (this !== activePlayer) {
 			$("body").unbind("mousemove");
-			renderer.gamestage.removeChild(this.mouseMoveSprite);
+			renderer.activeObjectsContainer.gamestage.removeChild(this.mouseMoveSprite);
 			return;
 		}
 
@@ -209,7 +209,7 @@ var Player = function(x, y, initiative) {
 			});
 			this.mouseMoveSprite = new createjs.Sprite(mouseMoveEventSpriteSheet, "exist");
 
-			renderer.gamestage.addChild(this.mouseMoveSprite);
+			renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 		}
 
 		if (isSelectionInSelectableBounds(this, x, y)) {
@@ -240,7 +240,7 @@ var Player = function(x, y, initiative) {
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', moveClickHandler, false);
 						if (this.mouseMoveSprite) {
-							renderer.gamestage.addChild(this.mouseMoveSprite);
+							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
 						actionMenu.destroy();
@@ -251,7 +251,7 @@ var Player = function(x, y, initiative) {
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', attackClickHandler, false);
 						if (this.mouseMoveSprite) {
-							renderer.gamestage.addChild(this.mouseMoveSprite);
+							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
 						actionMenu.destroy();

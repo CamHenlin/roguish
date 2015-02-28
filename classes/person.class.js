@@ -12,7 +12,7 @@ var Person = function() {
 	this.animations;
 	this.currentDirection = "";
 	this.lastFrameDirection = "";
-	this.sightDistance = DEFAULT_PERSON_SIGHT_DISTANCE;
+	this.scout = DEFAULT_PERSON_SIGHT_DISTANCE;
 	this.hp = DEFAULT_PERSON_HEALTH;
 	this.attack = DEFAULT_PERSON_ATTACK;
 

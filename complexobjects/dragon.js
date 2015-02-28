@@ -39,7 +39,7 @@ var Dragon = function(x, y, level) {
 	this.animations.y = this.y;
 	this.animations.regX = 33;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
 
-	gamestage.addChild(this.animations);
+	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
 	 * [moveUpOrDown decides whether the dragon should move up or down based on nearest player location]
@@ -74,6 +74,9 @@ var Dragon = function(x, y, level) {
 	 */
 	this.doMovement = function() {
 		var nearestPlayer = this.getNearestPlayer();
+		if (!nearestPlayer) {
+			return;
+		}
 
 		var dx = nearestPlayer.x - this.x;
 		var dy = nearestPlayer.y - this.y;

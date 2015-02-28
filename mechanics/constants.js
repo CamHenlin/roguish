@@ -5,7 +5,7 @@
 // when a player's turn counter reaches this turn in a frame, it is their turn.
 var MAX_TURN_COUNTER = 100;
 
-var MAP_MOVE_SPEED = 0.5;
+var MAP_MOVE_SPEED = 1;
 
 var NUM_PLAYERS = 1;
 
@@ -20,3 +20,5 @@ var DEFAULT_PERSON_HEALTH = 10;
 var DEFAULT_PERSON_ATTACK = 2;
 
 var LOG_FPS = true;
+
+var MAX_ENEMY_DISTANCE = 8;

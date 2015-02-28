@@ -31,7 +31,7 @@ var EndGame = function(x, y) {
 
 	this.animations = new createjs.Sprite(this.spriteSheet, "closed");
 
-	gamestage.addChild(this.animations);
+	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
 	 * [endGame Ends the game by displaying a dialog notifying who won and a button to click to play again]
@@ -43,14 +43,14 @@ var EndGame = function(x, y) {
 		var endMenu = new Form(gamestage.canvas.width / 2, gamestage.canvas.height / 2, [{  // build menu
 			text: winner.getName() + " has won the game!",
 			type: "basic-text",
-			callback: function() {				
+			callback: function() {
 			}
 		}, {
 			text: "Play Again!",
 			type: "button",
 			callback: function() {
 				endMenu.destroy();
-				init();				
+				init();
 			}
 		}]);
 

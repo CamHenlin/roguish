@@ -50,7 +50,7 @@ var Robot = function(x, y, level) {
 	this.animations.y = this.y;
 	this.animations.regX = 14;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
 
-	gamestage.addChild(this.animations);
+	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
 	 * [moveUpOrDown decides whether robot should move up or down based on nearest player location]
@@ -87,6 +87,9 @@ var Robot = function(x, y, level) {
 		this.animations.gotoAndPlay("move");
 
 		var nearestPlayer = this.getNearestPlayer();
+		if (!nearestPlayer) {
+			return;
+		}
 
 		var dx = nearestPlayer.x - this.x;
 		var dy = nearestPlayer.y - this.y;
