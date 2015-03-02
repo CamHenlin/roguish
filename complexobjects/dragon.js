@@ -13,6 +13,7 @@ var Dragon = function(x, y, level) {
 	this.defense = level * 2;
 	this.health = 10;
 	this.initiative = 20;
+	this.healthBar.x = this.x - 23;
 
 	if (this.defense < 1) {
 		this.defense = 1;
@@ -34,10 +35,14 @@ var Dragon = function(x, y, level) {
 		}
 	});
 
-	this.animations = new createjs.Sprite(this.spriteSheet, "still");
-	this.animations.x = this.x;
-	this.animations.y = this.y;
-	this.animations.regX = 33;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
+	this.animations = new createjs.Container();
+
+	this.sprite = new createjs.Sprite(this.spriteSheet, "still");
+	this.sprite.x = this.x;
+	this.sprite.y = this.y;
+	this.sprite.regX = 33;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
+
+	this.animations.addChild(this.sprite, this.healthBar);
 
 	renderer.activeObjectsContainer.addChild(this.animations);
 

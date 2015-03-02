@@ -15,6 +15,7 @@ var Person = function() {
 	this.scout = DEFAULT_PERSON_SIGHT_DISTANCE;
 	this.hp = DEFAULT_PERSON_HEALTH;
 	this.attack = DEFAULT_PERSON_ATTACK;
+	this.healthBar;
 
 	/**
 	 * [updateMovementAnimation note that this currently makes assumptions about what animations are available

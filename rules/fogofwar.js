@@ -4,7 +4,7 @@
  * @return {[type]}              [description]
  */
 function updateFogOfWar(playerObject) {
-	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.y + playerObject.animations.spriteSheet._frameHeight);
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.spriteSheet._frameWidth / 2, playerObject.y + playerObject.spriteSheet._frameHeight);
 	var distance = playerObject.scout;
 	for (var i = Math.floor(coordinates.x - distance); i < coordinates.x + distance; i++) {
 		for (var j = Math.floor(coordinates.y - distance); j < coordinates.y + distance; j++) {

@@ -523,7 +523,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredX(obj) {
-		return (obj.x + obj.animations.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
+		return (obj.x + obj.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
 	}
 
 	/**
@@ -552,7 +552,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}     [description]
 	 */
 	function distanceFromCenteredY(obj) {
-		return ((obj.y + obj.animations.spriteSheet._frameHeight / 2) + (renderer.container.y) - (gamestage.canvas.height / 2));
+		return ((obj.y + obj.spriteSheet._frameHeight / 2) + (renderer.container.y) - (gamestage.canvas.height / 2));
 	}
 
 	/**
@@ -579,7 +579,7 @@ function Renderer(gamestage) {
 	 * @return {[type]} [description]
 	 */
 	this.movementTickActions = function() {
-		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.animations.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.animations.spriteSheet._frameHeight);
+		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.spriteSheet._frameHeight);
 		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
 			// this section basically means we are looking to move to a new cell
 			var start = this.movementGraph.grid[startxy.x][startxy.y];

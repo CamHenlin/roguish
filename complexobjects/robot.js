@@ -45,11 +45,14 @@ var Robot = function(x, y, level) {
 		}
 	});
 
-	this.animations = new createjs.Sprite(this.spriteSheet, "still");
-	this.animations.x = this.x;
-	this.animations.y = this.y;
-	this.animations.regX = 14;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
+	this.animations = new createjs.Container();
 
+	this.sprite = new createjs.Sprite(this.spriteSheet, "still");
+	this.sprite.x = this.x;
+	this.sprite.y = this.y;
+	this.sprite.regX = 14;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
+
+	this.animations.addChild(this.sprite, this.healthBar);
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**

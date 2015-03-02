@@ -5,5 +5,5 @@
  * @return {[type]}              [description]
  */
 function calculateDamage(attackingObject, defendingObject) {
-	defendingObject.hp -= attackingObject.attack;
+	defendingObject.receiveDamage(attackingObject.attack);
 }

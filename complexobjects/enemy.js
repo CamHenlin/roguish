@@ -27,6 +27,15 @@ var Enemy = function(x, y, level) {
 								// moveSpeed is different from movementSpeed as movementSpeed determines how far
 								// the enemy moves per turn.
 
+	var maxHp = this.hp;  // never changes once initialized
+
+	this.healthBarMaxWidth = 18;
+	this.healthBar = new createjs.Bitmap("../graphics/health_bar.png");
+	this.healthBar.scaleX = this.healthBarMaxWidth / this.healthBar.image.width;
+	this.healthBar.x = this.x - 16;
+	this.healthBar.y = this.y - 5;
+
+
 	/**
 	 * [doMovement This function will be inherited by child classes that handle how the enemy moves]
 	 */
@@ -90,6 +99,34 @@ var Enemy = function(x, y, level) {
 	}
 
 	/**
+	 * [receiveDamage Reduces this enemy's hp by the amount of damage received and updates health bar]
+	 * @param  {[type]} amount [The amount of damage to be taken]
+	 */
+	this.receiveDamage = function(amount) {
+		this.hp -= amount;
+
+		if (this.hp <= 0) {
+			this.die();
+			return;
+		}
+
+		var newHealthBarWidth = this.healthBarMaxWidth * (this.hp / maxHp);
+
+		if (this.hp / maxHp < 0.2) {  // less than 20% hp, make the health bar red
+			this.animations.removeChild(this.healthBar);
+			this.healthBar = new createjs.Bitmap("../graphics/health_bar_red.png");
+			this.healthBar.x = this.x - 16;
+			this.healthBar.y = this.y - 5;
+			this.animations.addChild(this.healthBar);
+		}
+
+		if (newHealthBarWidth == 0)
+			newHealthBarWidth = 1;
+
+		this.healthBar.scaleX = newHealthBarWidth / this.healthBar.image.width;
+	};
+
+	/**
 	 * [die Kills this enemy, removing the enemy from activeObjects and the gamestage]
 	 */
 	this.die = function() {
@@ -99,8 +136,6 @@ var Enemy = function(x, y, level) {
 		if (index > -1) {
 			activeObjects.splice(index, 1);
 		}
-
-		console.log("enemy has died");
 	};
 
 	/**
@@ -112,10 +147,6 @@ var Enemy = function(x, y, level) {
 		}
 
 		this.counter++;
-
-		if (this.hp <= 0) {
-			this.die();
-		}
 	};
 
 	/**
