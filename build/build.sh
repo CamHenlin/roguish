@@ -3,9 +3,10 @@ java -jar compiler.jar \
 	--js=../libs/jquery-2.1.3.min.js \
 	\
 	--js=../classes/person.class.js --js=../classes/complexobject.class.js --js=../classes/widget.js \
-	--js=../classes/form.js --js=../classes/UI.js --js=../classes/simpleobject.class.js \
+	--js=../classes/form.js --js=../classes/simpleobject.class.js \
 	\
 	--js=../complexobjects/enemy.js --js=../complexobjects/robot.js --js=../complexobjects/dragon.js \
+	--js=../complexobjects/mainmenu.js \
 	\
 	--js=../simpleobjects/endgame.js \
 	\

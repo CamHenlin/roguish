@@ -6,7 +6,7 @@
 var formCounter = 0;
 
 /**
- * the form class is responsible for rendering html inputs to the dom and provides an interface for retrieveing this information
+ * the form class is responsible for rendering html inputs to the dom and provides an interface for retrieving this information
  * @param {[type]}
  * @param {Function}
  */

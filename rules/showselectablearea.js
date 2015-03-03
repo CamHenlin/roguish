@@ -1,5 +1,5 @@
 /**
- * [updateFogOfWar updates the selectable area around a player]
+ * [showSelectableArea updates the selectable area around a player]
  * @param  {[type]} playerObject [description]
  * @return {[type]}              [description]
  */

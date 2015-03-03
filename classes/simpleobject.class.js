@@ -4,7 +4,7 @@
  */
 
 /**
- * SimpleObject simple objects that all simple  objects inherit from
+ * SimpleObject simple objects that all simple objects inherit from
  * @constructor
  */
 var SimpleObject = function(x, y) {
