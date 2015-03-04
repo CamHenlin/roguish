@@ -40,7 +40,7 @@ function selectMap(previous) {
 	}, {
 		text: 'map',
 		type: 'select',
-		options: ['forrest', 'dungeon'],
+		options: ['dungeon', 'outside'],
 		id: 'mapname'
 	}];
 
@@ -59,7 +59,8 @@ function selectPlayers(previous) {
 		type: 'button',
 		callback: function() {
 			startGame.hide();
-			alert(startGame.getValue('numberOfPlayers'));
+			console.log(startGame.getValue('numberOfPlayers')); //this was an alert
+			maploader.loadMap(previous.getValue('mapname')+'.json')
 		}
 	}, {
 		text: 'Number of Players',

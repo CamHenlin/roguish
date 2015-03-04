@@ -69,7 +69,7 @@ function initVars() {
 	gamestage.snapToPixelEnabled = true;
 	renderer = new Renderer(gamestage);
 	maploader = new MapLoader(loader);
-	maploader.loadMap('map1.json'); //change this to the name of the map you want to load. the map must be in maps to work
+	maploader.loadMap('dungeon.json'); //change this to the name of the map you want to load. the map must be in maps to work
 	createjs.Ticker.addEventListener("tick", handleTick);
 	createjs.Ticker.useRAF = true;
 	createjs.Ticker.setFPS(60);

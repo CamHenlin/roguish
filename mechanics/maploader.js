@@ -16,6 +16,7 @@ function MapLoader(loader) {
 	* @return {[type]} [none]
 	*/
 	this.loadMap = function(mapname) {
+		console.log('loading map')
 		loader.removeAllEventListeners();
 		loader.addEventListener('fileload', handleMapLoad);
 		loader.loadManifest( [ { id: 'map', src: mapname }], true, 'maps/');
@@ -41,6 +42,7 @@ function MapLoader(loader) {
 	}
 
 	function isValidMap() {
+		return true
 		// Runs some basic checks on the map to make sure it is a good map
 		// checks for starting point
 		// checks for end point
