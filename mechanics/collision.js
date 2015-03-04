@@ -53,7 +53,7 @@ var CollisionSystem = function() {
 	 */
 	this.checkCollisionCellValid = function(x, y) {
 		try {
-			var a = x;
+			var a = y;
 			var b = x;
 
 			if (a <= -1 || a >= this.collisionArray.length) {
