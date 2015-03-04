@@ -32,12 +32,16 @@ function selectMap(previous) {
 		text: 'next',
 		type: 'button',
 		callback: function() {
+			console.log('next thing');
+			console.log(newGame.getValue('mapname'))
+			console.log('named')
 			selectPlayers(newGame);
 		}
 	}, {
 		text: 'map',
 		type: 'select',
-		options: ['forrest', 'dungeon']
+		options: ['forrest', 'dungeon'],
+		id: 'mapname'
 	}];
 
 	var newGame = new Form(100, 100, fields);
@@ -64,7 +68,7 @@ function selectPlayers(previous) {
 		min: 1,
 		max: 4
 	}];
-
+	console.log("this is a new game")
 	var startGame = new Form(200, 200, fields);
 	startGame.render();
 }
