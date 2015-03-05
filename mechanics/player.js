@@ -184,7 +184,7 @@ var Player = function(x, y, initiative) {
 	var mouseMoveHandler = function(event) {
 		if (this !== activePlayer) {
 			$("body").unbind("mousemove");
-			renderer.activeObjectsContainer.gamestage.removeChild(this.mouseMoveSprite);
+			renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
 			return;
 		}
 

@@ -182,6 +182,10 @@ var CollisionSystem = function() {
 		var obj1 = object1;
 		var obj2 = object2.animations;
 
+		if (!obj1.spriteSheet || !obj2.spriteSheet) {
+			return true;
+		}
+
 		return !(
 				obj1.y + obj1.spriteSheet._frameHeight < obj2.y ||
 				obj1.y > obj2.y + obj2.spriteSheet._frameHeight ||
