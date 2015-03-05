@@ -175,6 +175,7 @@ var Player = function(x, y, initiative) {
 		if (isSelectionInSelectableBounds(this, x, y)) {
 			renderer.moveObjectTo(this, x, y, true);
 			removeSelectableArea();
+			renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
 			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
 		}
 	};
