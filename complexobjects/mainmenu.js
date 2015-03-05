@@ -36,6 +36,7 @@ function selectMap(previous) {
 			console.log(newGame.getValue('mapname'))
 			console.log('named')
 			selectPlayers(newGame);
+			isDemo = false;
 		}
 	}, {
 		text: 'map',
@@ -59,8 +60,16 @@ function selectPlayers(previous) {
 		type: 'button',
 		callback: function() {
 			startGame.hide();
-			console.log(startGame.getValue('numberOfPlayers')); //this was an alert
-			maploader.loadMap(previous.getValue('mapname')+'.json')
+			activeObjects = [];
+			renderer.centered = true;
+			console.log(startGame.getValue('numberOfPlayers'));
+			maploader.loadMap(previous.getValue('mapname') + '.json', function() {
+				for (i = 0; i < parseInt(startGame.getValue('numberOfPlayers')); i++) {
+					var player = new Player(i * 16 + 32, i * 16 + 32, 10);
+					activeObjects.push(player);
+					updateFogOfWar(player);
+				}
+			}.bind(this));
 		}
 	}, {
 		text: 'Number of Players',

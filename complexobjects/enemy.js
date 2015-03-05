@@ -72,6 +72,7 @@ var Enemy = function(x, y, level) {
 	 */
 	this.turn = function() {
 		if (!this.isWithinMaxDistance()) {
+			this.turnCounter = 0;
 			return;
 		}
 

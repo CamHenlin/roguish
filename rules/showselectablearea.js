@@ -23,7 +23,7 @@ function showSelectableArea(playerObject) {
 	removeSelectableArea();
 
 	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.animations.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.animations.y + playerObject.animations.spriteSheet._frameHeight / 2);
-	var distance = playerObject.sightDistance;
+	var distance = playerObject.scout;
 	renderer.fogOfWarContainer.uncache();
 
 	for (var i = coordinates.x - distance; i < coordinates.x + distance; i++) {
@@ -68,6 +68,6 @@ function isSelectionInSelectableBounds(playerObject, x, y) {
 	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.animations.x + playerObject.animations.spriteSheet._frameWidth / 2, playerObject.animations.y + playerObject.animations.spriteSheet._frameHeight / 2);
 	var deltax = Math.pow(Math.abs(coordinates.x - selectCoordinate.x), 2);
 	var deltay = Math.pow(Math.abs(coordinates.y - selectCoordinate.y), 2);
-	var distance = playerObject.sightDistance;
+	var distance = playerObject.scout;
 	return distance > Math.sqrt(deltax + deltay);
 }

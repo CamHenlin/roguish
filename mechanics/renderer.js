@@ -378,6 +378,7 @@ function Renderer(gamestage) {
 	 * @return {[type]}         [none]
 	 */
 	this.prepareRenderer = function(mapData) {
+		this.activeObjectsContainer = new createjs.Container();
 		this.backgroundContainer = new createjs.Container();
 		this.complexObjects = [];
 		this.container = new createjs.Container();
@@ -389,6 +390,15 @@ function Renderer(gamestage) {
 		this.mapData = mapData; // this is our tiled JSON data
 		this.simpleObjects = [];
 		this.tileset = new Image();
+
+		this.backgroundContainer.x = 0;
+		this.backgroundContainer.y = 0;
+		this.container.x = 0;
+		this.container.y = 0;
+		this.foregroundContainer.x = 0;
+		this.foregroundContainer.y = 0;
+		this.fogOfWarContainer.x = 0;
+		this.fogOfWarContainer.y = 0;
 	};
 
 	/**

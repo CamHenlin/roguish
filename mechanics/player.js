@@ -262,6 +262,10 @@ var Player = function(x, y, initiative) {
 		}.bind(this));
 	};
 
+	/**
+	 * [cleanUpMovement resets animation position and turn counter]
+	 * @return {[type]} [void]
+	 */
 	this.cleanUpMovement = function() {
 		this.animations.gotoAndPlay("stand-front");
 		this.turnCounter = 0;

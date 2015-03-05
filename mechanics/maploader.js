@@ -8,6 +8,7 @@
  * @constructor
  */
 function MapLoader(loader) {
+	this.callback = null;
 	var map;
 
 	/**
@@ -15,11 +16,11 @@ function MapLoader(loader) {
 	* @param {[String mapname] mapname [String mapname]}
 	* @return {[type]} [none]
 	*/
-	this.loadMap = function(mapname) {
-		console.log('loading map')
+	this.loadMap = function(mapname, callback) {
+		this.callback = callback;
 		loader.removeAllEventListeners();
-		loader.addEventListener('fileload', handleMapLoad);
-		loader.loadManifest( [ { id: 'map', src: mapname }], true, 'maps/');
+		loader.addEventListener('fileload', handleMapLoad.bind(this));
+		loader.loadManifest([{ id: 'map', src: mapname }], true, 'maps/');
 	};
 
 	/**
@@ -29,8 +30,8 @@ function MapLoader(loader) {
 	function handleMapLoad() {
 		map = loader.getResult('map');
 		loader.removeAllEventListeners();
-		loader.addEventListener('fileload', handleTilesetLoad);
-		loader.loadManifest( [{ id: 'tileset', src: map.tilesets[0].name+TILESET_FILE_TYPE }], true, 'graphics/');
+		loader.addEventListener('fileload', handleTilesetLoad.bind(this));
+		loader.loadManifest([{ id: 'tileset', src: map.tilesets[0].name + TILESET_FILE_TYPE }], true, 'graphics/');
 	}
 
 	function handleTilesetLoad() {
@@ -38,11 +39,13 @@ function MapLoader(loader) {
 		renderer.prepareRenderer(map);
 		renderer.setImage(image);
 		renderer.initMap();
-		initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
+		if (this.callback) {
+			this.callback();
+		}
 	}
 
 	function isValidMap() {
-		return true
+		return true;
 		// Runs some basic checks on the map to make sure it is a good map
 		// checks for starting point
 		// checks for end point
