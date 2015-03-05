@@ -34,6 +34,7 @@ var activePlayer = {}; // this is set to the currently active player by the adva
 var selectableAreas = []; // global container for selectablearea blocks
 var gameOver = false;  // gets set to true when the end game goal has been collided with, prevents objects from being updated
 var fpsLabel = {};
+var isDemo = true;
 
 /**
  * [fixViewport fixes the viewport on a window resize event]
@@ -89,6 +90,10 @@ function initVars() {
 		var activeObjectsLength = activeObjects.length;
 		var i = 0;
 		var callNextActiveObject = function(i) {
+			if (!isDemo) {
+				return;
+			}
+
 			if (i < activeObjectsLength) {
 				renderer.centerMapOnObject(activeObjects[i], function() {
 					renderer.fogOfWarContainer.uncache();
