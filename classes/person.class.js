@@ -1,7 +1,3 @@
-/**
- * @name Person
- * @class
- */
 
 /**
  * Person mainly built to handle walking direction code, but I'm sure we can think of other things people share
@@ -18,11 +14,10 @@ var Person = function() {
 	this.healthBar;
 
 	/**
-	 * [updateMovementAnimation note that this currently makes assumptions about what animations are available
-	 * and should be moved away from doing so]
-	 * @param  {[type]} deltax [description]
-	 * @param  {[type]} deltay [description]
-	 * @return {[type]}        [description]
+	 * note that this currently makes assumptions about what animations are available
+	 * and should be moved away from doing so
+	 * @param  {number} deltax
+	 * @param  {number} deltay
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {

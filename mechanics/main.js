@@ -16,8 +16,7 @@ loader.loadManifest([
 ]);
 
 /**
- * [handleComplete handler for preload complete]
- * @return {[type]} [description]
+ * Handler for preload complete
  */
 function handleComplete() {
 	init();
@@ -37,8 +36,7 @@ var fpsLabel = {};
 var isDemo = true;
 
 /**
- * [fixViewport fixes the viewport on a window resize event]
- * @return {[type]} [description]
+ * Fixes the viewport on a window resize event
  */
 function fixViewport() {
 	gamestage.canvas.width = window.innerWidth / gamezoom;
@@ -47,8 +45,7 @@ function fixViewport() {
 }
 
 /**
- * [init call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler.]
- * @return {[type]} [description]
+ * Call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler
  */
 function init() {
 	console.log('initializing');
@@ -58,8 +55,7 @@ function init() {
 }
 
 /**
- * [initVars initialize all variables needed for a new game to start]
- * @return {[type]} [description]
+ * Initialize all variables needed for a new game to start
  */
 function initVars() {
 	console.log('initializing vars');
@@ -111,19 +107,17 @@ function initVars() {
 }
 
 /**
- * [initActiveObjects reset activeObjects array and initialize it]
- * @param  {[type]} playerCount [description]
- * @param  {[type]} enemyCount  [description]
- * @return {[type]}             [description]
+ * Reset activeObjects array and initialize it
+ * @param  {number} playerCount
+ * @param  {number} enemyCount 
  */
 function initActiveObjects(playerCount, enemyCount) {
 
 }
 
 /**
- * [handleTick our main game loop]
- * @param  {[type]} event [description]
- * @return {[type]}       [description]
+ * Our main game loop
+ * @param  {TickEvent} event 
  */
 function handleTick(event) {
 	if (!renderer.doneRendering) {

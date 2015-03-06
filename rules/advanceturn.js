@@ -3,8 +3,7 @@
  */
 
 /**
- * [advanceTurn function used in default game engine for determining next player turn]
- * @return {[void]} [description]
+ * Function used in default game engine for determining next player turn
  */
 function advanceTurn() {
 	document.getElementById("turnStatus").innerHTML = "";

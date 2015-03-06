@@ -1,8 +1,8 @@
 /**
- * [Dragon Class that defines the attributes of a dragon Enemy]
- * @param {[type]} x     [Initial x position]
- * @param {[type]} y     [Initial y position]
- * @param {[type]} level [Initial level]
+ * Class that defines the attributes of a dragon Enemy
+ * @param {number} x     Initial x position
+ * @param {number} y     Initial y position
+ * @param {number} level Initial level
  * @constructor
  */
 var Dragon = function(x, y, level) {
@@ -47,10 +47,10 @@ var Dragon = function(x, y, level) {
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
-	 * [moveUpOrDown decides whether the dragon should move up or down based on nearest player location]
+	 * Decides whether the dragon should move up or down based on nearest player location
 	 * @private
-	 * @param {[type]} [dy] [difference between nearest player's y position and this dragon's y position]
-	 * @return [true if move succeeded, false otherwise]
+	 * @param {number} dy difference between nearest player's y position and this dragon's y position
+	 * @return {boolean} true if move succeeded, false otherwise
 	 */
 	function moveUpOrDown(dy) {
 		if (dy >= 0) {
@@ -61,10 +61,10 @@ var Dragon = function(x, y, level) {
 	};
 
 	/**
-	 * [moveRightOrLeft decides whether the dragon should move right or left based on nearest player location]
+	 * Decides whether the dragon should move right or left based on nearest player location
 	 * @private
-	 * @param {[type]} [dx] [difference between nearest player's x position and this dragon's x position]
-	 * @return [true if move succeeded, false otherwise]
+	 * @param {number} dx difference between nearest player's x position and this dragon's x position
+	 * @return {boolean} true if move succeeded, false otherwise
 	 */
 	function moveRightOrLeft(dx) {
 		if (dx >= 0) {
@@ -75,7 +75,7 @@ var Dragon = function(x, y, level) {
 	};
 
 	/**
-	 * [doMovement Dragons move towards the nearest player]
+	 * Dragons move towards the nearest player
 	 */
 	this.doMovement = function() {
 		var nearestPlayer = this.getNearestPlayer();
@@ -103,9 +103,9 @@ var Dragon = function(x, y, level) {
 	};
 
 	/**
-	 * [updateMovementAnimation Updates the dragon's animation based on what direction it is moving]
-	 * @param  {[type]} deltax [Dragon's movement on the x-axis]
-	 * @param  {[type]} deltay [Dragon's movement on the y-axis]
+	 * Updates the dragon's animation based on what direction it is moving
+	 * @param  {number} deltax Dragon's movement on the x-axis
+	 * @param  {number} deltay Dragon's movement on the y-axis
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {
@@ -118,7 +118,7 @@ var Dragon = function(x, y, level) {
 	};
 
 	/**
-	 * [cleanUpMovement Function that is called when the dragon is done moving]
+	 * Function that is called when the dragon is done moving
 	 */
 	this.cleanUpMovement = function() {
 		this.turnCounter = 0;

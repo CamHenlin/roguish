@@ -1,7 +1,7 @@
 /**
- * [EndGame Simple object that ends the game and declares the player that collides with it the winner.]
- * @param {[type]} x [x position on canvas]
- * @param {[type]} y [y position on canvas]
+ * Simple object that ends the game and declares the player that collides with it the winner
+ * @param {number} x x position on canvas
+ * @param {number} y y position on canvas
  * @constructor
  */
 var EndGame = function(x, y) {
@@ -34,8 +34,8 @@ var EndGame = function(x, y) {
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
-	 * [endGame Ends the game by displaying a dialog notifying who won and a button to click to play again]
-	 * @param  {[type]} winner [Reference to a Player object, the player who won.]
+	 * Ends the game by displaying a dialog notifying who won and a button to click to play again
+	 * @param  {Player} winner reference to a Player object, the player who won
 	 */
 	this.endGame = function(winner) {
 		this.animations.gotoAndPlay("open");
@@ -59,7 +59,7 @@ var EndGame = function(x, y) {
 	};
 
 	/**
-	 * [tickActions Updates the state of this object, checking to see if a player has collided with it.]
+	 * Updates the state of this object, checking to see if a player has collided with it
 	 */
 	this.tickActions = function() {
 		for (var i = 0; i < activeObjects.length; i++) {

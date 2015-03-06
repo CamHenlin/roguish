@@ -1,7 +1,6 @@
 /**
- * [updateFogOfWar updates the fog of war around a player]
- * @param  {[type]} playerObject [description]
- * @return {[type]}              [description]
+ * Updates the fog of war around a player
+ * @param  {Player} playerObject
  */
 function updateFogOfWar(playerObject) {
 	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x + playerObject.spriteSheet._frameWidth / 2, playerObject.y + playerObject.spriteSheet._frameHeight);

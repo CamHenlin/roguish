@@ -1,8 +1,8 @@
 /**
- * [Robot Class that defines the attributes of a robot Enemy]
- * @param {[type]} x     [Initial x position]
- * @param {[type]} y     [Initial y position]
- * @param {[type]} level [Initial level]
+ * Class that defines the attributes of a robot Enemy
+ * @param {number} x     Initial x position
+ * @param {number} y     Initial y position
+ * @param {number} level Initial level
  * @constructor
  */
 var Robot = function(x, y, level) {
@@ -56,10 +56,10 @@ var Robot = function(x, y, level) {
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
-	 * [moveUpOrDown decides whether robot should move up or down based on nearest player location]
+	 * Decides whether robot should move up or down based on nearest player location
 	 * @private
-	 * @param {[type]} [dy] [difference between nearest player's y position and this robot's y position]
-	 * @return [true if move succeeded, false otherwise]
+	 * @param {number} dy difference between nearest player's y position and this robot's y position
+	 * @return {boolean} true if move succeeded, false otherwise
 	 */
 	function moveUpOrDown(dy) {
 		if (dy >= 0) {
@@ -70,10 +70,10 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [moveRightOrLeft decides whether robot should move right or left based on nearest player location]
+	 * Decides whether robot should move right or left based on nearest player location
 	 * @private
-	 * @param {[type]} [dx] [difference between nearest player's x position and this robot's x position]
-	 * @return [true if move succeeded, false otherwise]
+	 * @param {number} dx difference between nearest player's x position and this robot's x position
+	 * @return {boolean} true if move succeeded, false otherwise
 	 */
 	function moveRightOrLeft(dx) {
 		if (dx >= 0) {
@@ -84,7 +84,7 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [doMovement Robots move towards the nearest player]
+	 * Robots move towards the nearest player
 	 */
 	this.doMovement = function() {
 		this.animations.gotoAndPlay("move");
@@ -114,9 +114,9 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [updateMovementAnimation Updates the robot's animation based on what direction it is moving]
-	 * @param  {[type]} deltax [Robot's movement on the x-axis]
-	 * @param  {[type]} deltay [Robot's movement on the y-axis]
+	 * Updates the robot's animation based on what direction it is moving
+	 * @param  {number} deltax Robot's movement on the x-axis
+	 * @param  {number} deltay Robot's movement on the y-axis
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {
@@ -129,7 +129,7 @@ var Robot = function(x, y, level) {
 	};
 
 	/**
-	 * [cleanUpMovement Function that is called when the robot is done moving]
+	 * Function that is called when the robot is done moving
 	 */
 	this.cleanUpMovement = function() {
 		this.turnCounter = 0;

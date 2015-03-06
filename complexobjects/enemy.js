@@ -1,10 +1,10 @@
 
 
 /**
- * [Enemy Base class of an enemy. All enemies will extend this class]
- * @param {[type]} x     [Initial x position of enemy]
- * @param {[type]} y     [Initial y position of enemy]
- * @param {[type]} level [Initial level of enemy]
+ * Base class of an enemy. All enemies will extend this class
+ * @param {number} x     Initial x position of enemy
+ * @param {number} y     Initial y position of enemy
+ * @param {number} level Initial level of enemy
  * @constructor
  */
 var Enemy = function(x, y, level) {
@@ -37,14 +37,14 @@ var Enemy = function(x, y, level) {
 
 
 	/**
-	 * [doMovement This function will be inherited by child classes that handle how the enemy moves]
+	 * This function will be inherited by child classes that handle how the enemy moves
 	 */
 	this.doMovement = function() {
 	};
 
 	/**
-	 * [getNearestPlayer Finds the player on the gamestage that is closest to this enemy]
-	 * @return {[Player]} [The nearest player to this enemy]
+	 * Finds the player on the gamestage that is closest to this enemy
+	 * @return {Player} The nearest player to this enemy
 	 */
 	this.getNearestPlayer = function() {
 		var leastDistance = -1;
@@ -67,8 +67,7 @@ var Enemy = function(x, y, level) {
 	};
 
 	/**
-	 * [turn code that gets called when it's the enemy's turn]
-	 * @return {[type]} [description]
+	 * turn code that gets called when it's the enemy's turn
 	 */
 	this.turn = function() {
 		if (!this.isWithinMaxDistance()) {
@@ -80,8 +79,8 @@ var Enemy = function(x, y, level) {
 	};
 
 	/**
-	 * [isWithinMaxDistance checks whether or not the enemy is within the max distance from a player]
-	 * @return {Boolean} [description]
+	 * Checks whether or not the enemy is within the max distance from a player
+	 * @return {Boolean} 
 	 */
 	this.isWithinMaxDistance = function() {
 		for (var i = 0; i < activeObjects.length; i++) {
@@ -100,8 +99,8 @@ var Enemy = function(x, y, level) {
 	}
 
 	/**
-	 * [receiveDamage Reduces this enemy's hp by the amount of damage received and updates health bar]
-	 * @param  {[type]} amount [The amount of damage to be taken]
+	 * Reduces this enemy's hp by the amount of damage received and updates health bar
+	 * @param  {number} amount The amount of damage to be taken
 	 */
 	this.receiveDamage = function(amount) {
 		this.hp -= amount;
@@ -128,7 +127,7 @@ var Enemy = function(x, y, level) {
 	};
 
 	/**
-	 * [die Kills this enemy, removing the enemy from activeObjects and the gamestage]
+	 * Kills this enemy, removing the enemy from activeObjects and the gamestage
 	 */
 	this.die = function() {
 		renderer.activeObjectsContainer.removeChild(this.animations);
@@ -140,7 +139,7 @@ var Enemy = function(x, y, level) {
 	};
 
 	/**
-	 * [tickActions Keeps track of watchedElements and what the enemy should be doing]
+	 * Keeps track of watchedElements and what the enemy should be doing
 	 */
 	this.tickActions = function() {
 		for (var i = 0; i < this.watchedElements.length; i++) {
@@ -151,7 +150,7 @@ var Enemy = function(x, y, level) {
 	};
 
 	/**
-	 * [cleanUpMovement Gets called after enemy has finished moving]
+	 * Gets called after enemy has finished moving
 	 */
 	this.cleanUpMovement = function() {
 		this.turnCounter = 0;

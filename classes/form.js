@@ -7,8 +7,9 @@ var formCounter = 0;
 
 /**
  * the form class is responsible for rendering html inputs to the dom and provides an interface for retrieving this information
- * @param {[type]}
- * @param {Function}
+ * @param {number} x
+ * @param {number} y
+ * @param {Function} fields
  */
 var Form = function(x, y, fields) {
 	this.formName = "default-form-" + formCounter + "-name-";
@@ -29,16 +30,16 @@ var Form = function(x, y, fields) {
 	// public
 	/**
 	 * [getValue description]
-	 * @param  {[type]} value [description]
-	 * @return {[type]}       [description]
+	 * @param  {value} 
+	 * @return {string}
 	 */
 	this.getValue = function(value) {
 		return this.el.find("#" + value).val() || this.el.find("#" + value).is(":checked").val();
 	};
 
 	/**
-	 * [values description]
-	 * @return {[type]} [description]
+	 * 
+	 * @return {Object}
 	 */
 	this.values = function() {
 		obj = {};
@@ -49,8 +50,7 @@ var Form = function(x, y, fields) {
 	};
 
 	/**
-	 * [render description]
-	 * @return {[type]} [description]
+	 * 
 	 */
 	this.render = function() {
 		this.el.html(template.call(this));
@@ -61,8 +61,8 @@ var Form = function(x, y, fields) {
 	// private
 	/**
 	 * [getId description]
-	 * @param  {[type]} index [description]
-	 * @return {[type]}       [description]
+	 * @param  {number|string} index
+	 * @return {string}
 	 */
 	function getId(index) {
 		if (typeof(index) === "number") {
@@ -73,17 +73,17 @@ var Form = function(x, y, fields) {
 	}
 
 	/**
-	 * [template description]
-	 * @return {[type]} [description]
+	 * 
+	 * @return {string}
 	 */
 	function template() {
 		return inputFields.call(this);
 	}
 
 	/**
-	 * [basicText Displays raw text]
-	 * @param  {[type]} textToRender [The string of text to render]
-	 * @return {[type]}              [HTML code to be injected to display text]
+	 * Displays raw text
+	 * @param  {string} textToRender The string of text to render
+	 * @return {string}              HTML code to be injected to display text
 	 */
 	function basicText(textToRender) {
 		return "<p class='basic-text'>" + textToRender + "</p>";
@@ -91,19 +91,19 @@ var Form = function(x, y, fields) {
 
 	/**
 	 * [textField description]
-	 * @param  {[type]} name  [description]
-	 * @param  {[type]} index [description]
-	 * @return {[type]}       [description]
+	 * @param  {string} name 
+	 * @param  {number} index 
+	 * @return {string}
 	 */
 	function textField(name, index) {
 		return "<input class='input-default' placeholder='" + name + "' id='" + getId.call(this, index) + "'></input>";
 	}
 
 	/**
-	 * [buttonField description]
-	 * @param  {[type]} name  [description]
-	 * @param  {[type]} index [description]
-	 * @return {[type]}       [description]
+	 * 
+	 * @param  {string} name  
+	 * @param  {number} index 
+	 * @return {string}
 	 */
 	function buttonField(name, index) {
 		return "<button class='button-default' placeholder='" + name + "' id='" + getId.call(this, index) + "'>" + name + "</button>";
@@ -111,10 +111,10 @@ var Form = function(x, y, fields) {
 
 	/**
 	 * [selectField description]
-	 * @param  {[type]} name    [description]
-	 * @param  {[type]} options [description]
-	 * @param  {[type]} index   [description]
-	 * @return {[type]}         [description]
+	 * @param  {string} name    
+	 * @param  {string} options 
+	 * @param  {number} index  
+	 * @return {string}
 	 */
 	function selectField(name, options, index) {
 		var html = "<select class='select-default' id='" + getId.call(this, index) + "'>";
@@ -127,10 +127,10 @@ var Form = function(x, y, fields) {
 
 	/**
 	 * [radioField description]
-	 * @param  {[type]} name    [description]
-	 * @param  {[type]} options [description]
-	 * @param  {[type]} index   [description]
-	 * @return {[type]}         [description]
+	 * @param  {string} name   
+	 * @param  {string} options 
+	 * @param  {number} index   
+	 * @return {string}        
 	 */
 	function radioField(name, options, index) {
 		var html = "<p>choose the " + name + "</p>";
@@ -143,32 +143,32 @@ var Form = function(x, y, fields) {
 	}
 
 	/**
-	 * [numberField description]
-	 * @param  {[type]} name  [description]
-	 * @param  {[type]} min   [description]
-	 * @param  {[type]} max   [description]
-	 * @param  {[type]} index [description]
-	 * @return {[type]}       [description]
+	 * 
+	 * @param  {string} name  
+	 * @param  {number} min   
+	 * @param  {number} max   
+	 * @param  {number} index 
+	 * @return {string}       
 	 */
 	function numberField(name, min, max, index) {
 		return "<input class='input-default' placeholder='number of players (" + min + "-" + max + ")' type='number' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
 	/**
-	 * [rangeField description]
-	 * @param  {[type]} name  [description]
-	 * @param  {[type]} min   [description]
-	 * @param  {[type]} max   [description]
-	 * @param  {[type]} index [description]
-	 * @return {[type]}       [description]
+	 * 
+	 * @param  {string} name  
+	 * @param  {number} min   
+	 * @param  {number} max
+	 * @param  {number} index
+	 * @return {string}
 	 */
 	function rangeField(name, min, max, index) {
 		return "</br>" + name + "</br><input class='range-default' type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
 	/**
-	 * [inputFields description]
-	 * @return {[type]} [description]
+	 * Returns a string 
+	 * @return {string} 
 	 */
 	function inputFields() {
 		var html = "";
@@ -196,8 +196,7 @@ var Form = function(x, y, fields) {
 	}
 
 	/**
-	 * [attachCallbacks description]
-	 * @return {[type]} [description]
+	 * 
 	 */
 	function attachCallbacks() {
 		var index = 0;

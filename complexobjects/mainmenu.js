@@ -1,6 +1,5 @@
 /**
- * [mainForm main menu form]
- * @return {[type]} [description]
+ * Main menu form
  */
 function mainForm() {
 	var fields = [{
@@ -17,7 +16,8 @@ function mainForm() {
 }
 
 /**
-* [select map menu form]
+* Select map menu form
+* @param {Element} previous
 */
 function selectMap(previous) {
 	previous.hide();
@@ -50,7 +50,8 @@ function selectMap(previous) {
 }
 
 /**
-* [select map menu form]
+*
+* @param {Element} previous
 */
 function selectPlayers(previous) {
 	previous.hide();

@@ -4,8 +4,8 @@
  */
 
 /**
- * Widget is a 'abstract class used to construct Dom based ui element classes and controll their position on screen'
- * @param {Object} data object with x, y, container and el
+ * Widget is a 'abstract class used to construct Dom based ui element classes and control their position on screen'
+ * @param {Object} options object with x, y, container and el
  */
 var Widget = function(options) {
 	this.x = options.x || null;
@@ -16,8 +16,8 @@ var Widget = function(options) {
 	this.el = {}; // going to reset slightly later in the code
 
 	/**
-	 * [getPositionCSS description]
-	 * @return {[type]} [description]
+	 * Returns a string with position information in css form
+	 * @return {string} 
 	 */
 	this.getPositionCSS = function() {
 		if (!this.x && !this.y) {
@@ -31,8 +31,8 @@ var Widget = function(options) {
 	this.el = $("<div class='forms forms-default' " + this.getPositionCSS() + "></div>");
 
 	/**
-	 * [hide description]
-	 * @return {[type]} [description]
+	 * Hides element
+	 * @return {Widget}
 	 */
 	this.hide = function() {
 		this.el.hide();
@@ -40,16 +40,14 @@ var Widget = function(options) {
 	};
 
 	/**
-	 * [show description]
-	 * @return {[type]} [description]
+	 * Shows element
 	 */
 	this.show = function() {
 		this.el.show();
 	};
 
 	/**
-	 * [destroy description]
-	 * @return {[type]} [description]
+	 * Removes element
 	 */
 	this.destroy = function() {
 		this.el.remove();

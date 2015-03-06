@@ -1,8 +1,7 @@
 /**
- * [calculateDamage used to calculate damage during an attack]
- * @param  {[type]} attackingObject [description]
- * @param  {[type]} defendingObject [description]
- * @return {[type]}              [description]
+ * Used to calculate damage during an attack
+ * @param  {Object} attackingObject
+ * @param  {Object} defendingObject
  */
 function calculateDamage(attackingObject, defendingObject) {
 	defendingObject.receiveDamage(attackingObject.attack);

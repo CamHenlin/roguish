@@ -1,12 +1,8 @@
-/**
- * @name Player
- * @class
- */
 
 /**
  * Player class
- * @param {int} x [initial coordinate]
- * @param {int} y [initial coordinate]
+ * @param {number} x initial coordinate
+ * @param {number} y initial coordinate
  * @constructor
  */
 var Player = function(x, y, initiative) {
@@ -107,16 +103,15 @@ var Player = function(x, y, initiative) {
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
-	 * [tickActions run on each frame rendering in main loop]
-	 * @return {[type]} [description]
+	 * Run on each frame rendering in main loop
 	 */
 	this.tickActions = function() {
 
 	};
 
 	/**
-	 * [attackClickHandler click handler for attack]
-	 * @return {[type]} [description]
+	 * Click handler for attack
+	 * @return {MouseEvent} event
 	 */
 	var attackClickHandler = function(event) {
 		var x = event.pageX / gamezoom;
@@ -164,9 +159,8 @@ var Player = function(x, y, initiative) {
 	attackClickHandler = attackClickHandler.bind(this);
 
 	/**
-	 * [moveClickHandler click handler for move]
-	 * @param  {[type]} event [description]
-	 * @return {[type]}       [description]
+	 * Click handler for move
+	 * @param  {MouseEvent} event
 	 */
 	var moveClickHandler = function(event) {
 		var x = event.pageX / gamezoom;
@@ -180,7 +174,10 @@ var Player = function(x, y, initiative) {
 		}
 	};
 	moveClickHandler = moveClickHandler.bind(this);
-
+	/**
+	 * [mouseMoveHandler description
+	 * @param  {MouseEvent} event
+	 */
 	var mouseMoveHandler = function(event) {
 		if (this !== activePlayer) {
 			$("body").unbind("mousemove");
@@ -225,8 +222,7 @@ var Player = function(x, y, initiative) {
 	mouseMoveHandler = mouseMoveHandler.bind(this);
 
 	/**
-	 * [turn code that gets called when it's the players turn. should probably initialize a menu or something]
-	 * @return {[type]} [description]
+	 * Code that gets called when it's the players turn. should probably initialize a menu or something
 	 */
 	this.turn = function() {
 		this.currentDirection = "";
@@ -264,8 +260,7 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * [cleanUpMovement resets animation position and turn counter]
-	 * @return {[type]} [void]
+	 * Resets animation position and turn counter
 	 */
 	this.cleanUpMovement = function() {
 		this.animations.gotoAndPlay("stand-front");
@@ -273,16 +268,16 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * [setName Sets the name of the player]
-	 * @param {[type]} name [The name to be set]
+	 * Sets the name of the player
+	 * @param {string} name The name to be set
 	 */
 	this.setName = function(name) {
 		playerName = name;
 	};
 
 	/**
-	 * [getName Gets the name of the player]
-	 * @return {[type]} [The name of the player]
+	 * Gets the name of the player
+	 * @return {string} The name of the player
 	 */
 	this.getName = function() {
 		return playerName;

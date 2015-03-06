@@ -12,9 +12,9 @@ function MapLoader(loader) {
 	var map;
 
 	/**
-	* [loadMap loads the given map file ]
-	* @param {[String mapname] mapname [String mapname]}
-	* @return {[type]} [none]
+	* Loads the given map file
+	* @param {string} mapname
+	* @param {callback} callback to be called when map is loaded
 	*/
 	this.loadMap = function(mapname, callback) {
 		this.callback = callback;
@@ -24,8 +24,7 @@ function MapLoader(loader) {
 	};
 
 	/**
-	* [handleMapLoad handler for preload complete]
-	* @return {[type] [description]}
+	* Handler for preload complete
 	*/
 	function handleMapLoad() {
 		map = loader.getResult('map');
@@ -34,6 +33,9 @@ function MapLoader(loader) {
 		loader.loadManifest([{ id: 'tileset', src: map.tilesets[0].name + TILESET_FILE_TYPE }], true, 'graphics/');
 	}
 
+	/**
+	 * Handler for when tileset is loaded
+	 */
 	function handleTilesetLoad() {
 		var image = loader.getResult('tileset');
 		renderer.prepareRenderer(map);
@@ -43,7 +45,10 @@ function MapLoader(loader) {
 			this.callback();
 		}
 	}
-
+	/**
+	 * Performs basic validity tests on map
+	 * @return {boolean}
+	 */
 	function isValidMap() {
 		return true;
 		// Runs some basic checks on the map to make sure it is a good map

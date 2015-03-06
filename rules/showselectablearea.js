@@ -1,7 +1,6 @@
 /**
- * [showSelectableArea updates the selectable area around a player]
- * @param  {[type]} playerObject [description]
- * @return {[type]}              [description]
+ * Updates the selectable area around a player
+ * @param  {Player} playerObject
  */
 function showSelectableArea(playerObject) {
 	var fogOfWarSpriteSheet = new createjs.SpriteSheet({
@@ -45,8 +44,7 @@ function showSelectableArea(playerObject) {
 }
 
 /**
- * [removeSelectableArea removes selectable area]
- * @return {[type]} [description]
+ * Removes selectable area
  */
 function removeSelectableArea() {
 	renderer.fogOfWarContainer.uncache();
@@ -58,10 +56,11 @@ function removeSelectableArea() {
 }
 
 /**
- * [isSelectionInSelectableBounds true if selection location is in selectable area bounds]
- * @param  {[type]}  x [description]
- * @param  {[type]}  y [description]
- * @return {Boolean}   [description]
+ * True if selection location is in selectable area bounds
+ * @param  {Player} playerObject 
+ * @param  {number}  x 
+ * @param  {number}  y 
+ * @return {boolean} 
  */
 function isSelectionInSelectableBounds(playerObject, x, y) {
 	var selectCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);

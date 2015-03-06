@@ -1,22 +1,20 @@
-/**
- * @name  Collision
- * @class
- */
 
 /**
  * CollisionSystem system to handle collision within a map
  * @constructor
  */
 var CollisionSystem = function() {
+	/**
+	 * Array holding collision data
+	 * @type {Array}
+	 */
 	this.collisionArray = [[],[]];
 
 	/**
-	 * [checkCellValid check cell valid]
-	 * @param  {[type]} playerCollisionPoints [description]
-	 * @param  {[type]} collisionArray        [description]
-	 * @param  {[type]} x                     [description]
-	 * @param  {[type]} y                     [description]
-	 * @return {[type]}                       [description]
+	 * Returns true if coordinate is valid
+	 * @param  {number} x    x-coordinate in pixels             
+	 * @param  {number} y                   y-coordinate in pixels
+	 * @return {boolean}                    
 	 */
 	this.checkCellValid = function(x, y) {
 		var tilesize = 16; // this is used as width and height!
@@ -44,12 +42,10 @@ var CollisionSystem = function() {
 	};
 
 	/**
-	 * [checkCellValid check cell valid]
-	 * @param  {[type]} playerCollisionPoints [description]
-	 * @param  {[type]} collisionArray        [description]
-	 * @param  {[type]} tile #  x             [description]
-	 * @param  {[type]} tile #  y             [description]
-	 * @return {[type]}                       [description]
+	 * Returns true if coordinate is valid
+	 * @param  {number} x x-component in grid coordinates
+	 * @param  {number} y y-component in grid coordinates
+	 * @return {boolean}       
 	 */
 	this.checkCollisionCellValid = function(x, y) {
 		try {
@@ -75,9 +71,9 @@ var CollisionSystem = function() {
 	};
 
 	/**
-	 * [checkCellValid check cell valid]
-	 * @param  {[type]} playerCollisionPoints [description]
-	 * @return {[type]}                       [description]
+	 * Returns false if object intersects invalid tile
+	 * @param  {Object} object 
+	 * @return {boolean} 
 	 */
 	this.checkCellValidForObject = function(object) {
 		var tilesize = 16; // this is used as width and height!
@@ -150,10 +146,10 @@ var CollisionSystem = function() {
 	};
 
 	/**
-	 * [getCollisionCoordinateFromCell description]
-	 * @param  {[type]} x [description]
-	 * @param  {[type]} y [description]
-	 * @return {[type]}   [description]
+	 * Returns object with grid coordinates
+	 * @param  {number} x 
+	 * @param  {number} y
+	 * @return {Object} 
 	 */
 	this.getCollisionCoordinateFromCell = function(x, y) {
 		var tilesize = 16; // this is used as width and height!
@@ -173,10 +169,10 @@ var CollisionSystem = function() {
 	};
 
 	/**
-	 * [simpleCollision description]
-	 * @param  {[type]} object1 [description]
-	 * @param  {[type]} object2 [description]
-	 * @return {[type]}         [description]
+	 * Returns true if objects intersect
+	 * @param  {Object} object1 
+	 * @param  {Object} object2 
+	 * @return {boolean}      
 	 */
 	this.simpleCollision = function(object1, object2) {
 		var obj1 = object1;

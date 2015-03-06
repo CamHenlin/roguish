@@ -1,7 +1,3 @@
-/**
- * @name ComplexObject
- * @class
- */
 
 /**
  * ComplexObject complex objects that all complex objects inherit from
@@ -13,11 +9,10 @@ var ComplexObject = function() {
 	this.lastFrameDirection = "";
 
 	/**
-	 * [updateMovementAnimation note that this currently makes assumptions about what animations are available
-	 * and should be moved away from doing so]
-	 * @param  {[type]} deltax [description]
-	 * @param  {[type]} deltay [description]
-	 * @return {[type]}        [description]
+	 * Note that this currently makes assumptions about what animations are available
+	 * and should be moved away from doing so
+	 * @param  {number} deltax 
+	 * @param  {number} deltay
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 	};

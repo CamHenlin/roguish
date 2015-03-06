@@ -1,11 +1,7 @@
-/**
- * @name Renderer
- * @class
- */
 
 /**
  * Renderer handles rendering a map file to the canvas
- * @param {[EaselJS stage]} gamestage [EaselJS stage]
+ * @param {EaselJS stage} gamestage EaselJS stage
  * @constructor
  */
 function Renderer(gamestage) {
@@ -55,9 +51,8 @@ function Renderer(gamestage) {
 
 
 	/**
-	 * [completeRenderer run at the end of our map rendering process]
+	 * Run at the end of our map rendering process
 	 * @private
-	 * @return {[type]} [none]
 	 */
 	function completeRenderer() {
 		this.gamestage.removeAllChildren(); // clear the gamestage since we are ready to render.
@@ -82,9 +77,8 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [initLayers initialize all of the layers in the map]
+	 * Initialize all of the layers in the map
 	 * @private
-	 * @return {[type]} [none]
 	 */
 	function initLayers() {
 		var w = this.mapData.tilesets[0].tilewidth;
@@ -133,13 +127,13 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [initSimpleObjects initialization method for simple objects]
+	 * Initialization method for simple objects
 	 * @private
-	 * @param  {[type]} layerData    [description]
-	 * @param  {[type]} tilesetSheet [description]
-	 * @param  {[type]} tilewidth    [description]
-	 * @param  {[type]} tileheight   [description]
-	 * @return {[type]}              [description]
+	 * @param  {Array} layerData Tiled JSON data
+	 * @param  {Image} tilesetSheet 
+	 * @param  {number} tilewidth  
+	 * @param  {number} tileheight 
+	 * @return {EaselJS Container} 
 	 */
 	function initSimpleObjects(layerData, tilesetSheet, tilewidth, tileheight) {
 		var container = new createjs.Container();
@@ -173,13 +167,13 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [initDrawableLayer draws a single visible layer to a container]
+	 * Draws a single visible layer to a container
 	 * @private
-	 * @param  {[type]} layerData    [description]
-	 * @param  {[type]} tilesetSheet [description]
-	 * @param  {[type]} tilewidth    [description]
-	 * @param  {[type]} tileheight   [description]
-	 * @return {[type]}              [EaselJS container]
+	 * @param  {Array} layerData Tiled JSON data
+	 * @param  {Image} tilesetSheet 
+	 * @param  {number} tilewidth  
+	 * @param  {number} tileheight 
+	 * @return {EaselJS Container} 
 	 */
 	function initDrawableLayer(layerData, tilesetSheet, tilewidth, tileheight) {
 		var container = new createjs.Container();
@@ -210,13 +204,13 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [initFogOfWar draws fog of war]
+	 * Draws fog of war
 	 * @private
-	 * @param  {[type]} layerData    [description]
-	 * @param  {[type]} tilesetSheet [description]
-	 * @param  {[type]} tilewidth    [description]
-	 * @param  {[type]} tileheight   [description]
-	 * @return {[type]}              [EaselJS container]
+	 * @param  {Array} layerData Tiled JSON data
+	 * @param  {Image} tilesetSheet 
+	 * @param  {number} tilewidth  
+	 * @param  {number} tileheight 
+	 * @return {EaselJS Container} 
 	 */
 	function initFogOfWar(layerData, tilewidth, tileheight) {
 		this.fogOfWarContainer = new createjs.Container();
@@ -239,13 +233,13 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [initLayerWithCollisionArray Same as initDrawableLayer, but also builds the renderer's collision array]
+	 * Same as initDrawableLayer, but also builds the renderer's collision array
 	 * @private
-	 * @param  {[type]} layerData    [description]
-	 * @param  {[type]} tilesetSheet [description]
-	 * @param  {[type]} tilewidth    [description]
-	 * @param  {[type]} tileheight   [description]
-	 * @return {[type]}              [EaselJS container]
+	 * @param  {Array} layerData Tiled JSON data
+	 * @param  {Image} tilesetSheet 
+	 * @param  {number} tilewidth  
+	 * @param  {number} tileheight 
+	 * @return {EaselJS Container} 
 	 */
 	function initDrawableLayerWithCollisionArray(layerData, tilesetSheet, tilewidth, tileheight) {
 		var container = new createjs.Container();
@@ -281,9 +275,8 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [cleanUpMovement cleans up movement fields after a player's turn is done]
+	 * Cleans up movement fields after a player's turn is done
 	 * @private
-	 * @return [description]
 	 */
 	function cleanUpMovement() {
 		this.moving = false;
@@ -297,11 +290,10 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [shiftMap shifts the entire map except for the active player]
+	 * Shifts the entire map except for the active player
 	 * @private
-	 * @param  {[type]} xamount [description]
-	 * @param  {[type]} yamount [description]
-	 * @return {[type]}         [description]
+	 * @param  {number} xamount
+	 * @param  {number} yamount 
 	 */
 	function shiftMap(xamount, yamount) {
 		// right here we will actually have to iterate over other players and watched objects not contained by the renderer and move them in the opposite direction as well
@@ -323,11 +315,10 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [shiftMap shifts the entire map without regard for active or inactive players]
+	 * Shifts the entire map without regard for active or inactive players
 	 * @private
-	 * @param  {[type]} xamount [description]
-	 * @param  {[type]} yamount [description]
-	 * @return {[type]}         [description]
+	 * @param  {number} xamount
+	 * @param  {number} yamount 
 	 */
 	function shiftEntireMap(xamount, yamount) {
 		for (var i = 0; i < activeObjects.length; i++) {
@@ -346,18 +337,16 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [beginCaching forces caching on a container, caching the entire map size. disallows in animations in map]
-	 * @param  {[type]} container [description]
-	 * @return {[type]}           [description]
+	 * Forces caching on a container, caching the entire map size. disallows in animations in map
+	 * @param  {EaselJS Container} container 
 	 */
 	this.beginCaching = function(container) {
 		container.cache(0, 0, this.getMapWidth(), this.getMapHeight()); //this.mapData.tilesets[0].tileheight * this.mapData.layers[0].height);
 	};
 
 	/**
-	 * [initMap initializes the renderer, gets it ready to render a new map]
+	 * Initializes the renderer, gets it ready to render a new map
 	 * @public
-	 * @return {[type]} [none]
 	 */
 	this.initMap = function () {
 		// getting imagefile from first tileset
@@ -373,9 +362,8 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [prepareRenderer basically reinitialize all of our variables here, gets us ready to draw a new map]
-	 * @param  {[type]} mapData [new map JSON]
-	 * @return {[type]}         [none]
+	 * Basically reinitialize all of our variables here, gets us ready to draw a new map
+	 * @param  {Object} mapData new map JSON
 	 */
 	this.prepareRenderer = function(mapData) {
 		this.activeObjectsContainer = new createjs.Container();
@@ -402,11 +390,11 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [moveObjectTo shifts the map in a certain way]
-	 * @param  {[type]} trackedObject [description]
-	 * @param  {[type]} targetx       [description]
-	 * @param  {[type]} targety       [description]
-	 * @return {[type]}               [description]
+	 * Shifts the map in a certain way
+	 * @param  {Object} trackedObject 
+	 * @param  {number} targetx       
+	 * @param  {number} targety       
+	 * @return {boolean}               
 	 */
 	this.moveObjectTo = function(trackedObject, targetx, targety) {
 		this.movingObject = trackedObject;
@@ -429,26 +417,26 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [getCanvasWidth gets the canvas width in pixels]
-	 * @return {[type]} [description]
+	 * Gets the canvas width in pixels
+	 * @return {number}
 	 */
 	this.getCanvasWidth = function() {
 		return gamestage.canvas.width;
 	};
 
 	/**
-	 * [getCanvasWidth gets the canvas height in pixels]
-	 * @return {[type]} [description]
+	 * Gets the canvas height in pixels
+	 * @return {number}
 	 */
 	this.getCanvasHeight = function() {
 		return gamestage.canvas.height;
 	};
 
 	/**
-	 * [centerMapOnObject tells the renderer to attempt to center on an object]
+	 * Tells the renderer to attempt to center on an object
 	 * @public
-	 * @param  {[type]} centeredObject [description]
-	 * @return {[void]}                [description]
+	 * @param  {Object} centeredObject
+	 * @param {callback} centeringCallback
 	 */
 	this.centerMapOnObject = function(centeredObject, centeringCallback) {
 		this.centeredObject = centeredObject;
@@ -457,10 +445,10 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [centerMapOnObjectTick attempts to center the map on an object. returns true once the map is either centered
-	 * or the map has reached an edge when trying to center]
+	 * centerMapOnObjectTick attempts to center the map on an object. returns true once the map is either centered
+	 * or the map has reached an edge when trying to center
 	 * @public
-	 * @return {[boolean]}                [true if centered false if not]
+	 * @return {boolean}                true if centered false if not
 	 */
 	this.centerMapOnObjectTick = function() {
 		if (tryCentering.call(this, this.centeredObject, MAP_MOVE_SPEED) === false) {
@@ -470,10 +458,10 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [tryCentering attempts to center the screen, should get closer every frame]
-	 * @param  {[type]} obj   [description]
-	 * @param  {[type]} speed [description]
-	 * @return {[type]}       [false if the screen can't get more centered]
+	 * Attempts to center the screen, should get closer every frame
+	 * @param  {Object} obj
+	 * @param  {number} speed
+	 * @return {boolean}       false if the screen can't get more centered
 	 */
 	function tryCentering(obj, speed) {
 		var distanceX = distanceFromCenteredX.call(this, obj);
@@ -526,67 +514,66 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 * [distanceFromCenteredX returns distance from the center of the screen]
+	 * Returns distance from the center of the screen
 	 * positive means needs containers need to shift right by half returned number of pixels to be centered
 	 * positive means needs object need to shift left by half returned number of pixels to be centered
-	 * @param  {[type]} obj [description]
-	 * @return {[type]}     [description]
+	 * @param  {Object} obj
+	 * @return {number}  
 	 */
 	function distanceFromCenteredX(obj) {
 		return (obj.x + obj.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
 	}
 
 	/**
-	 * [canShiftMapLeft returns true if the map can shift left, false if not]
-	 * @param  {[type]} speed [description]
-	 * @return {[type]}       [description]
+	 * Returns true if the map can shift left, false if not
+	 * @param  {number} speed 
+	 * @return {boolean}     
 	 */
 	function canShiftMapLeft(speed) {
 		return renderer.container.x + (speed / 2) < 0;
 	}
 
 	/**
-	 * [canShiftMapRight returns true if the map can shift right, false if not]
-	 * @param  {[type]} speed [description]
-	 * @return {[type]}       [description]
+	 * Returns true if the map can shift right, false if not
+	 * @param  {number} speed 
+	 * @return {number}
 	 */
 	function canShiftMapRight(speed) {
 		return renderer.container.x + renderer.getMapWidth() - (speed / 2) > gamestage.canvas.width;
 	}
 
 	/**
-	 * [distanceFromCenteredY returns distance from the center of the screen]
+	 * Returns distance from the center of the screen
 	 * positive means containers needs to go up by half returned number of pixels to be centered
 	 * positive means object needs to go down by half returned number of pixels to be centered
-	 * @param  {[type]} obj [description]
-	 * @return {[type]}     [description]
+	 * @param  {Object} obj 
+	 * @return {number}
 	 */
 	function distanceFromCenteredY(obj) {
 		return ((obj.y + obj.spriteSheet._frameHeight / 2) + (renderer.container.y) - (gamestage.canvas.height / 2));
 	}
 
 	/**
-	 * [canShiftMapDown returns true if the map can shift down, false if not]
-	 * @param  {[type]} speed [description]
-	 * @return {[type]}       [description]
+	 * Returns true if the map can shift down, false if not
+	 * @param  {number} speed 
+	 * @return {boolean}
 	 */
 	function canShiftMapDown(speed) {
 		return renderer.container.y + (speed / 2) < 0;
 	}
 
 	/**
-	 * [canShiftMapUp returns true if the map can shift up, false if not]
-	 * @param  {[type]} speed [description]
-	 * @return {[type]}       [description]
+	 * Returns true if the map can shift up, false if not
+	 * @param  {number} speed 
+	 * @return {boolean}   
 	 */
 	function canShiftMapUp(speed) {
 		return gamestage.canvas.height - this.container.y + speed < this.getMapHeight();
 	}
 
 	/**
-	 * [movementTickActions description]
+	 * 
 	 * @public
-	 * @return {[type]} [description]
 	 */
 	this.movementTickActions = function() {
 		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.spriteSheet._frameHeight);
@@ -622,26 +609,26 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * [getMapWidth returns map width]
+	 * Returns map width
 	 * @public
-	 * @return {[type]} [description]
+	 * @return {number}
 	 */
 	this.getMapWidth = function() {
 		return this.mapData.tilewidth * (this.mapData.width);
 	};
 
 	/**
-	 * [getMapHeight returns map width]
+	 * Returns map width
 	 * @public
-	 * @return {[type]} [description]
+	 * @return {number}
 	 */
 	this.getMapHeight = function() {
 		return this.mapData.tileheight * (this.mapData.height);
 	};
 
 	/**
-	 * [setImage description]
-	 * @param {[type]} image [description]
+	 * Sets renderer's imageData
+	 * @param {Image} image
 	 */
 	this.setImage = function(image) {
 		this.imageData = image;
