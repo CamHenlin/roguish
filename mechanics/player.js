@@ -97,6 +97,24 @@ var Player = function(x, y, initiative) {
 	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
 	this.watchedElements = [];
 
+	var slashSpriteSheet = new createjs.SpriteSheet({
+		"images": [loader.getResult("slash")],
+		"frames": {
+			"width": 87, "height": 94, "count": 3
+		},
+		"animations": {
+			"slash": {
+				"frames" : [0,1,2],
+				"next" : "slash"
+			}
+		}
+	});
+	console.log(slashSpriteSheet);
+
+	this.attackAnimation = new createjs.Sprite(slashSpriteSheet, "slash");
+	//this.attackAnimation.scaleX = .5;
+	//this.attackAnimation.scaleY = .5;
+
 	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
 
 	// add our animations to global gamestage:
@@ -108,6 +126,12 @@ var Player = function(x, y, initiative) {
 	this.tickActions = function() {
 
 	};
+
+	/**
+	 * This returns damage amount for Player's attack, used in calculateDamage()
+	 * @return {number} the amount in hp
+	 */
+	this.attack = 2;
 
 	/**
 	 * Click handler for attack
@@ -140,8 +164,12 @@ var Player = function(x, y, initiative) {
 			var clickedEnemy = null;
 
 			for (var i = 0; i < activeObjects.length; i++) {
-				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
-					clickedEnemy = activeObjects[i];
+
+				// because enemies are in containers
+				var obj2 = activeObjects[i].animations;
+				if(obj2 instanceof createjs.Container) obj2 = obj2.children[0];
+				if (collisionSystem.simpleCollision(clickSprite, obj2)) {
+					if(activeObjects[i] instanceof Enemy) clickedEnemy = activeObjects[i];
 					break;
 				}
 			}

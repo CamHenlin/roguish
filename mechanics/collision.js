@@ -176,11 +176,15 @@ var CollisionSystem = function() {
 	 */
 	this.simpleCollision = function(object1, object2) {
 		var obj1 = object1;
-		var obj2 = object2.animations;
+		var obj2 = object2;
+
+
+		
 
 		if (!obj1.spriteSheet || !obj2.spriteSheet) {
 			return true;
 		}
+
 
 		return !(
 				obj1.y + obj1.spriteSheet._frameHeight < obj2.y ||
