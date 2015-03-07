@@ -103,6 +103,7 @@ var Enemy = function(x, y, level) {
 	 * @param  {number} amount The amount of damage to be taken
 	 */
 	this.receiveDamage = function(amount) {
+		console.log("receiveDamage");
 		this.hp -= amount;
 
 		if (this.hp <= 0) {

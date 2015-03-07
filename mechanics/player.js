@@ -100,16 +100,16 @@ var Player = function(x, y, initiative) {
 	var slashSpriteSheet = new createjs.SpriteSheet({
 		"images": [loader.getResult("slash")],
 		"frames": {
-			"width": 87, "height": 94, "count": 3
+			"width": 3, "height": 3, "count": 4
 		},
 		"animations": {
 			"slash": {
-				"frames" : [0,1,2],
-				"next" : "slash"
+				"frames" : [0,1,2,3],
+				"next" : "slash",
+				"speed" : .5
 			}
 		}
 	});
-	console.log(slashSpriteSheet);
 
 	this.attackAnimation = new createjs.Sprite(slashSpriteSheet, "slash");
 	//this.attackAnimation.scaleX = .5;
@@ -157,6 +157,7 @@ var Player = function(x, y, initiative) {
 			});
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
 
+			// hack
 			clickSprite.x = x;
 			clickSprite.y = y;
 			console.log(clickSprite);

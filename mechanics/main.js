@@ -14,7 +14,8 @@ loader.loadManifest([
 	{id: "dragon", src: "graphics/dragon.png"},
 	{id: "chest", src: "graphics/chest.png"},
 	{id: "starttile", src: "graphics/starttile.png"},
-	{id: "stairsdown", src: "graphics/stairsdown.png"}
+	{id: "stairsdown", src: "graphics/stairsdown.png"},
+	{id: "slash", src: "graphics/slash.png"}
 ]);
 
 /**
