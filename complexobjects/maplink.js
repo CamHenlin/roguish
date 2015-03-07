@@ -14,11 +14,14 @@
 var MapLink = function(x, y, graphic, link, startPointNumber) {
 	this.x = x;
 	this.y = y;
+	this.link = link;
+	this.startPointNumber = startPointNumber;
+
 	this.spriteSheet = new createjs.SpriteSheet({  // set sprite for the dragon
 		"images": [loader.getResult(graphic)],
 		"frames": {
 			"width": 16,
-			"height": 24,
+			"height": 16,
 			"count": 1
 		},
 		"animations": {
@@ -38,7 +41,53 @@ var MapLink = function(x, y, graphic, link, startPointNumber) {
 	// add our animations to global gamestage:
 	renderer.activeObjectsContainer.addChild(this.animations);
 
-	this.tickActions = function() {};
+	this.tickActions = function() {
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				var player = activeObjects[i];
+
+				if (player.x + player.animations.spriteSheet._frameWidth > this.x && player.x < this.x + this.animations.spriteSheet._frameWidth) {        // Check player collision
+					if (player.y + player.animations.spriteSheet._frameHeight > this.y && player.y < this.y + this.animations.spriteSheet._frameHeight) {
+						// gather all the players before we empty the active objects
+						var players = [];
+						for (var j = 0; j < activeObjects.length; j++) {
+							if (activeObjects[j] instanceof Player) {
+								players.push(activeObjects[j]);
+							}
+						}
+
+						activeObjects = [];
+						renderer.centered = true;
+
+						// load the linked map
+						maploader.loadMap(this.link + '.json', function() {
+							// find the correct start point for the link
+							var linkedStartPoint = {};
+							for (j = 0; j < activeObjects.length; j++) {
+								if (activeObjects[j] instanceof StartPoint) {
+									if (activeObjects[j].startPointNumber === this.startPointNumber) {
+										linkedStartPoint = activeObjects[j];
+									}
+								}
+							}
+
+							// add the players near the start point
+							for (j = 0; j < players.length; j++) {
+								players[j].x = parseInt(startPoint.x) + j * 16;
+								players[j].animations.x = parseInt(startPoint.x) + j * 16;
+								players[j].y = parseInt(startPoint.y) + j * 16;
+								players[j].animations.y = parseInt(startPoint.y) + j * 16;
+
+								activeObjects.push(players[j]);
+								renderer.activeObjectsContainer.addChild(players[j].animations);
+								updateFogOfWar(players[j]);
+							}
+						}.bind(this));
+					}
+				}
+			}
+		}
+	};
 };
 
 MapLink.prototype = new ComplexObject;

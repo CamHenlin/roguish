@@ -9,6 +9,7 @@
  * @default
  */
 var MAX_TURN_COUNTER = 100;
+
 /**
  * Speed that the map attempts to center at
  * @type {number}
@@ -16,6 +17,7 @@ var MAX_TURN_COUNTER = 100;
  * @default
  */
 var MAP_MOVE_SPEED = 1;
+
 /**
  * Number of players to be instantiated
  * @type {number}
@@ -23,6 +25,7 @@ var MAP_MOVE_SPEED = 1;
  * @default
  */
 var NUM_PLAYERS = 1;
+
 /**
  * Number of enemies to be instantiated
  * @type {number}
@@ -30,6 +33,7 @@ var NUM_PLAYERS = 1;
  * @default
  */
 var NUM_ENEMIES = 1;
+
 /**
  * Tileset file extension
  * @type {string}
@@ -37,6 +41,7 @@ var NUM_ENEMIES = 1;
  * @default
  */
 var TILESET_FILE_TYPE = '.png';
+
 /**
  * Default sight distance
  * @type {number}
@@ -44,6 +49,7 @@ var TILESET_FILE_TYPE = '.png';
  * @default
  */
 var DEFAULT_PERSON_SIGHT_DISTANCE = 4;
+
 /**
  * Default health
  * @type {number}
@@ -51,6 +57,7 @@ var DEFAULT_PERSON_SIGHT_DISTANCE = 4;
  * @default
  */
 var DEFAULT_PERSON_HEALTH = 10;
+
 /**
  * Default attack damage
  * @type {number}
@@ -58,6 +65,7 @@ var DEFAULT_PERSON_HEALTH = 10;
  * @default
  */
 var DEFAULT_PERSON_ATTACK = 2;
+
 /**
  * Boolean indicating whether fps will be logged
  * @type {boolean}
@@ -65,6 +73,7 @@ var DEFAULT_PERSON_ATTACK = 2;
  * @default
  */
 var LOG_FPS = true;
+
 /**
  * Maximum enemy distance
  * @type {number}

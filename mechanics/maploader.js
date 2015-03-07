@@ -17,6 +17,7 @@ function MapLoader(loader) {
 	* @param {callback} callback to be called when map is loaded
 	*/
 	this.loadMap = function(mapname, callback) {
+		console.log('loading ' + mapname);
 		this.callback = callback;
 		loader.removeAllEventListeners();
 		loader.addEventListener('fileload', handleMapLoad.bind(this));
@@ -28,6 +29,10 @@ function MapLoader(loader) {
 	*/
 	function handleMapLoad() {
 		map = loader.getResult('map');
+		console.log(map);
+		console.log(map.tilesets);
+		console.log(map.tilesets[0]);
+		console.log(map.tilesets[0].name);
 		loader.removeAllEventListeners();
 		loader.addEventListener('fileload', handleTilesetLoad.bind(this));
 		loader.loadManifest([{ id: 'tileset', src: map.tilesets[0].name + TILESET_FILE_TYPE }], true, 'graphics/');
