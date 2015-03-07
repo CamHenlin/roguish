@@ -25,8 +25,8 @@ var Form = function(x, y, fields, options) {
 	}
 
 	this.fields = fields;
-	this.header = options.header || null; 
-	this.message = options.message || null;
+	this.header = options ? options.header || null : null;
+	this.message = options ? options.message || null : null;
 
 	// inherited constructor
 	Widget.apply(this, [{x: x, y: y}]);
