@@ -12,9 +12,9 @@ var CollisionSystem = function() {
 
 	/**
 	 * Returns true if coordinate is valid
-	 * @param  {number} x    x-coordinate in pixels             
-	 * @param  {number} y                   y-coordinate in pixels
-	 * @return {boolean}                    
+	 * @param  {number} x    x-coordinate in pixels
+	 * @param  {number} y    y-coordinate in pixels
+	 * @return {boolean}
 	 */
 	this.checkCellValid = function(x, y) {
 		var tilesize = 16; // this is used as width and height!
@@ -45,7 +45,7 @@ var CollisionSystem = function() {
 	 * Returns true if coordinate is valid
 	 * @param  {number} x x-component in grid coordinates
 	 * @param  {number} y y-component in grid coordinates
-	 * @return {boolean}       
+	 * @return {boolean}
 	 */
 	this.checkCollisionCellValid = function(x, y) {
 		try {
@@ -72,8 +72,8 @@ var CollisionSystem = function() {
 
 	/**
 	 * Returns false if object intersects invalid tile
-	 * @param  {Object} object 
-	 * @return {boolean} 
+	 * @param  {Object} object
+	 * @return {boolean}
 	 */
 	this.checkCellValidForObject = function(object) {
 		var tilesize = 16; // this is used as width and height!
@@ -147,9 +147,9 @@ var CollisionSystem = function() {
 
 	/**
 	 * Returns object with grid coordinates
-	 * @param  {number} x 
+	 * @param  {number} x
 	 * @param  {number} y
-	 * @return {Object} 
+	 * @return {Object}
 	 */
 	this.getCollisionCoordinateFromCell = function(x, y) {
 		var tilesize = 16; // this is used as width and height!
@@ -170,9 +170,9 @@ var CollisionSystem = function() {
 
 	/**
 	 * Returns true if objects intersect
-	 * @param  {Object} object1 
-	 * @param  {Object} object2 
-	 * @return {boolean}      
+	 * @param  {Object} object1
+	 * @param  {Object} object2
+	 * @return {boolean}
 	 */
 	this.simpleCollision = function(object1, object2) {
 		var obj1 = object1;
