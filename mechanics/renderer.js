@@ -119,6 +119,11 @@ function Renderer(gamestage) {
 			if (layer.type === 'objectgroup') { // this is the list of tiled objects, if any
 				for (var j = 0; j < layer.objects.length; j++) {
 					// this is where we will handle cases for object files
+					if (layer.objects[j].type === "StartPoint") {
+						new StartPoint(layer.objects[j].x *  this.mapData.tilewidth, layer.objects[j].y *  this.mapData.tileheight);
+					} else if () {
+						new MapLink(layer.objects[j].x *  this.mapData.tilewidth, layer.objects[j].y *  this.mapData.tileheight);
+					}
 				}
 			}
 

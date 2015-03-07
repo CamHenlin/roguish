@@ -12,7 +12,9 @@ loader.loadManifest([
 	{id: "selectablearea", src: "graphics/selectablearea.png"},
 	{id: "validtile", src: "graphics/validtile.png"},
 	{id: "dragon", src: "graphics/dragon.png"},
-	{id: "chest", src: "graphics/chest.png"}
+	{id: "chest", src: "graphics/chest.png"},
+	{id: "starttile", src: "graphics/starttile.png"},
+	{id: "stairsdown", src: "graphics/stairsdown.png"}
 ]);
 
 /**
@@ -34,6 +36,7 @@ var selectableAreas = []; // global container for selectablearea blocks
 var gameOver = false;  // gets set to true when the end game goal has been collided with, prevents objects from being updated
 var fpsLabel = {};
 var isDemo = true;
+var startPoint = {};
 
 /**
  * Fixes the viewport on a window resize event

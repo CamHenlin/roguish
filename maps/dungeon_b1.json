@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="32" height="32" tilewidth="16" tileheight="16" nextobjectid="9">
+ <tileset firstgid="1" name="dungeon_tiles_0" tilewidth="16" tileheight="16">
+  <image source="../graphics/dungeon_tiles_0.png" width="448" height="176"/>
+ </tileset>
+ <layer name="background2" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt07sNACAIBFD2H8hBHMPCGaxsjCgaAn6O5GL5OBITESVhRhM2I7Xhw3/Vz5/39/ZPu3/dZ2U0/PYO1v7KvbX82rn3WvicfVv/yETyrzT6c/5sh+wY+PDhw4cP38sv8Gbzsw==
+  </data>
+ </layer>
+ <layer name="background1" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+  </data>
+ </layer>
+ <layer name="simpleobjects" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJzt1jENAAAIBLHHv2k8MEBCWgU3XgJsqOsAAIAHPBXMNR/UAAM=
+  </data>
+ </layer>
+ <layer name="collision" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJxjYCAeOALxXyyYkwQzKAGj9o/aP2r/qP0jxX4nIFZDwvF0th+Xf0ftH7WfWPsDgFgCD8YH4hhQ0z8uHI/HjBwgNsGBAwnYT2vgPwjtB5U5zkg0LeWw2Q+KcweoWvR4pbYcLv+rQjE2f1BTDpf/45FoWsoNxvQ30u0fzX+j+Y9eAGQ/ADMZm2Q=
+  </data>
+ </layer>
+ <layer name="foreground" width="32" height="32">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20PBxQAAADwbhAAAAE=
+  </data>
+ </layer>
+ <objectgroup name="complexobjects">
+  <object id="5" type="MapLink" x="442" y="41.5">
+   <properties>
+    <property name="graphic" value="stairsdown"/>
+    <property name="link" value="dungeon"/>
+    <property name="startpoint" value="1"/>
+   </properties>
+  </object>
+  <object id="6" type="StartPoint" x="382.75" y="42.75">
+   <properties>
+    <property name="startpoint_id" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>
