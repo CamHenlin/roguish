@@ -120,7 +120,7 @@ function Renderer(gamestage) {
 				for (var j = 0; j < layer.objects.length; j++) {
 					// this is where we will handle cases for object files
 					if (layer.objects[j].type === "StartPoint") {
-						new StartPoint(layer.objects[j].x, layer.objects[j].y);
+						new StartPoint(layer.objects[j].x, layer.objects[j].y, parseInt(layer.objects[j].properties.startpoint_id));
 					} else if (layer.objects[j].type === "MapLink") {
 						new MapLink(layer.objects[j].x, layer.objects[j].y, layer.objects[j].properties.graphic, layer.objects[j].properties.link, parseInt(layer.objects[j].properties.startpoint));
 					}

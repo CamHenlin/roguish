@@ -80,7 +80,7 @@ var Enemy = function(x, y, level) {
 
 	/**
 	 * Checks whether or not the enemy is within the max distance from a player
-	 * @return {Boolean} 
+	 * @return {Boolean}
 	 */
 	this.isWithinMaxDistance = function() {
 		for (var i = 0; i < activeObjects.length; i++) {

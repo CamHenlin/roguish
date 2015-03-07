@@ -7,9 +7,10 @@
  * StartPoint
  * @constructor
  */
-var StartPoint = function(x, y) {
+var StartPoint = function(x, y, startPointNumber) {
 	this.x = x;
 	this.y = y;
+	this.startPointNumber = startPointNumber;
 	this.spriteSheet = new createjs.SpriteSheet({  // set sprite for the dragon
 		"images": [loader.getResult("starttile")],
 		"frames": {
