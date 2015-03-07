@@ -30,11 +30,14 @@ var StartPoint = function(x, y) {
 	this.animations = new createjs.Sprite(this.spriteSheet, "still"); // change the second string to an animation from the spritesheet
 	this.animations.x = this.x;
 	this.animations.y = this.y - 8;
+	activeObjects.push(this);
 
 	// add our animations to global gamestage:
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	startPoint = {'x': x, 'y': y};
+
+	this.tickActions = function() {};
 };
 
 StartPoint.prototype = new ComplexObject;

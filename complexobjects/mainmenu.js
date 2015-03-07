@@ -66,7 +66,7 @@ function selectPlayers(previous) {
 			console.log(startGame.getValue('numberOfPlayers'));
 			maploader.loadMap(previous.getValue('mapname') + '.json', function() {
 				for (i = 0; i < parseInt(startGame.getValue('numberOfPlayers')); i++) {
-					var player = new Player(i * 16 + 32, i * 16 + 32, 10);
+					var player = new Player(i * 16 + parseInt(startPoint.x), i * 16 + parseInt(startPoint.y), 10);
 					activeObjects.push(player);
 					updateFogOfWar(player);
 				}
