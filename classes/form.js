@@ -11,20 +11,24 @@ var formCounter = 0;
  * @param {number} y
  * @param {Function} fields
  */
-var Form = function(x, y, fields) {
+var Form = function(x, y, fields, options) {
+	
 	this.formName = "default-form-" + formCounter + "-name-";
 	formCounter++;
 
-	// if an object is passed in for x, then we know it is actually the fields
+	// if an object is passed in for x, then we know it is actually the fields and shift the arguments over
 	if (typeof(x) === "object") {
+		options = y;
 		fields = x;
 		x = 0;
 		y = 0;
 	}
 
 	this.fields = fields;
+	this.header = options.header || null; 
+	this.message = options.message || null;
 
-	// constructor
+	// inherited constructor
 	Widget.apply(this, [{x: x, y: y}]);
 
 	// public
@@ -54,6 +58,7 @@ var Form = function(x, y, fields) {
 	 */
 	this.render = function() {
 		this.el.html(template.call(this));
+		console.log(this.header)
 		this.container.append(this.el);
 		attachCallbacks.call(this);
 	};

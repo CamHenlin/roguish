@@ -3,15 +3,19 @@
  */
 function mainForm() {
 	var fields = [{
-		text: 'New Game',
+		text: 'New Game!',
 		type: 'button',
 		callback: function() {
 			console.log('click')
 			selectMap(mainMenu);
 		}
 	}];
+	var options = {
+		header:"rougish", 
+		message:'a game produced in cis422'
+	}
 
-	var mainMenu = new Form(fields);
+	var mainMenu = new Form(0,0,fields, options);
 	mainMenu.render();
 }
 
@@ -45,7 +49,7 @@ function selectMap(previous) {
 		id: 'mapname'
 	}];
 
-	var newGame = new Form(100, 100, fields);
+	var newGame = new Form(fields);
 	newGame.render();
 }
 
@@ -80,7 +84,7 @@ function selectPlayers(previous) {
 		max: 4
 	}];
 	console.log("this is a new game")
-	var startGame = new Form(200, 200, fields);
+	var startGame = new Form(fields);
 	startGame.render();
 }
 
