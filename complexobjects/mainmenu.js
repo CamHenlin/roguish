@@ -77,24 +77,59 @@ function selectPlayers(previous) {
 		max: 4
 	},
 	{
-		text: 'Start Game',
+		text: 'Next',
 		type: 'button',
 		callback: function() {
-			startGame.hide();
-			activeObjects = [];
-			renderer.centered = true;
-			console.log(startGame.getValue('numberOfPlayers'));
-			maploader.loadMap(previous.getValue('mapname') + '.json', function() {
-				for (i = 0; i < parseInt(startGame.getValue('numberOfPlayers')); i++) {
-					var player = new Player(i * 16 + parseInt(startPoint.x), i * 16 + parseInt(startPoint.y), 10);
-					activeObjects.push(player);
-					updateFogOfWar(player);
-				}
-			}.bind(this));
+			players.hide();
+			namePlayers(parseInt(players.getValue("numberOfPlayers")), []);
 		}
 	}];
-	console.log("this is a new game")
-	var startGame = new Form(fields, {header:"players"});
+
+	var players = new Form(fields, {header:"players"});
+	players.render();
+}
+
+/**
+ * [namePlayers The menus for naming each player]
+ * @param  {[type]} numPlayers [The number of players chosen.]
+ * @param  {[type]} names      [The list of names added recursively in this function.]
+ */
+function namePlayers(numPlayers, names) {
+	if (names.length == numPlayers) {
+		activeObjects = [];
+		renderer.centered = true;
+		maploader.loadMap('dungeon.json', function() {
+			for (var i = 0; i < numPlayers; i++) {
+				var player = new Player(i * 16 + parseInt(startPoint.x), i * 16 + parseInt(startPoint.y), 10);
+				player.setName(names[i]);
+				activeObjects.push(player);
+				updateFogOfWar(player);
+			}
+		}.bind(this));
+
+		return;
+	}
+
+	var fields = [
+	{
+		type: "basic-text",
+		text: "Player " + (names.length + 1) + " name:"
+	},
+	{
+		type: "text",
+		id: "player" + names.length,
+	},
+	{
+		type: "button",
+		text: names.length == numPlayers - 1 ? "Start Game" : "Next",
+		callback: function() {
+			startGame.hide();
+			names.push(startGame.getValue('player' + names.length));
+			namePlayers(numPlayers, names);
+		}
+	}];
+
+	var startGame = new Form(fields, {header:"names"});
 	startGame.render();
 }
 

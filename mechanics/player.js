@@ -266,7 +266,7 @@ var Player = function(x, y, initiative) {
 
 		playerTurn = true;
 		this.totalTurns++;
-		console.log('player turn called');
+		console.log(this.getName() + '\'s turn called');
 		renderer.centerMapOnObject(this, function() {
 			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',

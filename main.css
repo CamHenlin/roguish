@@ -69,6 +69,7 @@ body{
 	padding: 8px;
 	font-size: 32px;
 	font-weight: bold;
+	max-width: 265px;
 }
 .range-default {
 	padding: 8px;
