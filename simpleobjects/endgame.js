@@ -6,6 +6,7 @@
  */
 var EndGame = function(x, y) {
 	SimpleObject.call(this, x, y);
+	console.log("end game: " + x + " " + y);
 
 	this.spriteSheet = new createjs.SpriteSheet({  // treasure chest sprite sheet
 		"images": [loader.getResult("chest")],
@@ -40,19 +41,78 @@ var EndGame = function(x, y) {
 	this.endGame = function(winner) {
 		this.animations.gotoAndPlay("open");
 
-		var endMenu = new Form(gamestage.canvas.width / 2, gamestage.canvas.height / 2, [{  // build menu
-			text: winner.getName() + " has won the game!",
+		var endMenu = new Form(gamestage.canvas.width / 2, gamestage.canvas.height / 2, [
+		{
+			text: winner.getName() + " has won the game with a score of " + winner.getScore() + "!",
 			type: "basic-text",
 			callback: function() {
 			}
-		}, {
+		},
+		{
 			text: "Play Again!",
 			type: "button",
 			callback: function() {
 				endMenu.destroy();
-				init();
+				window.location.reload();
 			}
-		}]);
+		},
+		{
+			text: "Main Menu",
+			type: "button",
+			callback: function() {
+				endMenu.destroy();
+				window.location.reload();
+			}
+		}
+		]);
+
+		if (localStorage.highScore === undefined) {
+			var hs = [];
+			for (var i = 0; i < MAX_HIGH_SCORES; i++) {
+				hs.push({name: "<None>", score: 0});
+			}
+
+			localStorage.highScore = JSON.stringify(hs);
+		}
+
+		var dict = {
+			text: "Top 5 Scores:",
+			type: "basic-text",
+			callback: function() {
+			}
+		};
+
+		endMenu.fields.splice(1, 0, dict);
+
+		var highScores = JSON.parse(localStorage.highScore);
+
+		for (var i = 0; i < highScores.length; i++) {
+			if (winner.getScore() > highScores[i].score) {
+				for (var k = i; k < highScores.length - 1; k++) {
+					var swap = highScores[k + 1];
+					highScores[k + 1] = highScores[i];
+					highScores[i] = swap;
+				}
+
+				highScores[i] = {name: winner.getName(), score: winner.getScore()};
+				break;
+			}
+		}
+
+		localStorage.highScore = JSON.stringify(highScores);
+
+		for (var i = 0; i < highScores.length; i++) {
+			if (highScores[i].name === "<None>")
+				continue;
+
+			var element = {
+				text: (i + 1) + ". " + highScores[i].name + ": " + highScores[i].score,
+				type: "basic-text",
+				callback: function() {}
+			};
+
+			endMenu.fields.splice(i + 2, 0, element);
+		}
 
 		endMenu.render();
 		gameOver = true;
