@@ -404,6 +404,7 @@ function Renderer(gamestage) {
 	 * @return {boolean}
 	 */
 	this.moveObjectTo = function(trackedObject, targetx, targety) {
+		console.log('targetx ' + targetx + ' taregety ' + targety);
 		this.movingObject = trackedObject;
 
 		targetx -= this.container.x;
@@ -412,7 +413,7 @@ function Renderer(gamestage) {
 			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).x &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {
 			cleanUpMovement.call(this);
-
+console.log('invalid');
 			return false;
 		}
 
@@ -583,6 +584,7 @@ function Renderer(gamestage) {
 	 * @public
 	 */
 	this.movementTickActions = function() {
+		console.log('moving');
 		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.spriteSheet._frameHeight);
 		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
 			// this section basically means we are looking to move to a new cell
@@ -598,7 +600,12 @@ function Renderer(gamestage) {
 			}
 		}
 
-		if ((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !this.movementSearchResult || !this.movementSearchResult[0]) {
+		if ((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) || !this.movementSearchResult || !this.movementSearchResult[0]) {
+			console.log('invalid');
+			console.log((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x));
+			console.log(!collisionSystem.checkCellValid(startxy.x, startxy.y));
+			console.log(!this.movementSearchResult);
+			console.log(!this.movementSearchResult[0]);
 			cleanUpMovement.call(this);
 			return;
 		}

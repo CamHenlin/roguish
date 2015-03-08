@@ -24,14 +24,17 @@ var CollisionSystem = function() {
 			var b = ~~(x / tilesize);
 
 			if (a <= -1 || a >= this.collisionArray.length) {
+				console.log('1');
 				return false;
 			}
 
 			if (b <= -1 || b >= this.collisionArray[a].length) {
+				console.log('2');
 				return false;
 			}
 
 			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				console.log('3');
 				return false;
 			}
 		} catch (error) {
