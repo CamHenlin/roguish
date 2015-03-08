@@ -12,7 +12,7 @@ var Robot = function(x, y, level) {
 	this.movementSpeed = 100;
 	this.attack = level + 15;
 	this.defense = level - 15;
-	this.health = 5;
+	this.hp = 1*level;
 
 	if (this.defense < 1) {
 		this.defense = 1;

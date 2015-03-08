@@ -11,6 +11,7 @@ var Player = function(x, y, initiative) {
 	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
+	this.xp = 0;
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
 		"frames": {
@@ -97,6 +98,24 @@ var Player = function(x, y, initiative) {
 	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
 	this.watchedElements = [];
 
+	var slashSpriteSheet = new createjs.SpriteSheet({
+		"images": [loader.getResult("slash")],
+		"frames": {
+			"width": 3, "height": 3, "count": 4
+		},
+		"animations": {
+			"slash": {
+				"frames" : [0,1,2,3],
+				"next" : "slash",
+				"speed" : .5
+			}
+		}
+	});
+
+	this.attackAnimation = new createjs.Sprite(slashSpriteSheet, "slash");
+	//this.attackAnimation.scaleX = .5;
+	//this.attackAnimation.scaleY = .5;
+
 	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
 
 	// add our animations to global gamestage:
@@ -110,6 +129,12 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
+	 * This returns damage amount for Player's attack, used in calculateDamage()
+	 * @return {number} the amount in hp
+	 */
+	this.attack = 2;
+
+	/**
 	 * Click handler for attack
 	 * @return {MouseEvent} event
 	 */
@@ -117,7 +142,8 @@ var Player = function(x, y, initiative) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 
-		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValid(x, y)) {
+		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			var clickEventSpriteSheet = new createjs.SpriteSheet({
 				"images": [loader.getResult("player")], // who cares, it's already preloaded
 				"frames": {
@@ -132,6 +158,7 @@ var Player = function(x, y, initiative) {
 			});
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
 
+			// hack
 			clickSprite.x = x;
 			clickSprite.y = y;
 			console.log(clickSprite);
@@ -139,8 +166,12 @@ var Player = function(x, y, initiative) {
 			var clickedEnemy = null;
 
 			for (var i = 0; i < activeObjects.length; i++) {
-				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
-					clickedEnemy = activeObjects[i];
+
+				// because enemies are in containers
+				var obj2 = activeObjects[i].animations;
+				if(obj2 instanceof createjs.Container) obj2 = obj2.children[0];
+				if (collisionSystem.simpleCollision(clickSprite, obj2)) {
+					if(activeObjects[i] instanceof Enemy) clickedEnemy = activeObjects[i];
 					break;
 				}
 			}
@@ -154,6 +185,7 @@ var Player = function(x, y, initiative) {
 			}
 
 			calculateDamage(this, clickedEnemy);
+
 		}
 	}
 	attackClickHandler = attackClickHandler.bind(this);
@@ -166,7 +198,8 @@ var Player = function(x, y, initiative) {
 		var x = event.pageX / gamezoom;
 		var y = event.pageY / gamezoom;
 
-		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValid(x, y)) {
+		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			renderer.moveObjectTo(this, x, y, true);
 			removeSelectableArea();
 			renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
@@ -211,7 +244,8 @@ var Player = function(x, y, initiative) {
 			renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 		}
 
-		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValid(x, y)) {
+		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			this.mouseMoveSprite.gotoAndPlay("valid");
 		} else {
 			this.mouseMoveSprite.gotoAndPlay("invalid");

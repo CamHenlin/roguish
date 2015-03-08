@@ -11,7 +11,7 @@ var Dragon = function(x, y, level) {
 	this.movementSpeed = 50 * level; // set attributes unique to a dragon
 	this.magic = level + 30;
 	this.defense = level * 2;
-	this.health = 10;
+	this.hp = 1*level;
 	this.initiative = 20;
 	this.healthBar.x = this.x - 23;
 

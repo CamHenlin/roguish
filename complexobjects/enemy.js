@@ -100,12 +100,13 @@ var Enemy = function(x, y, level) {
 
 	/**
 	 * Reduces this enemy's hp by the amount of damage received and updates health bar
-	 * @param  {number} amount The amount of damage to be taken
+ 	 * @param  {Object} attackingObject
 	 */
-	this.receiveDamage = function(amount) {
-		this.hp -= amount;
+	this.receiveDamage = function(attackingObject) {
+		this.hp -= attackingObject.attack;
 
 		if (this.hp <= 0) {
+			attackingObject.xp+=this.xp;
 			this.die();
 			return;
 		}
@@ -136,6 +137,10 @@ var Enemy = function(x, y, level) {
 		if (index > -1) {
 			activeObjects.splice(index, 1);
 		}
+
+		console.log("len:"+activeObjects.length)
+
+
 	};
 
 	/**
@@ -145,7 +150,6 @@ var Enemy = function(x, y, level) {
 		for (var i = 0; i < this.watchedElements.length; i++) {
 			this.watchedElements[i].tickActions(); // tick watched elements
 		}
-
 		this.counter++;
 	};
 

@@ -14,7 +14,8 @@ loader.loadManifest([
 	{id: "dragon", src: "graphics/dragon.png"},
 	{id: "chest", src: "graphics/chest.png"},
 	{id: "starttile", src: "graphics/starttile.png"},
-	{id: "stairsdown", src: "graphics/stairsdown.png"}
+	{id: "stairsdown", src: "graphics/stairsdown.png"},
+	{id: "slash", src: "graphics/slash.png"}
 ]);
 
 /**
@@ -82,7 +83,6 @@ function initVars() {
 		fpsLabel.y = gamestage.canvas.height - 64;
 	}
 
-	initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
 
 	// this initiates sort of a demo mode I guess?
 	setTimeout(function() {
@@ -109,14 +109,6 @@ function initVars() {
 	}, 1000);
 }
 
-/**
- * Reset activeObjects array and initialize it
- * @param  {number} playerCount
- * @param  {number} enemyCount 
- */
-function initActiveObjects(playerCount, enemyCount) {
-
-}
 
 /**
  * Our main game loop
