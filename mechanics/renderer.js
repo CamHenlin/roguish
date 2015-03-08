@@ -123,6 +123,8 @@ function Renderer(gamestage) {
 						new StartPoint(layer.objects[j].x, layer.objects[j].y, parseInt(layer.objects[j].properties.startpoint_id));
 					} else if (layer.objects[j].type === "MapLink") {
 						new MapLink(layer.objects[j].x, layer.objects[j].y, layer.objects[j].properties.graphic, layer.objects[j].properties.link, parseInt(layer.objects[j].properties.startpoint));
+					} else if (layer.objects[j].type === "DisableFogOfWar") {
+						new DisableFogOfWar();
 					}
 				}
 			}

@@ -196,6 +196,9 @@ var Player = function(x, y, initiative) {
 		var y = event.pageY / gamezoom;
 
 		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		console.log(JSON.stringify(collisionCoordinate));
+		console.log(isSelectionInSelectableBounds(this, x, y));
+		console.log(collisionSystem.checkCellValidForObject(collisionCoordinate));
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			renderer.moveObjectTo(this, x, y, true);
 			removeSelectableArea();

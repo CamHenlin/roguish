@@ -176,14 +176,7 @@ var CollisionSystem = function() {
 	 */
 	this.simpleCollision = function(object1, object2) {
 		var obj1 = object1;
-<<<<<<< HEAD
-		var obj2 = object2;
-
-
-		
-=======
 		var obj2 = object2.sprite || object2.animations;
->>>>>>> fixed attack bug
 
 		if (!obj1.spriteSheet || !object2.spriteSheet) {
 			return false;

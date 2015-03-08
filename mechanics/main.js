@@ -15,7 +15,8 @@ loader.loadManifest([
 	{id: "chest", src: "graphics/chest.png"},
 	{id: "starttile", src: "graphics/starttile.png"},
 	{id: "stairsdown", src: "graphics/stairsdown.png"},
-	{id: "slash", src: "graphics/slash.png"}
+	{id: "slash", src: "graphics/slash.png"},
+	{id: "black", src: "graphics/black.png"}
 ]);
 
 /**
@@ -111,10 +112,9 @@ function initVars() {
 	}, 1000);
 }
 
-
 /**
  * Our main game loop
- * @param  {TickEvent} event 
+ * @param  {TickEvent} event
  */
 function handleTick(event) {
 	if (!renderer.doneRendering) {
