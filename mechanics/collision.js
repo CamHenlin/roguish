@@ -176,21 +176,30 @@ var CollisionSystem = function() {
 	 */
 	this.simpleCollision = function(object1, object2) {
 		var obj1 = object1;
+<<<<<<< HEAD
 		var obj2 = object2;
 
 
 		
+=======
+		var obj2 = object2.sprite || object2.animations;
+>>>>>>> fixed attack bug
 
-		if (!obj1.spriteSheet || !obj2.spriteSheet) {
-			return true;
+		if (!obj1.spriteSheet || !object2.spriteSheet) {
+			return false;
+		}
+
+		var offset = 0;
+		if (obj2.regX) {
+			offset = obj2.regX;
 		}
 
 
 		return !(
 				obj1.y + obj1.spriteSheet._frameHeight < obj2.y ||
-				obj1.y > obj2.y + obj2.spriteSheet._frameHeight ||
-				obj1.x > obj2.x + obj2.spriteSheet._frameWidth  ||
-				obj1.x + obj1.spriteSheet._frameWidth < obj2.x
+				obj1.y > obj2.y + object2.spriteSheet._frameHeight ||
+				obj1.x > obj2.x + object2.spriteSheet._frameWidth - offset  ||
+				obj1.x + obj1.spriteSheet._frameWidth < obj2.x - offset
 		);
 	}
 }

@@ -167,12 +167,8 @@ var Player = function(x, y, initiative) {
 			var clickedEnemy = null;
 
 			for (var i = 0; i < activeObjects.length; i++) {
-
-				// because enemies are in containers
-				var obj2 = activeObjects[i].animations;
-				if(obj2 instanceof createjs.Container) obj2 = obj2.children[0];
-				if (collisionSystem.simpleCollision(clickSprite, obj2)) {
-					if(activeObjects[i] instanceof Enemy) clickedEnemy = activeObjects[i];
+				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
+					clickedEnemy = activeObjects[i];
 					break;
 				}
 			}
