@@ -30,10 +30,11 @@ var Widget = function(options) {
 	};
 
 	// ugly hack to have to move this declaration here, since we want to use the getPositionCSS method:
-	this.el = $("<div class='forms forms-default' " + this.getPositionCSS() + "></div>");
+	this.el = $("<div class='forms' " + this.getPositionCSS() + "></div>");
 	if(this.cssClass){
-		
 		this.el.addClass(this.cssClass);
+	}else{
+		this.el.addClass("forms-default");
 	}
 
 	/**

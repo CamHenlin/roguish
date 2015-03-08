@@ -288,7 +288,7 @@ var Player = function(x, y, initiative) {
 						$("body").mousemove(mouseMoveHandler);
 						actionMenu.destroy();
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
-				}]);
+				}], {cssClass:'playerActions'});
 			actionMenu.render();
 			showSelectableArea(this);
 		}.bind(this));

@@ -134,9 +134,24 @@ p{
 	width:100%;
 
 	background:rgba(0,0,0,.5);
-	z-index: 100000000;
+	z-index: 1;
 	color:white;
 	padding:2rem;
+}
+
+.playerActions button{
+	font-size: 16px;
+	/* width: 100%; */
+	line-height: 32px;
+	padding: .0rem;
+	width: 6rem;
+	display: block;
+	color: white;
+	border: 0;
+	background: rgba(0,0,0,.8);
+	/* border-radius: 190px; */
+	border-bottom: 1px solid rgba(255,255,255,.25);
+
 }
 
 progress{
