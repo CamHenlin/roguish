@@ -12,7 +12,7 @@ var formCounter = 0;
  * @param {Function} fields
  */
 var Form = function(x, y, fields, options) {
-	
+
 	this.formName = "default-form-" + formCounter + "-name-";
 	formCounter++;
 
@@ -35,15 +35,15 @@ var Form = function(x, y, fields, options) {
 	// public
 	/**
 	 * [getValue description]
-	 * @param  {value} 
+	 * @param  {value}
 	 * @return {string}
 	 */
 	this.getValue = function(value) {
-		return this.el.find("#" + value).val() || this.el.find("#" + value).is(":checked").val();
+		return this.el.find("#" + value).val();
 	};
 
 	/**
-	 * 
+	 *
 	 * @return {Object}
 	 */
 	this.values = function() {
@@ -55,7 +55,7 @@ var Form = function(x, y, fields, options) {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	this.render = function() {
 		this.el.html(template.call(this));
@@ -84,7 +84,7 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * 
+	 *
 	 * @return {string}
 	 */
 	function template() {
@@ -102,8 +102,8 @@ var Form = function(x, y, fields, options) {
 
 	/**
 	 * [textField description]
-	 * @param  {string} name 
-	 * @param  {number} index 
+	 * @param  {string} name
+	 * @param  {number} index
 	 * @return {string}
 	 */
 	function textField(name, index) {
@@ -111,9 +111,9 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * 
-	 * @param  {string} name  
-	 * @param  {number} index 
+	 *
+	 * @param  {string} name
+	 * @param  {number} index
 	 * @return {string}
 	 */
 	function buttonField(name, index) {
@@ -122,9 +122,9 @@ var Form = function(x, y, fields, options) {
 
 	/**
 	 * [selectField description]
-	 * @param  {string} name    
-	 * @param  {string} options 
-	 * @param  {number} index  
+	 * @param  {string} name
+	 * @param  {string} options
+	 * @param  {number} index
 	 * @return {string}
 	 */
 	function selectField(name, options, index) {
@@ -138,10 +138,10 @@ var Form = function(x, y, fields, options) {
 
 	/**
 	 * [radioField description]
-	 * @param  {string} name   
-	 * @param  {string} options 
-	 * @param  {number} index   
-	 * @return {string}        
+	 * @param  {string} name
+	 * @param  {string} options
+	 * @param  {number} index
+	 * @return {string}
 	 */
 	function radioField(name, options, index) {
 		var html = name ? "<p>choose the " + name + "</p>" : "";
@@ -154,21 +154,21 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * 
-	 * @param  {string} name  
-	 * @param  {number} min   
-	 * @param  {number} max   
-	 * @param  {number} index 
-	 * @return {string}       
+	 *
+	 * @param  {string} name
+	 * @param  {number} min
+	 * @param  {number} max
+	 * @param  {number} index
+	 * @return {string}
 	 */
 	function numberField(name, min, max, index) {
 		return "<input class='input-default' placeholder='number of players (" + min + "-" + max + ")' type='number' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
 	/**
-	 * 
-	 * @param  {string} name  
-	 * @param  {number} min   
+	 *
+	 * @param  {string} name
+	 * @param  {number} min
 	 * @param  {number} max
 	 * @param  {number} index
 	 * @return {string}
@@ -179,8 +179,8 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * Returns a string 
-	 * @return {string} 
+	 * Returns a string
+	 * @return {string}
 	 */
 	function inputFields() {
 		var html = "";
@@ -208,7 +208,7 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	function attachCallbacks() {
 		var index = 0;

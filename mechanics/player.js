@@ -6,12 +6,13 @@
  * @constructor
  */
 var Player = function(x, y, initiative) {
-	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
-	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.x = x;
+	this.y = y;
 	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
 	this.xp = 1;
+	this.attack = 2;
 	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
@@ -106,16 +107,16 @@ var Player = function(x, y, initiative) {
 		},
 		"animations": {
 			"slash": {
-				"frames" : [0,1,2,3],
+				"frames" : [0, 1, 2, 3],
 				"next" : "slash",
-				"speed" : .5
+				"speed" : 0.5
 			}
 		}
 	});
 
 	this.attackAnimation = new createjs.Sprite(slashSpriteSheet, "slash");
-	//this.attackAnimation.scaleX = .5;
-	//this.attackAnimation.scaleY = .5;
+	this.attackAnimation.scaleX = 2;
+	this.attackAnimation.scaleY = 2;
 
 	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
 
@@ -128,12 +129,6 @@ var Player = function(x, y, initiative) {
 	this.tickActions = function() {
 
 	};
-
-	/**
-	 * This returns damage amount for Player's attack, used in calculateDamage()
-	 * @return {number} the amount in hp
-	 */
-	this.attack = 2;
 
 	/**
 	 * Click handler for attack
@@ -158,8 +153,6 @@ var Player = function(x, y, initiative) {
 				}
 			});
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
-
-			// hack
 			clickSprite.x = x;
 			clickSprite.y = y;
 			console.log(clickSprite);
@@ -167,7 +160,12 @@ var Player = function(x, y, initiative) {
 			var clickedEnemy = null;
 
 			for (var i = 0; i < activeObjects.length; i++) {
+				if (activeObjects[i] instanceof Player) {
+					continue;
+				}
+
 				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
+					alert(i);
 					clickedEnemy = activeObjects[i];
 					break;
 				}
