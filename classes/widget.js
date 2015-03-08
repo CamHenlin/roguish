@@ -10,10 +10,12 @@
 var Widget = function(options) {
 	this.x = options.x || null;
 	this.y = options.y || null;
-	this.cssClass = null;
-	this.cssId = null;
+	this.cssClass = options.cssClass || null;
+	this.cssId = options.cssId || null;
 	this.container = $('body');
 	this.el = {}; // going to reset slightly later in the code
+
+	console.log(this.cssClass);
 
 	/**
 	 * Returns a string with position information in css form
@@ -29,6 +31,10 @@ var Widget = function(options) {
 
 	// ugly hack to have to move this declaration here, since we want to use the getPositionCSS method:
 	this.el = $("<div class='forms forms-default' " + this.getPositionCSS() + "></div>");
+	if(this.cssClass){
+		
+		this.el.addClass(this.cssClass);
+	}
 
 	/**
 	 * Hides element

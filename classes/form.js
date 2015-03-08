@@ -27,9 +27,10 @@ var Form = function(x, y, fields, options) {
 	this.fields = fields;
 	this.header = options ? options.header || null : null;
 	this.message = options ? options.message || null : null;
+	this.cssClass = options ? options.cssClass || null : null;
 
 	// inherited constructor
-	Widget.apply(this, [{x: x, y: y}]);
+	Widget.apply(this, [{x: x, y: y, cssClass: this.cssClass}]);
 
 	// public
 	/**
@@ -58,7 +59,12 @@ var Form = function(x, y, fields, options) {
 	 */
 	this.render = function() {
 		this.el.html(template.call(this));
-		console.log(this.header)
+		if(this.message){
+			this.el.prepend("<p>"+this.message+"</p>");
+		}
+		if(this.header){
+			this.el.prepend("<h2>"+this.header+"</h2>");
+		}
 		this.container.append(this.el);
 		attachCallbacks.call(this);
 	};
@@ -138,7 +144,7 @@ var Form = function(x, y, fields, options) {
 	 * @return {string}        
 	 */
 	function radioField(name, options, index) {
-		var html = "<p>choose the " + name + "</p>";
+		var html = name ? "<p>choose the " + name + "</p>" : "";
 		firstOption = options.shift();
 		html += "<input checked type='radio' class='radio-default' id='" + getId.call(this, index) + "' value='" + firstOption + "'>" + firstOption + "</br> "
 		options.forEach(function(option) {
@@ -168,7 +174,8 @@ var Form = function(x, y, fields, options) {
 	 * @return {string}
 	 */
 	function rangeField(name, min, max, index) {
-		return "</br>" + name + "</br><input class='range-default' type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
+		var html = name ? "</br>" + name + "</br>" : "";
+		return html + "<input class='range-default' type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
 	/**

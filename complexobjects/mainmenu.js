@@ -9,7 +9,14 @@ function mainForm() {
 			console.log('click')
 			selectMap(mainMenu);
 		}
-	}];
+	},{
+		text: 'high scores',
+		type: 'button',
+		callback: function(){
+			console.log('highscores');
+		}
+	}
+	];
 	var options = {
 		header:"rougish", 
 		message:'a game produced in cis422'
@@ -25,7 +32,14 @@ function mainForm() {
 */
 function selectMap(previous) {
 	previous.hide();
-	var fields = [{
+	var fields = [
+	{
+		text: 'map',
+		type: 'select',
+		options: ['dungeon', 'outside'],
+		id: 'mapname'
+	},
+	{
 		text: 'back',
 		type: 'button',
 		callback: function() {
@@ -42,11 +56,6 @@ function selectMap(previous) {
 			selectPlayers(newGame);
 			isDemo = false;
 		}
-	}, {
-		text: 'map',
-		type: 'select',
-		options: ['dungeon', 'outside'],
-		id: 'mapname'
 	}];
 
 	var newGame = new Form(fields);
@@ -60,7 +69,14 @@ function selectMap(previous) {
 function selectPlayers(previous) {
 	previous.hide();
 
-	var fields = [{
+	var fields = [
+	{
+		type: 'range',
+		id: 'numberOfPlayers',
+		min: 1,
+		max: 4
+	},
+	{
 		text: 'Start Game',
 		type: 'button',
 		callback: function() {
@@ -76,15 +92,9 @@ function selectPlayers(previous) {
 				}
 			}.bind(this));
 		}
-	}, {
-		text: 'Number of Players',
-		type: 'range',
-		id: 'numberOfPlayers',
-		min: 1,
-		max: 4
 	}];
 	console.log("this is a new game")
-	var startGame = new Form(fields);
+	var startGame = new Form(fields, {header:"players"});
 	startGame.render();
 }
 

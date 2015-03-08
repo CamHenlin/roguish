@@ -19,6 +19,10 @@ canvas {
 *{
 	font-family: 'Pixelated', sans-serif !important;
 }
+body{
+	position: absolute;
+}
+
 .second, .forms {
 	position: absolute;
 	z-index: 100;
@@ -83,6 +87,10 @@ canvas {
 	max-width: 18rem;
 	border-width: 48px;
 	border-image: url("footbk.jpg") 50% round;
+	background-image:url("knot.jpg");
+	background-repeat: no-repeat;
+	padding-bottom:3rem;
+	background-position: center bottom;
 
 }
 .forms-default .button-default{
@@ -108,4 +116,44 @@ canvas {
 	display: block;
 	position: relative;
 	top:3.5rem;
+}
+p{
+	font-size: 1.25rem;
+	text-align: center;
+	position: relative;
+	top:-1rem;
+}
+#numberOfPlayers{
+	display: block;
+	margin:auto;
+}
+
+#playermenu{
+	position: absolute;
+	bottom:0px;
+	width:100%;
+
+	background:rgba(0,0,0,.5);
+	z-index: 100000000;
+	color:white;
+	padding:2rem;
+}
+
+progress{
+	/* Reset the default appearance */
+  -webkit-appearance: none;
+   appearance: none;
+   background: red;
+   height: .5rem;
+}
+
+progress[value]::-webkit-progress-value {
+  background-image:
+	   -webkit-linear-gradient(top, 
+	                           rgba(255, 255, 255, .25), 
+	                           rgba(0, 0, 0, .25)),
+	   -webkit-linear-gradient(left, red, red);
+
+    border-radius: 2px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
 }
