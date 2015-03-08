@@ -13,10 +13,12 @@ function advanceTurn() {
 		}
 
 		if (activeObjects[i].turnCounter > MAX_TURN_COUNTER && !turnFlag) {
+
 			activeObjects[i].turn();
 			turnFlag = true;
 			if (activeObjects[i].constructor === Player) {
 				activePlayer = activeObjects[i];
+				console.log("I'm "+i+" and my xp is "+activePlayer.xp);
 			}
 		}
 	}

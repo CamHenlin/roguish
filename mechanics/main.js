@@ -83,7 +83,6 @@ function initVars() {
 		fpsLabel.y = gamestage.canvas.height - 64;
 	}
 
-	initActiveObjects(NUM_PLAYERS, NUM_ENEMIES);
 
 	// this initiates sort of a demo mode I guess?
 	setTimeout(function() {
@@ -110,14 +109,6 @@ function initVars() {
 	}, 1000);
 }
 
-/**
- * Reset activeObjects array and initialize it
- * @param  {number} playerCount
- * @param  {number} enemyCount 
- */
-function initActiveObjects(playerCount, enemyCount) {
-
-}
 
 /**
  * Our main game loop

@@ -5,7 +5,6 @@
  */
 
 function calculateDamage(attackingObject, defendingObject) {
-	
 	// stupid hack
 	attackingObject.attackAnimation.x = defendingObject.x - 8;
 	attackingObject.attackAnimation.y = defendingObject.y;
@@ -14,5 +13,5 @@ function calculateDamage(attackingObject, defendingObject) {
 	setTimeout(function() {
 		renderer.activeObjectsContainer.removeChild(attackingObject.attackAnimation)}, 500);
 
-	defendingObject.receiveDamage(attackingObject.attack);
+	defendingObject.receiveDamage(attackingObject);
 }

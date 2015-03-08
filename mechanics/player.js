@@ -11,6 +11,7 @@ var Player = function(x, y, initiative) {
 	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
+	this.xp = 0;
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
 		"frames": {
@@ -184,6 +185,7 @@ var Player = function(x, y, initiative) {
 			}
 
 			calculateDamage(this, clickedEnemy);
+
 		}
 	}
 	attackClickHandler = attackClickHandler.bind(this);
