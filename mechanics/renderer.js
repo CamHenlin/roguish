@@ -404,7 +404,6 @@ function Renderer(gamestage) {
 	 * @return {boolean}
 	 */
 	this.moveObjectTo = function(trackedObject, targetx, targety) {
-		console.log('targetx ' + targetx + ' taregety ' + targety);
 		this.movingObject = trackedObject;
 
 		targetx -= this.container.x;
@@ -413,7 +412,6 @@ function Renderer(gamestage) {
 			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).x &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {
 			cleanUpMovement.call(this);
-console.log('invalid');
 			return false;
 		}
 
@@ -529,7 +527,7 @@ console.log('invalid');
 	 * @return {number}
 	 */
 	function distanceFromCenteredX(obj) {
-		return (obj.x + obj.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
+		return (obj.x + obj.spriteSheet._frameWidth) + renderer.container.x - (gamestage.canvas.width / 2);
 	}
 
 	/**
@@ -558,7 +556,7 @@ console.log('invalid');
 	 * @return {number}
 	 */
 	function distanceFromCenteredY(obj) {
-		return ((obj.y + obj.spriteSheet._frameHeight / 2) + (renderer.container.y) - (gamestage.canvas.height / 2));
+		return ((obj.y + obj.spriteSheet._frameHeight) + (renderer.container.y) - (gamestage.canvas.height / 2));
 	}
 
 	/**
@@ -585,7 +583,7 @@ console.log('invalid');
 	 */
 	this.movementTickActions = function() {
 		console.log('moving');
-		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.spriteSheet._frameHeight);
+		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
 		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
 			// this section basically means we are looking to move to a new cell
 			var start = this.movementGraph.grid[startxy.x][startxy.y];
@@ -601,11 +599,6 @@ console.log('invalid');
 		}
 
 		if ((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) || !this.movementSearchResult || !this.movementSearchResult[0]) {
-			console.log('invalid');
-			console.log((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x));
-			console.log(!collisionSystem.checkCellValid(startxy.x, startxy.y));
-			console.log(!this.movementSearchResult);
-			console.log(!this.movementSearchResult[0]);
 			cleanUpMovement.call(this);
 			return;
 		}

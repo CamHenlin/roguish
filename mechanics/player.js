@@ -96,8 +96,8 @@ var Player = function(x, y, initiative) {
 	});
 
 	this.animations = new createjs.Sprite(this.spriteSheet, "stand-front"); // change the second string to an animation from the spritesheet
-	this.animations.x = this.x + this.animations.spriteSheet._frameWidth / 3;
-	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
+	this.animations.x = this.x;
+	this.animations.y = this.y;
 	this.watchedElements = [];
 
 	var slashSpriteSheet = new createjs.SpriteSheet({
@@ -171,7 +171,7 @@ var Player = function(x, y, initiative) {
 				}
 			}
 
-			renderer.moveObjectTo(this, x, y, true);
+			renderer.moveObjectTo(this, x, y + 16, true);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
 			removeSelectableArea();
 
@@ -198,7 +198,7 @@ var Player = function(x, y, initiative) {
 		console.log(isSelectionInSelectableBounds(this, x, y));
 		console.log(collisionSystem.checkCellValidForObject(collisionCoordinate));
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
-			renderer.moveObjectTo(this, x, y, true);
+			renderer.moveObjectTo(this, x, y - 16, true);
 			removeSelectableArea();
 			renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
 			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
@@ -242,15 +242,15 @@ var Player = function(x, y, initiative) {
 			renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 		}
 
-		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x - renderer.container.x - renderer.container.x % 16, y - renderer.container.y - renderer.container.y % 16);
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			this.mouseMoveSprite.gotoAndPlay("valid");
 		} else {
 			this.mouseMoveSprite.gotoAndPlay("invalid");
 		}
 
-		this.mouseMoveSprite.x = x;
-		this.mouseMoveSprite.y = y;
+		this.mouseMoveSprite.x = x + renderer.container.x % 16;
+		this.mouseMoveSprite.y = y + renderer.container.y % 16;
 	};
 	mouseMoveHandler = mouseMoveHandler.bind(this);
 
