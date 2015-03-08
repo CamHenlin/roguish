@@ -171,7 +171,7 @@ var Player = function(x, y, initiative) {
 				}
 			}
 
-			renderer.moveObjectTo(this, x, y + 16, true);
+			renderer.moveObjectTo(this, x, y - 16, true);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
 			removeSelectableArea();
 

@@ -186,23 +186,19 @@ var CollisionSystem = function() {
 			return false;
 		}
 
-		var offset = 0;
-		if (object2.sprite && object2.sprite.regX) {
-			offset = obj2.regX;
-		}
 
 		console.log(obj1.y + obj1.spriteSheet._frameHeight);
 		console.log(obj2.y);
 		console.log(obj1.y + obj1.spriteSheet._frameHeight < obj2.y);
 		console.log(obj1.y > obj2.y + object2.spriteSheet._frameHeight);
-		console.log(obj1.x > obj2.x + object2.spriteSheet._frameWidth - offset);
-		console.log(obj1.x + obj1.spriteSheet._frameWidth < obj2.x - offset);
+		console.log(obj1.x > obj2.x + object2.spriteSheet._frameWidth);
+		console.log(obj1.x + obj1.spriteSheet._frameWidth < obj2.x);
 
 		return !(
 				obj1.y + obj1.spriteSheet._frameHeight < obj2.y ||
 				obj1.y > obj2.y + object2.spriteSheet._frameHeight ||
-				obj1.x > obj2.x + object2.spriteSheet._frameWidth - offset  ||
-				obj1.x + obj1.spriteSheet._frameWidth < obj2.x - offset
+				obj1.x > obj2.x + object2.spriteSheet._frameWidth  ||
+				obj1.x + obj1.spriteSheet._frameWidth < obj2.x
 		);
 	}
 }

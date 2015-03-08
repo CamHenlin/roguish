@@ -32,7 +32,7 @@ var Enemy = function(x, y, level) {
 	this.healthBarMaxWidth = 18;
 	this.healthBar = new createjs.Bitmap("../graphics/health_bar.png");
 	this.healthBar.scaleX = this.healthBarMaxWidth / this.healthBar.image.width;
-	this.healthBar.x = this.x - 16;
+	this.healthBar.x = this.x;
 	this.healthBar.y = this.y - 5;
 
 
@@ -116,7 +116,7 @@ var Enemy = function(x, y, level) {
 		if (this.hp / maxHp < 0.2) { // less than 20% hp, make the health bar red
 			this.animations.removeChild(this.healthBar);
 			this.healthBar = new createjs.Bitmap("../graphics/health_bar_red.png");
-			this.healthBar.x = this.x - 16;
+			this.healthBar.x = this.x;
 			this.healthBar.y = this.y - 5;
 			this.animations.addChild(this.healthBar);
 		}
