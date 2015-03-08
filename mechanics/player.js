@@ -153,8 +153,8 @@ var Player = function(x, y, initiative) {
 				}
 			});
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
-			clickSprite.x = x;
-			clickSprite.y = y;
+			clickSprite.x = x - renderer.container.x;
+			clickSprite.y = y - renderer.container.y;
 			console.log(clickSprite);
 
 			var clickedEnemy = null;
