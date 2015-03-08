@@ -81,3 +81,11 @@ var LOG_FPS = true;
  * @default
  */
 var MAX_ENEMY_DISTANCE = 8;
+
+/**
+ * [MAX_HIGH_SCORES The max amount of high scores kept track of]
+ * @type {number}
+ * @constant
+ * @default
+ */
+var MAX_HIGH_SCORES = 5;

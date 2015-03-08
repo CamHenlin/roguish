@@ -11,7 +11,8 @@ var Player = function(x, y, initiative) {
 	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
-	this.xp = 0;
+	this.xp = 1;
+	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
 		"frames": {
@@ -264,6 +265,7 @@ var Player = function(x, y, initiative) {
 		this.lastFrameDirection = "";
 
 		playerTurn = true;
+		this.totalTurns++;
 		console.log('player turn called');
 		renderer.centerMapOnObject(this, function() {
 			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
@@ -316,6 +318,19 @@ var Player = function(x, y, initiative) {
 	 */
 	this.getName = function() {
 		return playerName;
+	};
+
+	/**
+	 * [getScore Calculates and returns the player's current score.]
+	 * @return {[type]} [The player's current score]
+	 */
+	this.getScore = function() {
+		var turnScore = 100 - this.totalTurns;
+
+		if (turnScore < 1)
+			turnScore = 1;
+
+		return this.xp * turnScore;
 	};
 };
 

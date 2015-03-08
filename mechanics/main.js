@@ -58,6 +58,7 @@ function init() {
 	window.onresize = fixViewport;
 }
 
+
 /**
  * Initialize all variables needed for a new game to start
  */
@@ -67,6 +68,7 @@ function initVars() {
 	gamestage.canvas.width = window.innerWidth / gamezoom;
 	gamestage.canvas.height = window.innerHeight / gamezoom;
 	gamestage.clear();
+	activeObjects.length = 0;
 	gamestage.snapToPixelEnabled = true;
 	renderer = new Renderer(gamestage);
 	maploader = new MapLoader(loader);
