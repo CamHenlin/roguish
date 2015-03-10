@@ -1,18 +1,19 @@
 
 /**
- * ComplexObject complex objects that all complex objects inherit from
+ * Base class for complex objects. Objects which move on the map such as enemies will inherit this class.
  * @constructor
  */
 var ComplexObject = function() {
+	
 	this.animations;
 	this.currentDirection = "";
 	this.lastFrameDirection = "";
 
 	/**
-	 * Note that this currently makes assumptions about what animations are available
-	 * and should be moved away from doing so
+	 * abstract method for updating movement animation
 	 * @param  {number} deltax 
 	 * @param  {number} deltay
+	 * @abstract
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 	};

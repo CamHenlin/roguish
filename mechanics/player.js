@@ -1,8 +1,9 @@
 
 /**
- * Player class
- * @param {number} x initial coordinate
- * @param {number} y initial coordinate
+ * Class with behavior and attributes for players
+ * @param {number} x initial x-coordinate
+ * @param {number} y initial y-coordinate
+ * @param {number} initiative 
  * @constructor
  */
 var Player = function(x, y, initiative) {
@@ -51,12 +52,12 @@ var Player = function(x, y, initiative) {
 			},
 			"spin-left": {
 				"frames": [0, 8, 12, 4],
-				"next": "spin",
+				"next": "spin-left",
 				"speed": 1
 			},
 			"spin-right": {
 				"frames": [0, 4, 12, 8],
-				"next": "spin",
+				"next": "spin-right",
 				"speed": 1
 			},
 			"walk-front": {
@@ -137,6 +138,9 @@ var Player = function(x, y, initiative) {
 
 	};
 
+	// 
+	var attackTarget = null;
+
 	/**
 	 * Click handler for attack
 	 * @return {MouseEvent} event
@@ -162,7 +166,6 @@ var Player = function(x, y, initiative) {
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
 			clickSprite.x = x - renderer.container.x;
 			clickSprite.y = y - renderer.container.y;
-			console.log(clickSprite);
 
 			var clickedEnemy = null;
 
@@ -172,8 +175,10 @@ var Player = function(x, y, initiative) {
 				}
 
 				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
-					alert(i);
 					clickedEnemy = activeObjects[i];
+
+					// reference for attack sprite
+					attackTarget = activeObjects[i];
 					break;
 				}
 			}
@@ -201,9 +206,6 @@ var Player = function(x, y, initiative) {
 		var y = event.pageY / gamezoom;
 
 		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
-		console.log(JSON.stringify(collisionCoordinate));
-		console.log(isSelectionInSelectableBounds(this, x, y));
-		console.log(collisionSystem.checkCellValidForObject(collisionCoordinate));
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			renderer.moveObjectTo(this, x, y - 16, true);
 			removeSelectableArea();
@@ -214,7 +216,7 @@ var Player = function(x, y, initiative) {
 	moveClickHandler = moveClickHandler.bind(this);
 
 	/**
-	 * [mouseMoveHandler description
+	 * Clickhandler for mousemove
 	 * @param  {MouseEvent} event
 	 */
 	var mouseMoveHandler = function(event) {
@@ -262,7 +264,7 @@ var Player = function(x, y, initiative) {
 	mouseMoveHandler = mouseMoveHandler.bind(this);
 
 	/**
-	 * Code that gets called when it's the players turn. should probably initialize a menu or something
+	 * Code that gets called when it's the players turn. Initializes the player's action menu
 	 */
 	this.turn = function() {
 		this.currentDirection = "";
@@ -270,7 +272,6 @@ var Player = function(x, y, initiative) {
 
 		playerTurn = true;
 		this.totalTurns++;
-		console.log(this.getName() + '\'s turn called');
 		renderer.centerMapOnObject(this, function() {
 			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',
@@ -302,10 +303,25 @@ var Player = function(x, y, initiative) {
 		}.bind(this));
 	};
 
+
+
+	var removeAttackAnimation = function() {
+		renderer.activeObjectsContainer.removeChild(this.attackAnimation);
+		
+	}.bind(this);
+
 	/**
 	 * Resets animation position and turn counter
 	 */
 	this.cleanUpMovement = function() {
+		if(attackTarget) {
+			renderer.activeObjectsContainer.addChild(this.attackAnimation);
+			this.attackAnimation.x = attackTarget.x + attackTarget.animations.x;
+			this.attackAnimation.y = attackTarget.y + attackTarget.animations.y;
+			attackTarget = null;
+			setTimeout(removeAttackAnimation, 1000);
+		}
+		
 		this.animations.gotoAndPlay("stand-front");
 		this.turnCounter = 0;
 	};
@@ -327,8 +343,8 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * [getScore Calculates and returns the player's current score.]
-	 * @return {[type]} [The player's current score]
+	 * Calculates and returns the player's current score.
+	 * @return {number} The player's current score
 	 */
 	this.getScore = function() {
 		var turnScore = 100 - this.totalTurns;

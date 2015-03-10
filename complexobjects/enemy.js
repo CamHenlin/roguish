@@ -38,6 +38,7 @@ var Enemy = function(x, y, level) {
 
 	/**
 	 * This function will be inherited by child classes that handle how the enemy moves
+	 * @abstract
 	 */
 	this.doMovement = function() {
 	};
@@ -88,7 +89,6 @@ var Enemy = function(x, y, level) {
 				var dx = Math.pow(activeObjects[i].x - this.x, 2);
 				var dy = Math.pow(activeObjects[i].y - this.y, 2);
 				var distance = Math.sqrt(dy + dx);
-				console.log(distance);
 				if (distance < MAX_ENEMY_DISTANCE) {
 					return true;
 				}
@@ -138,7 +138,6 @@ var Enemy = function(x, y, level) {
 		if (index > -1) {
 			activeObjects.splice(index, 1);
 		}
-
 	};
 
 	/**

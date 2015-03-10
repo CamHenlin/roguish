@@ -6,7 +6,6 @@
  */
 var EndGame = function(x, y) {
 	SimpleObject.call(this, x, y);
-	console.log("end game: " + x + " " + y);
 
 	this.spriteSheet = new createjs.SpriteSheet({  // treasure chest sprite sheet
 		"images": [loader.getResult("chest")],

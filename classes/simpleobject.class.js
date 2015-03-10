@@ -1,6 +1,6 @@
 
 /**
- * SimpleObject simple objects that all simple objects inherit from
+ * Base class for all simple objects.
  * @constructor
  */
 var SimpleObject = function(x, y) {
