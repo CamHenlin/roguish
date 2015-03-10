@@ -348,12 +348,12 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * Gives the player amount of xp, and then levels them up if they have passed a threshold 
+	 * Gives the player amount of xp, and then levels them up if they have passed a threshold
 	 * @param {int} amount How much XP the player gets
 	 */
 	this.gainXP = function(amount) {
 		this.xp += amount;
-		if (this.xp >= this.levelUpThreshold()){
+		if (this.xp >= this.levelUpThreshold()) {
 			this.level += 1;
 			this.skillPoints += 3;
 			this.hp = 10*(this.level/2); //Players automatically get reset back to full hp plus a little bit
