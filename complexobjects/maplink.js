@@ -74,9 +74,9 @@ var MapLink = function(x, y, graphic, link, startPointNumber) {
 							// add the players near the start point
 							for (j = 0; j < players.length; j++) {
 								players[j].x = parseInt(startPoint.x) + j * 16;
-								players[j].animations.x = parseInt(startPoint.x) + j * 16;
+								players[j].animations.x = parseInt(startPoint.x) - parseInt(startPoint.x) % 16 + j * 16;
 								players[j].y = parseInt(startPoint.y) + j * 16;
-								players[j].animations.y = parseInt(startPoint.y) + j * 16;
+								players[j].animations.y = parseInt(startPoint.y) - parseInt(startPoint.x) % 16 + j * 16 + 16;
 
 								activeObjects.push(players[j]);
 								renderer.activeObjectsContainer.addChild(players[j].animations);

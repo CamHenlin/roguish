@@ -123,6 +123,8 @@ function Renderer(gamestage) {
 						new StartPoint(layer.objects[j].x, layer.objects[j].y, parseInt(layer.objects[j].properties.startpoint_id));
 					} else if (layer.objects[j].type === "MapLink") {
 						new MapLink(layer.objects[j].x, layer.objects[j].y, layer.objects[j].properties.graphic, layer.objects[j].properties.link, parseInt(layer.objects[j].properties.startpoint));
+					} else if (layer.objects[j].type === "DisableFogOfWar") {
+						new DisableFogOfWar();
 					}
 				}
 			}
@@ -410,7 +412,6 @@ function Renderer(gamestage) {
 			(collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).x === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).x &&
 			 collisionSystem.getCollisionCoordinateFromCell(trackedObject.x, trackedObject.y).y === collisionSystem.getCollisionCoordinateFromCell(targetx, targety).y)) {
 			cleanUpMovement.call(this);
-
 			return false;
 		}
 
@@ -526,7 +527,7 @@ function Renderer(gamestage) {
 	 * @return {number}
 	 */
 	function distanceFromCenteredX(obj) {
-		return (obj.x + obj.spriteSheet._frameWidth / 2) + renderer.container.x - (gamestage.canvas.width / 2);
+		return (obj.x + obj.spriteSheet._frameWidth) + renderer.container.x - (gamestage.canvas.width / 2);
 	}
 
 	/**
@@ -555,7 +556,7 @@ function Renderer(gamestage) {
 	 * @return {number}
 	 */
 	function distanceFromCenteredY(obj) {
-		return ((obj.y + obj.spriteSheet._frameHeight / 2) + (renderer.container.y) - (gamestage.canvas.height / 2));
+		return ((obj.y + obj.spriteSheet._frameHeight) + (renderer.container.y) - (gamestage.canvas.height / 2));
 	}
 
 	/**
@@ -581,7 +582,8 @@ function Renderer(gamestage) {
 	 * @public
 	 */
 	this.movementTickActions = function() {
-		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x + this.movingObject.spriteSheet._frameWidth / 2, this.movingObject.y + this.movingObject.spriteSheet._frameHeight);
+		console.log('moving');
+		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
 		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
 			// this section basically means we are looking to move to a new cell
 			var start = this.movementGraph.grid[startxy.x][startxy.y];
@@ -596,7 +598,7 @@ function Renderer(gamestage) {
 			}
 		}
 
-		if ((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) || !collisionSystem.checkCellValid(startxy.x, startxy.y) || !this.movementSearchResult || !this.movementSearchResult[0]) {
+		if ((this.movingToCellTarget.y === startxy.y && this.movingToCellTarget.x === startxy.x) || !this.movementSearchResult || !this.movementSearchResult[0]) {
 			cleanUpMovement.call(this);
 			return;
 		}

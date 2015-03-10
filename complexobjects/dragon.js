@@ -40,7 +40,6 @@ var Dragon = function(x, y, level) {
 	this.sprite = new createjs.Sprite(this.spriteSheet, "still");
 	this.sprite.x = this.x;
 	this.sprite.y = this.y;
-	this.sprite.regX = 33;   // The middle of each frame on the x-axis in pixels, used for flipping the image.
 
 	this.animations.addChild(this.sprite, this.healthBar);
 

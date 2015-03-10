@@ -1,9 +1,10 @@
 /**
  * @name advanceTurn
+ * @description [Code that handles everything needed when a turn is advanced.]
  */
 
 /**
- * Function used in default game engine for determining next player turn
+ * [advanceTurn Function used in default game engine for determining next player turn]
  */
 function advanceTurn() {
 	var turnFlag = false;
@@ -12,13 +13,11 @@ function advanceTurn() {
 			activeObjects[i].turnCounter += activeObjects[i].initiative;
 		}
 
-		if (activeObjects[i].turnCounter > MAX_TURN_COUNTER && !turnFlag) {
-
+		if (activeObjects[i].turnCounter >= MAX_TURN_COUNTER && !turnFlag) {
 			activeObjects[i].turn();
 			turnFlag = true;
 			if (activeObjects[i].constructor === Player) {
 				activePlayer = activeObjects[i];
-				console.log("I'm "+i+" and my xp is "+activePlayer.xp);
 			}
 		}
 	}

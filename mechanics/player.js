@@ -6,12 +6,13 @@
  * @constructor
  */
 var Player = function(x, y, initiative) {
-	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
-	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.x = x;
+	this.y = y;
 	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
 	this.turnCounter = 0;
 	this.xp = 1;
+	this.attack = 2;
 	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
@@ -95,8 +96,8 @@ var Player = function(x, y, initiative) {
 	});
 
 	this.animations = new createjs.Sprite(this.spriteSheet, "stand-front"); // change the second string to an animation from the spritesheet
-	this.animations.x = this.x + this.animations.spriteSheet._frameWidth / 3;
-	this.animations.y = this.y + this.animations.spriteSheet._frameHeight / 2;
+	this.animations.x = this.x;
+	this.animations.y = this.y;
 	this.watchedElements = [];
 
 	var slashSpriteSheet = new createjs.SpriteSheet({
@@ -106,16 +107,16 @@ var Player = function(x, y, initiative) {
 		},
 		"animations": {
 			"slash": {
-				"frames" : [0,1,2,3],
+				"frames" : [0, 1, 2, 3],
 				"next" : "slash",
-				"speed" : .5
+				"speed" : 0.5
 			}
 		}
 	});
 
 	this.attackAnimation = new createjs.Sprite(slashSpriteSheet, "slash");
-	//this.attackAnimation.scaleX = .5;
-	//this.attackAnimation.scaleY = .5;
+	this.attackAnimation.scaleX = 2;
+	this.attackAnimation.scaleY = 2;
 
 	var playerName = "Player"; // The name of the player, right now is only used when declaring the winner.
 
@@ -128,12 +129,6 @@ var Player = function(x, y, initiative) {
 	this.tickActions = function() {
 
 	};
-
-	/**
-	 * This returns damage amount for Player's attack, used in calculateDamage()
-	 * @return {number} the amount in hp
-	 */
-	this.attack = 2;
 
 	/**
 	 * Click handler for attack
@@ -158,26 +153,25 @@ var Player = function(x, y, initiative) {
 				}
 			});
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
-
-			// hack
-			clickSprite.x = x;
-			clickSprite.y = y;
+			clickSprite.x = x - renderer.container.x;
+			clickSprite.y = y - renderer.container.y;
 			console.log(clickSprite);
 
 			var clickedEnemy = null;
 
 			for (var i = 0; i < activeObjects.length; i++) {
+				if (activeObjects[i] instanceof Player) {
+					continue;
+				}
 
-				// because enemies are in containers
-				var obj2 = activeObjects[i].animations;
-				if(obj2 instanceof createjs.Container) obj2 = obj2.children[0];
-				if (collisionSystem.simpleCollision(clickSprite, obj2)) {
-					if(activeObjects[i] instanceof Enemy) clickedEnemy = activeObjects[i];
+				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
+					alert(i);
+					clickedEnemy = activeObjects[i];
 					break;
 				}
 			}
 
-			renderer.moveObjectTo(this, x, y, true);
+			renderer.moveObjectTo(this, x, y - 16, true);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
 			removeSelectableArea();
 
@@ -200,8 +194,11 @@ var Player = function(x, y, initiative) {
 		var y = event.pageY / gamezoom;
 
 		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		console.log(JSON.stringify(collisionCoordinate));
+		console.log(isSelectionInSelectableBounds(this, x, y));
+		console.log(collisionSystem.checkCellValidForObject(collisionCoordinate));
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
-			renderer.moveObjectTo(this, x, y, true);
+			renderer.moveObjectTo(this, x, y - 16, true);
 			removeSelectableArea();
 			renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
 			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
@@ -245,15 +242,15 @@ var Player = function(x, y, initiative) {
 			renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 		}
 
-		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
+		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x - renderer.container.x - renderer.container.x % 16, y - renderer.container.y - renderer.container.y % 16);
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			this.mouseMoveSprite.gotoAndPlay("valid");
 		} else {
 			this.mouseMoveSprite.gotoAndPlay("invalid");
 		}
 
-		this.mouseMoveSprite.x = x;
-		this.mouseMoveSprite.y = y;
+		this.mouseMoveSprite.x = x + renderer.container.x % 16;
+		this.mouseMoveSprite.y = y + renderer.container.y % 16;
 	};
 	mouseMoveHandler = mouseMoveHandler.bind(this);
 
@@ -266,7 +263,7 @@ var Player = function(x, y, initiative) {
 
 		playerTurn = true;
 		this.totalTurns++;
-		console.log('player turn called');
+		console.log(this.getName() + '\'s turn called');
 		renderer.centerMapOnObject(this, function() {
 			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',

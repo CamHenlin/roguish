@@ -19,7 +19,7 @@ var Widget = function(options) {
 
 	/**
 	 * Returns a string with position information in css form
-	 * @return {string} 
+	 * @return {string}
 	 */
 	this.getPositionCSS = function() {
 		if (!this.x && !this.y) {
@@ -39,7 +39,7 @@ var Widget = function(options) {
 
 	/**
 	 * Hides element
-	 * @return {Widget}
+	 * @return {Widget that was hidden}
 	 */
 	this.hide = function() {
 		this.el.hide();
@@ -48,6 +48,7 @@ var Widget = function(options) {
 
 	/**
 	 * Shows element
+	 * @return {void} []
 	 */
 	this.show = function() {
 		this.el.show();
@@ -55,6 +56,7 @@ var Widget = function(options) {
 
 	/**
 	 * Removes element
+	 * @return {void} []
 	 */
 	this.destroy = function() {
 		this.el.remove();

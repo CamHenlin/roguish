@@ -27,12 +27,12 @@ var Enemy = function(x, y, level) {
 								// moveSpeed is different from movementSpeed as movementSpeed determines how far
 								// the enemy moves per turn.
 
-	var maxHp = this.hp;  // never changes once initialized
+	var maxHp = this.hp; // never changes once initialized
 
 	this.healthBarMaxWidth = 18;
 	this.healthBar = new createjs.Bitmap("../graphics/health_bar.png");
 	this.healthBar.scaleX = this.healthBarMaxWidth / this.healthBar.image.width;
-	this.healthBar.x = this.x - 16;
+	this.healthBar.x = this.x;
 	this.healthBar.y = this.y - 5;
 
 
@@ -84,11 +84,11 @@ var Enemy = function(x, y, level) {
 	 */
 	this.isWithinMaxDistance = function() {
 		for (var i = 0; i < activeObjects.length; i++) {
-			if (activeObjects[i].constructor === Player) {
-				var dx = Math.abs(activeObjects[i].x - this.x);
-				var dy = Math.abs(activeObjects[i].y - this.y);
+			if (activeObjects[i] instanceof Player) {
+				var dx = Math.pow(activeObjects[i].x - this.x, 2);
+				var dy = Math.pow(activeObjects[i].y - this.y, 2);
 				var distance = Math.sqrt(dy + dx);
-
+				console.log(distance);
 				if (distance < MAX_ENEMY_DISTANCE) {
 					return true;
 				}
@@ -96,7 +96,7 @@ var Enemy = function(x, y, level) {
 		}
 
 		return false;
-	}
+	};
 
 	/**
 	 * Reduces this enemy's hp by the amount of damage received and updates health bar
@@ -106,23 +106,24 @@ var Enemy = function(x, y, level) {
 		this.hp -= attackingObject.attack;
 
 		if (this.hp <= 0) {
-			attackingObject.xp+=this.xp;
+			attackingObject.xp += this.xp;
 			this.die();
 			return;
 		}
 
 		var newHealthBarWidth = this.healthBarMaxWidth * (this.hp / maxHp);
 
-		if (this.hp / maxHp < 0.2) {  // less than 20% hp, make the health bar red
+		if (this.hp / maxHp < 0.2) { // less than 20% hp, make the health bar red
 			this.animations.removeChild(this.healthBar);
 			this.healthBar = new createjs.Bitmap("../graphics/health_bar_red.png");
-			this.healthBar.x = this.x - 16;
+			this.healthBar.x = this.x;
 			this.healthBar.y = this.y - 5;
 			this.animations.addChild(this.healthBar);
 		}
 
-		if (newHealthBarWidth == 0)
+		if (newHealthBarWidth === 0) {
 			newHealthBarWidth = 1;
+		}
 
 		this.healthBar.scaleX = newHealthBarWidth / this.healthBar.image.width;
 	};
@@ -138,9 +139,7 @@ var Enemy = function(x, y, level) {
 			activeObjects.splice(index, 1);
 		}
 
-		console.log("len:"+activeObjects.length)
-
-
+		console.log("len:" + activeObjects.length);
 	};
 
 	/**
@@ -150,6 +149,7 @@ var Enemy = function(x, y, level) {
 		for (var i = 0; i < this.watchedElements.length; i++) {
 			this.watchedElements[i].tickActions(); // tick watched elements
 		}
+
 		this.counter++;
 	};
 
