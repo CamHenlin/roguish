@@ -41,7 +41,7 @@ var EndGame = function(x, y) {
 	this.endGame = function(winner) {
 		this.animations.gotoAndPlay("open");
 
-		var endMenu = new Form(gamestage.canvas.width / 2, gamestage.canvas.height / 2, [
+		var endMenu = new Form([
 		{
 			text: winner.getName() + " has won the game with a score of " + winner.getScore() + "!",
 			type: "basic-text",

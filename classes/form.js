@@ -216,6 +216,16 @@ var Form = function(x, y, fields, options) {
 			if (field.type === 'button') {
 				$("#" + getId.call(this, (field.id) ? field.id : index)).click(field.callback);
 			}
+			if(field.key){
+				// $("body").unbind();
+				// console.log(Mousetrap);
+				// $("body").keypress(function(event){
+				// 	if(event.which == field.key.charCodeAt()){
+				// 		console.log(field);
+				// 		field.callback();
+				// 	}
+				// });
+			}
 			index++;
 		}.bind(this));
 	}

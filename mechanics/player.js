@@ -270,6 +270,7 @@ var Player = function(x, y, initiative) {
 		renderer.centerMapOnObject(this, function() {
 			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',
+					key: "m",
 					type: 'button',
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', moveClickHandler, false);
@@ -281,6 +282,7 @@ var Player = function(x, y, initiative) {
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
 				}, {
 					text: 'Attack',
+					key: "a",
 					type: 'button',
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', attackClickHandler, false);
