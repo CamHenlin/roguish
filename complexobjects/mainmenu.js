@@ -8,7 +8,7 @@ function mainForm() {
 		type: 'button',
 		callback: function() {
 			console.log('click')
-			selectMap(mainMenu);
+			selectPlayers(mainMenu);
 		}
 	},{
 		text: 'high scores',
@@ -25,43 +25,6 @@ function mainForm() {
 
 	var mainMenu = new Form(0,0,fields, options);
 	mainMenu.render();
-}
-
-/**
- * [selectMap Select map menu form. This function is not used]
- * @param  {[function]} previous [previous menu item, this menu hides]
- * @return {[void]}          []
- */
-function selectMap(previous) {
-	previous.hide();
-	var fields = [
-	{
-		text: 'map',
-		type: 'select',
-		options: ['dungeon', 'outside'],
-		id: 'mapname'
-	},
-	{
-		text: 'back',
-		type: 'button',
-		callback: function() {
-			newGame.hide();
-			mainForm();
-		}
-	}, {
-		text: 'next',
-		type: 'button',
-		callback: function() {
-			console.log('next thing');
-			console.log(newGame.getValue('mapname'))
-			console.log('named')
-			selectPlayers(newGame);
-			isDemo = false;
-		}
-	}];
-
-	var newGame = new Form(fields);
-	newGame.render();
 }
 
 /**

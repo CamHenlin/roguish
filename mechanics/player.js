@@ -15,7 +15,9 @@ var Player = function(x, y, initiative) {
 	this.defense = 4; //skill affecting how hard it is to hit a player
 	this.scout = 3; //skill affecting how hard it is for enemies to detect player, and how far player can see
 	this.turnCounter = 0;
+	this.level = 1;
 	this.xp = 0;
+	this.hp = 10*this.level;
 	this.skillPoints = 0;
 	this.attack = 2;
 	this.totalTurns = 0; // counts how many turns this player has taken.
@@ -354,6 +356,10 @@ var Player = function(x, y, initiative) {
 		if (this.xp >= this.levelUpThreshold()){
 			this.level += 1;
 			this.skillPoints += 3;
+			this.hp = 10*(this.level/2); //Players automatically get reset back to full hp plus a little bit
+			this.attack += 1; //Players start to hit harder as they level up
+			console.log("You have leveled up! "+this.xp+" xp, "+this.level+" level, "+this.skillPoints+" Skill Points, "+
+						this.hp+" hp, "+ this.attack+" attack!");
 		};
 	};
 };
