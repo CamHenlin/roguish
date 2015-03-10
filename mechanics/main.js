@@ -1,5 +1,6 @@
 /**
  * @name Main
+ * @description [Code that initializes and starts the game.]
  */
 
 var loader = new createjs.LoadQueue(false);
@@ -20,7 +21,7 @@ loader.loadManifest([
 ]);
 
 /**
- * Handler for preload complete
+ * [handleComplete Handler for preload complete]
  */
 function handleComplete() {
 	init();
@@ -41,7 +42,7 @@ var isDemo = true;
 var startPoint = {};
 
 /**
- * Fixes the viewport on a window resize event
+ * [fixViewport Fixes the viewport on a window resize event]
  */
 function fixViewport() {
 	gamestage.canvas.width = window.innerWidth / gamezoom;
@@ -50,7 +51,7 @@ function fixViewport() {
 }
 
 /**
- * Call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler
+ * [init Call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler]
  */
 function init() {
 	console.log('initializing');
@@ -61,7 +62,7 @@ function init() {
 
 
 /**
- * Initialize all variables needed for a new game to start
+ * [initVars Initialize all variables needed for a new game to start]
  */
 function initVars() {
 	console.log('initializing vars');
@@ -81,7 +82,6 @@ function initVars() {
 
 	if (LOG_FPS) {
 		fpsLabel = new createjs.Text("", "14px 'Helvetica'", "#FFF");
-
 		fpsLabel.x = gamestage.canvas.width - 64;
 		fpsLabel.y = gamestage.canvas.height - 64;
 	}
@@ -113,7 +113,7 @@ function initVars() {
 }
 
 /**
- * Our main game loop
+ * [handleTick Our main game loop]
  * @param  {TickEvent} event
  */
 function handleTick(event) {
