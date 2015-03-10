@@ -6,12 +6,17 @@
  * @constructor
  */
 var Player = function(x, y, initiative) {
-	this.x = x;
-	this.y = y;
-	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
-	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
+	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.initiative = initiative; // this is a skill used for determining player turn in default advanceturn.js
+	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame)
+	this.attackSpeed = 1; // skill that determines how many attacks you can make in a single turn
+	this.moveLength = 5; // skill affecting how far player can move in a single turn
+	this.defense = 4; //skill affecting how hard it is to hit a player
+	this.scout = 3; //skill affecting how hard it is for enemies to detect player, and how far player can see
 	this.turnCounter = 0;
-	this.xp = 1;
+	this.xp = 0;
+	this.skillPoints = 0;
 	this.attack = 2;
 	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
@@ -330,6 +335,26 @@ var Player = function(x, y, initiative) {
 			turnScore = 1;
 
 		return this.xp * turnScore;
+	}
+
+	/*
+	 * Determines how much XP the player needs to level up
+	 * @return {integer} amount of xp needed to level up
+	 */
+	this.levelUpThreshold = function() {
+		return 500*this.level;
+	};
+
+	/**
+	 * Gives the player amount of xp, and then levels them up if they have passed a threshold 
+	 * @param {int} amount How much XP the player gets
+	 */
+	this.gainXP = function(amount) {
+		this.xp += amount;
+		if (this.xp >= this.levelUpThreshold()){
+			this.level += 1;
+			this.skillPoints += 3;
+		};
 	};
 };
 

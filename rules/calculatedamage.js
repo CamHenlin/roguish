@@ -9,7 +9,7 @@ function calculateDamage(attackingObject, defendingObject) {
 	attackingObject.attackAnimation.y = defendingObject.animations.y;
 	renderer.activeObjectsContainer.addChild(attackingObject.attackAnimation);
 	attackingObject.attackAnimation.gotoAndPlay("slash");
-	console.log(defendingObject);
+
 	defendingObject.receiveDamage(attackingObject);
 
 	setTimeout(function() {

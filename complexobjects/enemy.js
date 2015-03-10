@@ -106,7 +106,7 @@ var Enemy = function(x, y, level) {
 		this.hp -= attackingObject.attack;
 
 		if (this.hp <= 0) {
-			attackingObject.xp += this.xp;
+			attackingObject.gainXP(this.xp);
 			this.die();
 			return;
 		}
@@ -139,7 +139,6 @@ var Enemy = function(x, y, level) {
 			activeObjects.splice(index, 1);
 		}
 
-		console.log("len:" + activeObjects.length);
 	};
 
 	/**
