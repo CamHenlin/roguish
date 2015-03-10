@@ -7,9 +7,10 @@ var formCounter = 0;
 
 /**
  * the form class is responsible for rendering html inputs to the dom and provides an interface for retrieving this information
- * @param {number} x
- * @param {number} y
- * @param {Function} fields
+ * @param {number} x coorddinate
+ * @param {number} y coordinate
+ * @param {Function} list of fields
+ * @param {Object} @optional options object
  */
 var Form = function(x, y, fields, options) {
 
@@ -32,19 +33,20 @@ var Form = function(x, y, fields, options) {
 	// inherited constructor
 	Widget.apply(this, [{x: x, y: y, cssClass: this.cssClass}]);
 
-	// public
 	/**
-	 * [getValue description]
+	 * [getValue gets the value of an internal form field]
 	 * @param  {value}
 	 * @return {string}
+	 * @public
 	 */
 	this.getValue = function(value) {
 		return this.el.find("#" + value).val();
 	};
 
 	/**
-	 *
-	 * @return {Object}
+	 * [values returns the values of all fields within a form]
+	 * @return {Object containing form values}
+	 * @public
 	 */
 	this.values = function() {
 		obj = {};
@@ -55,7 +57,8 @@ var Form = function(x, y, fields, options) {
 	};
 
 	/**
-	 *
+	 * [render renders the form to the screen]
+	 * @public
 	 */
 	this.render = function() {
 		this.el.html(template.call(this));
@@ -71,9 +74,10 @@ var Form = function(x, y, fields, options) {
 
 	// private
 	/**
-	 * [getId description]
+	 * [getId gets the idea of a form field by its number]
 	 * @param  {number|string} index
 	 * @return {string}
+	 * @private
 	 */
 	function getId(index) {
 		if (typeof(index) === "number") {
@@ -84,44 +88,48 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 *
+	 * [template returns the proper template for the desired form.]
 	 * @return {string}
+	 * @private
 	 */
 	function template() {
 		return inputFields.call(this);
 	}
 
 	/**
-	 * Displays raw text
+	 * Displays raw text on the form field
 	 * @param  {string} textToRender The string of text to render
 	 * @return {string}              HTML code to be injected to display text
+	 * @private
 	 */
 	function basicText(textToRender) {
 		return "<p class='basic-text'>" + textToRender + "</p>";
 	}
 
 	/**
-	 * [textField description]
+	 * [textField diplays a text field]
 	 * @param  {string} name
 	 * @param  {number} index
 	 * @return {string}
+	 * @private
 	 */
 	function textField(name, index) {
 		return "<input class='input-default' placeholder='" + name + "' id='" + getId.call(this, index) + "'></input>";
 	}
 
 	/**
-	 *
+	 * [buttonField displays a button field]
 	 * @param  {string} name
 	 * @param  {number} index
 	 * @return {string}
+	 * @private
 	 */
 	function buttonField(name, index) {
 		return "<button class='button-default' placeholder='" + name + "' id='" + getId.call(this, index) + "'>" + name + "</button>";
 	}
 
 	/**
-	 * [selectField description]
+	 * [selectField displays a select field]
 	 * @param  {string} name
 	 * @param  {string} options
 	 * @param  {number} index
@@ -137,11 +145,12 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * [radioField description]
+	 * [radioField displays a radio field]
 	 * @param  {string} name
 	 * @param  {string} options
 	 * @param  {number} index
 	 * @return {string}
+	 * @private
 	 */
 	function radioField(name, options, index) {
 		var html = name ? "<p>choose the " + name + "</p>" : "";
@@ -154,24 +163,26 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 *
+	 * [numberField displays a numberField]
 	 * @param  {string} name
 	 * @param  {number} min
 	 * @param  {number} max
 	 * @param  {number} index
 	 * @return {string}
+	 * @private
 	 */
 	function numberField(name, min, max, index) {
 		return "<input class='input-default' placeholder='number of players (" + min + "-" + max + ")' type='number' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
 	/**
-	 *
+	 * [rangeField displays a range field]
 	 * @param  {string} name
 	 * @param  {number} min
 	 * @param  {number} max
 	 * @param  {number} index
 	 * @return {string}
+	 * @private
 	 */
 	function rangeField(name, min, max, index) {
 		var html = name ? "</br>" + name + "</br>" : "";
@@ -179,8 +190,10 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 * Returns a string
+	 * [inputFields handles the display of all types of fields]
+	 * Returns a string of the fields' HTML
 	 * @return {string}
+	 * @private
 	 */
 	function inputFields() {
 		var html = "";
@@ -208,7 +221,8 @@ var Form = function(x, y, fields, options) {
 	}
 
 	/**
-	 *
+	 * [attachCallbacks attaches the proper callback functions to each form.]
+	 * @private
 	 */
 	function attachCallbacks() {
 		var index = 0;

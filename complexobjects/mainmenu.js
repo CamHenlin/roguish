@@ -1,5 +1,6 @@
 /**
- * Main menu form
+ * [mainForm Main menu form, which is displayed at the beginning of the game]
+ * @return {[void]} []
  */
 function mainForm() {
 	var fields = [{
@@ -18,7 +19,7 @@ function mainForm() {
 	}
 	];
 	var options = {
-		header:"rougish", 
+		header:"rougish",
 		message:'a game produced in cis422'
 	}
 
@@ -27,9 +28,10 @@ function mainForm() {
 }
 
 /**
-* Select map menu form
-* @param {Element} previous
-*/
+ * [selectMap Select map menu form. This function is not used]
+ * @param  {[function]} previous [previous menu item, this menu hides]
+ * @return {[void]}          []
+ */
 function selectMap(previous) {
 	previous.hide();
 	var fields = [
@@ -63,9 +65,10 @@ function selectMap(previous) {
 }
 
 /**
-*
-* @param {Element} previous
-*/
+ * [selectPlayers description]
+ * @param  {[function]} previous [previous menu item, that this menu hides]
+ * @return {[void]}          []
+ */
 function selectPlayers(previous) {
 	previous.hide();
 
@@ -90,8 +93,8 @@ function selectPlayers(previous) {
 }
 
 /**
- * [namePlayers The menus for naming each player]
- * @param  {[type]} numPlayers [The number of players chosen.]
+ * [namePlayers The menus for naming each player. creates a menu with a text field for player name input]
+ * @param  {[type]} numPlayers [The number of players chosen, the dialog will be displayed this number of times.]
  * @param  {[type]} names      [The list of names added recursively in this function.]
  */
 function namePlayers(numPlayers, names) {
