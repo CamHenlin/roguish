@@ -72,7 +72,7 @@ var DEFAULT_PERSON_ATTACK = 2;
  * @constant
  * @default
  */
-var LOG_FPS = true;
+var LOG_FPS = false;
 
 /**
  * Maximum enemy distance
@@ -81,6 +81,14 @@ var LOG_FPS = true;
  * @default
  */
 var MAX_ENEMY_DISTANCE = 8;
+
+/**
+ * Minimum enemy distance
+ * @type {number}
+ * @constant
+ * @default
+ */
+var MAX_ENEMY_DISTANCE = 2;
 
 /**
  * [MAX_HIGH_SCORES The max amount of high scores kept track of]
