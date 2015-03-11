@@ -12,14 +12,12 @@ var Player = function(x, y, initiative) {
 	this.initiative = initiative; // this is a skill used for determining player turn in default advanceturn.js
 	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame)
 	this.attackSpeed = 1; // skill that determines how many attacks you can make in a single turn
-	this.moveLength = 5; // skill affecting how far player can move in a single turn
-	this.defense = 4; //skill affecting how hard it is to hit a player
-	this.scout = 3; //skill affecting how hard it is for enemies to detect player, and how far player can see
+	//Scout is skill affecting how hard it is for enemies to detect player, and how far player can see/move
 	this.turnCounter = 0;
 	this.level = 1;
 	this.xp = 0;
 	this.hp = 10*this.level;
-	this.skillPoints = 0;
+	this.skillPoints = 1;
 	this.attack = 2;
 	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
@@ -198,6 +196,62 @@ var Player = function(x, y, initiative) {
 	attackClickHandler = attackClickHandler.bind(this);
 
 	/**
+	 * Function that creates Form to display player attributes
+	 */
+	this.createStatsForm = function() {
+		var fields = [{
+				text: '+Initiative: '+this.initiative,
+				type: 'button',
+				callback: function() {
+					if (this.skillPoints > 0){
+						this.skillPoints -= 1;
+						this.initiative += 1;
+						statsMenu.destroy();
+						this.createStatsForm();
+					}
+				}.bind(this)
+			},
+			{
+				text: '+Attack Speed: '+this.attackSpeed,
+				type: 'button',
+				callback: function() {
+					if (this.skillPoints > 0){
+						this.skillPoints -= 1;
+						this.attackSpeed += 1;
+						statsMenu.destroy();
+						this.createStatsForm();
+					}
+				}.bind(this)
+			},
+			{
+				text: '+Scout: '+this.scout,
+				type: 'button',
+				callback: function() {
+					if (this.skillPoints > 0){
+						this.skillPoints -= 1;
+						this.scout += 1;
+						statsMenu.destroy();
+						this.createStatsForm();
+					}
+				}.bind(this)
+			},{
+				text: 'close',
+				type: 'button',
+				callback: function() {
+					statsMenu.destroy();
+				}
+			}
+			];
+		var options = {
+				message:this.playerName+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
+				      +this.hp+'   Attack: '+this.attack+'   Level: '+this.level+'   XP: '+this.xp+'   Next Level: '
+				      +(this.levelUpThreshold()-this.xp)
+		}
+		var statsMenu = new Form(0,0,fields, options);
+		statsMenu.render();
+	};
+
+	/**
 	 * Click handler for move
 	 * @param  {MouseEvent} event
 	 */
@@ -297,7 +351,17 @@ var Player = function(x, y, initiative) {
 						$("body").mousemove(mouseMoveHandler);
 						actionMenu.destroy();
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
-				}], {cssClass:'playerActions'});
+				}, {
+					text: 'Skills',
+					key: "s",
+					type: 'button',
+					callback: function() {
+						this.createStatsForm();
+						
+					}.bind(this)
+				}
+
+				], {cssClass:'playerActions'});
 			actionMenu.render();
 			showSelectableArea(this);
 		}.bind(this));
@@ -309,6 +373,7 @@ var Player = function(x, y, initiative) {
 		renderer.activeObjectsContainer.removeChild(this.attackAnimation);
 		
 	}.bind(this);
+
 
 	/**
 	 * Resets animation position and turn counter
@@ -371,8 +436,8 @@ var Player = function(x, y, initiative) {
 		this.xp += amount;
 		if (this.xp >= this.levelUpThreshold()) {
 			this.level += 1;
-			this.skillPoints += 3;
-			this.hp = 10*(this.level/2); //Players automatically get reset back to full hp plus a little bit
+			this.skillPoints += 2;
+			this.hp = 10+(this.level/2); //Players automatically get reset back to full hp plus a little bit
 			this.attack += 1; //Players start to hit harder as they level up
 			console.log("You have leveled up! "+this.xp+" xp, "+this.level+" level, "+this.skillPoints+" Skill Points, "+
 						this.hp+" hp, "+ this.attack+" attack!");

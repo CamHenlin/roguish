@@ -6,7 +6,7 @@ function mainForm() {
 		text: 'New Game!',
 		type: 'button',
 		callback: function() {
-			console.log('click')
+			console.log('click');
 			selectPlayers(mainMenu);
 		}
 	},{
