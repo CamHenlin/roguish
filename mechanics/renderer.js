@@ -157,14 +157,7 @@ function Renderer(gamestage) {
 					// each different simple object will have an idx entry here
 					if (layerData.data[idx] === 1) { // This is the chest (end game goal)
 						console.log('pushing endgame');
-						var endGame = new EndGame(x * tilewidth, y * tileheight);
-						var cellBitmap = endGame.animations;
-						cellBitmap.gotoAndStop("closed");
-						cellBitmap.x = endGame.x;
-						cellBitmap.y = endGame.y;
-
-						container.addChild(cellBitmap);
-						this.simpleobjects.push(endGame);
+						activeObjects.push(new EndGame(x * tilewidth, y * tileheight));
 					} else if (layerData.data[idx] === 2) {
 						console.log('pushing robot!');
 						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 5));

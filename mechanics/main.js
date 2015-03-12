@@ -156,13 +156,12 @@ function handleTick(event) {
 document.onkeydown = function(event) {
 	if(activePlayer.actionMenu) {
 		for (var i in activePlayer.actionMenu.fields) {
-			console.log(activePlayer.actionMenu.fields[i].key + " === " + String.fromCharCode(event.keyCode));
 			if (activePlayer.actionMenu.fields[i].key.toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
 				activePlayer.actionMenu.fields[i].callback();
 			}
 		}
 	}
-	
+
 
 	return;
 };
