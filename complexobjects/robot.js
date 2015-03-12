@@ -11,7 +11,7 @@ var Robot = function(x, y, level) {
 	this.attackSpeed = 2;
 	this.movementSpeed = 10;
 	this.moveLength = 2;
-	this.attack = level + 15;
+	this.attack = level + 5;
 	this.defense = level - 15;
 	this.hp = 1*level;
 
@@ -55,7 +55,6 @@ var Robot = function(x, y, level) {
 	this.animations.addChild(this.sprite, this.healthBar);
 	renderer.activeObjectsContainer.addChild(this.animations);
 
-	
 
 	/**
 	 * Updates the robot's animation based on what direction it is moving

@@ -124,7 +124,7 @@ function namePlayers(numPlayers, names) {
 	{
 		type: "text",
 		text: "name",
-		id: "player" + names.length,
+		id: "player" + names.length
 	},
 	{
 		type: "button",
