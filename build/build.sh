@@ -6,7 +6,8 @@ java -jar compiler.jar \
 	--js=../classes/form.js --js=../classes/simpleobject.class.js \
 	\
 	--js=../complexobjects/enemy.js --js=../complexobjects/robot.js --js=../complexobjects/dragon.js \
-	--js=../complexobjects/mainmenu.js \
+	--js=../complexobjects/mainmenu.js --js=../complexobjects/maplink.js --js=../complexobjects/startpoint.js \
+	--js=../complexobjects/disablefogofwar.js \
 	\
 	--js=../simpleobjects/endgame.js \
 	\

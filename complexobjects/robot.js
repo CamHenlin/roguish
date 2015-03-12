@@ -8,10 +8,10 @@
 var Robot = function(x, y, level) {
 	Enemy.call(this, x, y, level); // Call super constructor
 
-	this.attackSpeed = level * 2;
+	this.attackSpeed = 2;
 	this.movementSpeed = 10;
 	this.moveLength = 2;
-	this.attack = level + 15;
+	this.attack = level + 5;
 	this.defense = level - 15;
 	this.hp = 1*level;
 
@@ -55,21 +55,6 @@ var Robot = function(x, y, level) {
 	this.animations.addChild(this.sprite, this.healthBar);
 	renderer.activeObjectsContainer.addChild(this.animations);
 
-	/**
-	 * Robots move towards the nearest player
-	 */
-	this.doMovement = function() {
-		this.sprite.gotoAndPlay("move");
-
-		var nearestPlayer = this.getNearestPlayer();
-		if (!nearestPlayer) {
-			return;
-		}
-		console.log(nearestPlayer);
-console.log(nearestPlayer.animations.x);
-console.log(nearestPlayer.animations.y);
-		renderer.moveObjectTo(this,nearestPlayer.animations.x,nearestPlayer.animations.y);
-	};
 
 	/**
 	 * Updates the robot's animation based on what direction it is moving
@@ -78,10 +63,8 @@ console.log(nearestPlayer.animations.y);
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {
-			this.animations.scaleX = 1;
 			this.lastFrameDirection = "walk-right";
 		} else if (deltax < 0 && this.lastFrameDirection !== "walk-left") {
-			this.animations.scaleX = -1;
 			this.lastFrameDirection = "walk-left";
 		}
 	};

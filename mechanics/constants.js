@@ -48,7 +48,7 @@ var TILESET_FILE_TYPE = '.png';
  * @constant
  * @default
  */
-var DEFAULT_PERSON_SIGHT_DISTANCE = 14;
+var DEFAULT_PERSON_SIGHT_DISTANCE = 4;
 
 /**
  * Default health
@@ -56,7 +56,7 @@ var DEFAULT_PERSON_SIGHT_DISTANCE = 14;
  * @constant
  * @default
  */
-var DEFAULT_PERSON_HEALTH = 10;
+var DEFAULT_PERSON_HEALTH = 100;
 
 /**
  * Default attack damage

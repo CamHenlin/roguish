@@ -16,7 +16,7 @@ var Player = function(x, y, initiative) {
 	this.turnCounter = 0;
 	this.level = 1;
 	this.xp = 0;
-	this.hp = 10*this.level;
+	this.hp = 100 * this.level;
 	this.maxHP = this.hp;
 	this.skillPoints = 1;
 	this.attack = 2;
@@ -53,12 +53,12 @@ var Player = function(x, y, initiative) {
 			"spin-left": {
 				"frames": [0, 8, 12, 4],
 				"next": "spin-left",
-				"speed": 1
+				"speed": .1
 			},
 			"spin-right": {
 				"frames": [0, 4, 12, 8],
 				"next": "spin-right",
-				"speed": 1
+				"speed": .1
 			},
 			"walk-front": {
 				"frames": [1, 2, 3, 2],
@@ -142,6 +142,47 @@ var Player = function(x, y, initiative) {
 	var attackTarget = null;
 
 	/**
+	 * Removes the player from the map, gives a gameover screen if no players are left alive
+	 */
+	this.die = function() {
+		this.animations.gotoAndPlay("spin-right");
+		setTimeout(function() {
+			renderer.activeObjectsContainer.removeChild(this.animations);
+		}.bind(this), 1000);
+
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] === this) {
+				activeObjects.splice(i, 1);
+				return;
+			}
+		}
+	};
+
+	/**
+	 * Reduces Player's HP by the amount of damage received and updates health bar
+ 	 * @param  {Object} attackingObject
+	 */
+	this.receiveDamage = function(attackingObject) {
+		this.hp -= attackingObject.attack;
+
+		if (this.hp <= 0){
+			this.die();
+		}
+
+		alivePlayers = 0;
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				alivePlayers++;
+			}
+		}
+
+		if (alivePlayers == 0){
+			alert("you lost");
+		}
+
+	};
+
+	/**
 	 * Click handler for attack
 	 * @return {MouseEvent} event
 	 */
@@ -197,6 +238,8 @@ var Player = function(x, y, initiative) {
 	}
 	attackClickHandler = attackClickHandler.bind(this);
 
+
+
 	/**
 	 * Function that creates Form to display player attributes
 	 */
@@ -245,7 +288,7 @@ var Player = function(x, y, initiative) {
 			}
 			];
 		var options = {
-				message:playerName+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
+				message:this.getName()+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
 				      +this.hp+'   Attack: '+this.attack+'   Level: '+this.level+'   XP: '+this.xp+'   Next Level: '
 				      +(this.levelUpThreshold()-this.xp)
 		}

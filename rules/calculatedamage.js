@@ -7,16 +7,20 @@
 function calculateDamage(attackingObject, defendingObject) {
 	//attacking Object attacks a number of times equal to their attack speed
 	for (var i = 0; i < attackingObject.attackSpeed; i++){
-		attackingObject.attackAnimation.x = defendingObject.animations.x - defendingObject.spriteSheet._frameWidth / 2;
-		attackingObject.attackAnimation.y = defendingObject.animations.y;
-		renderer.activeObjectsContainer.addChild(attackingObject.attackAnimation);
-		attackingObject.attackAnimation.gotoAndPlay("slash");
+		if (attackingObject instanceof Player ){
+			attackingObject.attackAnimation.x = defendingObject.animations.x - defendingObject.spriteSheet._frameWidth / 2;
+			attackingObject.attackAnimation.y = defendingObject.animations.y;
+			renderer.activeObjectsContainer.addChild(attackingObject.attackAnimation);
+			attackingObject.attackAnimation.gotoAndPlay("slash");
+		}
 
 		defendingObject.receiveDamage(attackingObject);
 
-		setTimeout(function() {
-			renderer.activeObjectsContainer.removeChild(attackingObject.attackAnimation)
-		}, 500);
+		if (attackingObject instanceof Player ){
+			setTimeout(function() {
+				renderer.activeObjectsContainer.removeChild(attackingObject.attackAnimation)
+			}, 500);
+		}
 
 	}
 }

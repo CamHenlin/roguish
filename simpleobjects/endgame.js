@@ -29,9 +29,17 @@ var EndGame = function(x, y) {
 		}
 	});
 
-	this.animations = new createjs.Sprite(this.spriteSheet, "closed");
-
+	this.animations = new createjs.Sprite(this.spriteSheet, "open");
+	this.animations.x = x;
+	this.animations.y = y;
 	renderer.activeObjectsContainer.addChild(this.animations);
+
+	this.doMovement = function () {};
+	this.getNearestPlayer = function() {};
+	this.isWithinMaxDistance = function() {};
+	this.receiveDamage = function() {};
+	this.die = function() {};
+	this.cleanUpMovement = function() {};
 
 	/**
 	 * Ends the game by displaying a dialog notifying who won and a button to click to play again
