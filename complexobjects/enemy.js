@@ -85,11 +85,10 @@ var Enemy = function(x, y, level) {
 	this.isWithinMaxDistance = function() {
 		for (var i = 0; i < activeObjects.length; i++) {
 			if (activeObjects[i] instanceof Player) {
-				var dx = Math.pow(activeObjects[i].x - this.x, 2);
-				var dy = Math.pow(activeObjects[i].y - this.y, 2);
+				var dx = Math.abs(activeObjects[i].x - this.x);
+				var dy = Math.abs(activeObjects[i].y - this.y);
 				var distance = Math.sqrt(dy + dx);
-
-				if (distance < max(MIN_ENEMY_DISTANCE,(MAX_ENEMY_DISTANCE-activeObjects[i].scout))) {
+				if (distance < MAX_ENEMY_DISTANCE) {
 					return true;
 				}
 			}

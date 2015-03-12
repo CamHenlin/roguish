@@ -9,7 +9,7 @@
 function advanceTurn() {
 	var turnFlag = false;
 	for (var i = 0; i < activeObjects.length; i++) {
-		if ((activeObjects.isWithinMaxDistance && activeObjects.isWithinMaxDistance()) || activeObjects[i].constructor === Player) {
+		if ((activeObjects[i] instanceof Enemy) || activeObjects[i].constructor === Player) {
 			activeObjects[i].turnCounter += activeObjects[i].initiative;
 		}
 

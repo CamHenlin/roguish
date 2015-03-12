@@ -86,7 +86,8 @@ var Robot = function(x, y, level) {
 	 * Robots move towards the nearest player
 	 */
 	this.doMovement = function() {
-		this.animations.gotoAndPlay("move");
+		console.log('robot moving');
+		this.sprite.gotoAndPlay("move");
 
 		var nearestPlayer = this.getNearestPlayer();
 		if (!nearestPlayer) {
@@ -132,7 +133,7 @@ var Robot = function(x, y, level) {
 	 */
 	this.cleanUpMovement = function() {
 		this.turnCounter = 0;
-		this.animations.gotoAndPlay("still");
+		this.sprite.gotoAndPlay("still");
 	};
 };
 
