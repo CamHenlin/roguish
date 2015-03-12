@@ -104,4 +104,4 @@ var MAX_HIGH_SCORES = 5;
  * @constant
  * @default
  */
-var TREASURE_VALUE = 100;
+var TREASURE_VALUE = 1000;
