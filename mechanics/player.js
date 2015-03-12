@@ -177,7 +177,9 @@ var Player = function(x, y, initiative) {
 		}
 
 		if (alivePlayers == 0){
-			alert("you lost");
+			customAlert(function(){
+				location.reload();
+			},"you lost");
 		}
 
 	};

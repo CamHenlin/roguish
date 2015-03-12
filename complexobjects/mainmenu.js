@@ -85,10 +85,7 @@ function selectPlayers() {
 		type: 'button',
 		callback: function() {
 			var val = $("#numberOfPlayers").val();
-			console.log(val == "");
-			// console.log(val%1===0);
 			if($("#numberOfPlayers").val() < 0 || $("#numberOfPlayers").val() > 4 || val == ""){
-				// alert('please enter range between 1-4');
 				customAlert(players, "please enter range between 1-4");
 				return;
 			}
@@ -228,7 +225,7 @@ function confirm(previous, callback){
 }
 
 function customAlert(previous, message){
-	previous.hide();
+	if (typeof(previous) !="function"){ previous.hide()}
 	var fields = [
 	{
 		type:"button",
@@ -236,7 +233,8 @@ function customAlert(previous, message){
 		callback: function(){
 			alert.hide();
 			console.log(previous);
-			previous.show();
+			if (typeof(previous) !="function"){ previous.show()}
+			else{ previous() }
 		}
 	}];
 
