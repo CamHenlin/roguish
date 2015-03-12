@@ -20,7 +20,7 @@ function mainForm() {
 	}
 	];
 	var options = {
-		header:"rougish",
+		header:"roguish",
 		message:'a game produced in cis422'
 	}
 
@@ -104,6 +104,8 @@ function namePlayers(numPlayers, names) {
 			}
 		}.bind(this));
 
+		mission();
+
 		return;
 	}
 
@@ -132,6 +134,19 @@ function namePlayers(numPlayers, names) {
 
 	var startGame = new Form(fields, {header:"names"});
 	startGame.render();
+}
+
+function mission(){
+	var fields = [
+	{
+		type: "button",
+		text: "ok",
+		callback: function() {
+			mission.hide();
+		}
+	}];
+	var mission = new Form(fields, {header:"your mission", message:'recover the mythic treasure chest or die trying!' });
+	mission.render();
 }
 
 function backToMain(){
