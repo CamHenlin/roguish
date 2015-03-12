@@ -20,6 +20,7 @@ var Enemy = function(x, y, level) {
 	this.scout = level * 1.25;
 	this.magic = level;
 	this.initiative = 10;
+	this.vision = 1; //How far the enemy can see, way of approximating how far an enemy can move in a turn.
 	this.turnCounter = 0;  // Determines when the enemy should perform its turn
 	this.watchedElements = [];
 	this.counter = 0;
@@ -101,7 +102,7 @@ var Enemy = function(x, y, level) {
 				var dx = Math.abs(activeObjects[i].x - this.x);
 				var dy = Math.abs(activeObjects[i].y - this.y);
 				var distance = Math.sqrt(dy + dx);
-				if (distance < Math.max(MAX_ENEMY_DISTANCE-activeObjects[i].scout,MIN_ENEMY_DISTANCE)) {
+				if (distance < Math.max(MAX_ENEMY_DISTANCE-activeObjects[i].scout+this.vision,MIN_ENEMY_DISTANCE)) {
 					return true;
 				}
 			}

@@ -8,6 +8,7 @@
 var Dragon = function(x, y, level) {
 	Enemy.call(this, x, y, level); // Call super constructor
 
+	this.vision = 4;
 	this.attackSpeed = 1;
 	this.movementSpeed = 50 * level; // set attributes unique to a dragon
 	this.moveLength = 4;
