@@ -88,7 +88,7 @@ var MAX_ENEMY_DISTANCE = 8;
  * @constant
  * @default
  */
-var MAX_ENEMY_DISTANCE = 8;
+var MIN_ENEMY_DISTANCE = 8;
 
 /**
  * [MAX_HIGH_SCORES The max amount of high scores kept track of]

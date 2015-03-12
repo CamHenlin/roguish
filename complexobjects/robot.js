@@ -9,7 +9,8 @@ var Robot = function(x, y, level) {
 	Enemy.call(this, x, y, level); // Call super constructor
 
 	this.attackSpeed = level * 2;
-	this.movementSpeed = 100;
+	this.movementSpeed = 10;
+	this.moveLength = 2;
 	this.attack = level + 15;
 	this.defense = level - 15;
 	this.hp = 1*level;
@@ -55,34 +56,6 @@ var Robot = function(x, y, level) {
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
-	 * Decides whether robot should move up or down based on nearest player location
-	 * @private
-	 * @param {number} dy difference between nearest player's y position and this robot's y position
-	 * @return {boolean} true if move succeeded, false otherwise
-	 */
-	function moveUpOrDown(dy) {
-		if (dy >= 0) {
-			return renderer.moveObjectTo(this, x, y + 2, false); // Move down
-		}
-
-		return renderer.moveObjectTo(this, x, y - 2, false); // Move up
-	};
-
-	/**
-	 * Decides whether robot should move right or left based on nearest player location
-	 * @private
-	 * @param {number} dx difference between nearest player's x position and this robot's x position
-	 * @return {boolean} true if move succeeded, false otherwise
-	 */
-	function moveRightOrLeft(dx) {
-		if (dx >= 0) {
-			return renderer.moveObjectTo(this, x + 2, y, false); // move right
-		}
-
-		return renderer.moveObjectTo(this, x - 2, y, false); // move left
-	};
-
-	/**
 	 * Robots move towards the nearest player
 	 */
 	this.doMovement = function() {
@@ -96,21 +69,25 @@ var Robot = function(x, y, level) {
 
 		var dx = nearestPlayer.x - this.x;
 		var dy = nearestPlayer.y - this.y;
-		var success = false;
+		var targetx;
+		var targety;
 
-		if (Math.abs(dx) > Math.abs(dy)) { // Move right or left
-			success = moveRightOrLeft.call(this, dx);
-
-			if (!success) {
-				moveUpOrDown.call(this, dy);
-			}
-		} else {  // Move up or down
-			success = moveUpOrDown.call(this, dy);
-
-			if (!success) {
-				moveRightOrLeft.call(this, dx);
-			}
+		if (dx > 0){
+			targetx = this.x + Math.min(this.moveLength,dx);
 		}
+		else{
+			targetx = this.x - Math.min(this.moveLength,Math.abs(dx));
+		}
+
+
+		if (dy > 0){
+			targety = this.y + Math.min(this.moveLength,dy);
+		}
+		else{
+			this.y - Math.min(this.moveLength,Math.abs(dy));
+		}
+
+		renderer.moveObjectTo(this,targetx,targety);
 	};
 
 	/**
