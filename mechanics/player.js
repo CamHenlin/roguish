@@ -145,7 +145,17 @@ var Player = function(x, y, initiative) {
 	 * Removes the player from the map, gives a gameover screen if no players are left alive
 	 */
 	this.die = function() {
+		this.animations.gotoAndPlay("spin-right");
+		setTimeout(function() {
+			renderer.activeObjectsContainer.removeChild(this.animations);
+		}.bind(this), 1000);
 
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] === this) {
+				activeObjects.splice(i, 1);
+				return;
+			}
+		}
 	};
 
 	/**
@@ -477,10 +487,6 @@ var Player = function(x, y, initiative) {
 						this.hp+" hp, "+ this.attack+" attack!");
 		};
 	};
-
-	this.die = function() {
-		this.animations.gotoAndPlay("spin-right");
-	}
 };
 
 Player.prototype = new Person;
