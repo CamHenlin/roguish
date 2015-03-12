@@ -114,7 +114,7 @@ var Form = function(x, y, fields, options) {
 	 * @private
 	 */
 	function textField(name, index) {
-		return "<input class='input-default' placeholder='" + name + "' id='" + getId.call(this, index) + "'></input>";
+		return "<input class='input-default' placeholder='" + name + "' id='" + getId.call(this, index) + "' autofocus ></input>";
 	}
 
 	/**
@@ -172,7 +172,7 @@ var Form = function(x, y, fields, options) {
 	 * @private
 	 */
 	function numberField(name, min, max, index) {
-		return "<input class='input-default' placeholder='number of players (" + min + "-" + max + ")' type='number' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
+		return "<input class='input-default' placeholder='" + min + "-" + max + "' type='number' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "' autofocus></input>"
 	}
 
 	/**

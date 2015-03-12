@@ -195,6 +195,11 @@ progress[value]::-webkit-progress-value {
     background-size: 35px 20px, 100% 100%, 100% 100%;
 }
 
+#numberOfPlayers{
+	min-width: 6rem;
+  text-align: center;
+}
+
 #backtomain{
 	padding:1.5rem;
 	z-index: 9000;

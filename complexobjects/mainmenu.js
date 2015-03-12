@@ -71,9 +71,10 @@ function selectMap() {
  * @param  {function} previous previous menu item, that this menu hides
  */
 function selectPlayers() {
+	
 	var fields = [
 	{
-		type: 'range',
+		type: 'number',
 		id: 'numberOfPlayers',
 		min: 1,
 		max: 4
@@ -82,6 +83,14 @@ function selectPlayers() {
 		text: 'Next',
 		type: 'button',
 		callback: function() {
+			var val = $("#numberOfPlayers").val();
+			console.log(val == "");
+			// console.log(val%1===0);
+			if($("#numberOfPlayers").val() < 0 || $("#numberOfPlayers").val() > 4 || val == ""){
+				// alert('please enter range between 1-4');
+				customAlert(players, "please enter range between 1-4");
+				return;
+			}
 			players.hide();
 			namePlayers(parseInt(players.getValue("numberOfPlayers")), []);
 		}
@@ -89,6 +98,9 @@ function selectPlayers() {
 
 	var players = new Form(fields, {header:"players"});
 	players.render();
+	$("#numberOfPlayers").change(function(e){ 
+
+	});
 }
 
 /**
@@ -211,6 +223,23 @@ function confirm(previous, callback){
 
 	var confirm = new Form(fields, {header:"are you sure?"});
 	confirm.render();
+}
+
+function customAlert(previous, message){
+	previous.hide();
+	var fields = [
+	{
+		type:"button",
+		text:"ok",
+		callback: function(){
+			alert.hide();
+			console.log(previous);
+			previous.show();
+		}
+	}];
+
+	var alert = new Form(fields, {message:message});
+	alert.render();
 }
 
 startMenu();
