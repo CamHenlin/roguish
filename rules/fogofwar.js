@@ -1,5 +1,5 @@
-/**
- * Updates the fog of war around a player
+ /**
+ * Updates the renderer's fog of war around a player's position
  * @param  {Player} playerObject
  */
 function updateFogOfWar(playerObject) {
