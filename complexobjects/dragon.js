@@ -10,6 +10,7 @@ var Dragon = function(x, y, level) {
 
 	this.attackSpeed = 1;
 	this.movementSpeed = 50 * level; // set attributes unique to a dragon
+	this.moveLength = 4;
 	this.magic = level + 30;
 	this.defense = level * 2;
 	this.hp = 1*level;
@@ -54,10 +55,10 @@ var Dragon = function(x, y, level) {
 	 */
 	function moveUpOrDown(dy) {
 		if (dy >= 0) {
-			return renderer.moveObjectTo(this, x, y + this.movementSpeed, false); // Move down
+			return renderer.moveObjectTo(this, x, y + this.moveLength, false); // Move down
 		}
 
-		return renderer.moveObjectTo(this, x, y - this.movementSpeed, false); // Move up
+		return renderer.moveObjectTo(this, x, y - this.moveLength, false); // Move up
 	};
 
 	/**
@@ -68,10 +69,10 @@ var Dragon = function(x, y, level) {
 	 */
 	function moveRightOrLeft(dx) {
 		if (dx >= 0) {
-			return renderer.moveObjectTo(this, x + this.movementSpeed, y, false); // move right
+			return renderer.moveObjectTo(this, x + this.moveLength, y, false); // move right
 		}
 
-		return renderer.moveObjectTo(this, x - this.movementSpeed, y, false); // move left
+		return renderer.moveObjectTo(this, x - this.moveLength, y, false); // move left
 	};
 
 	/**

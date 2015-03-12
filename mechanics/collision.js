@@ -1,4 +1,4 @@
-
+ 
 /**
  * CollisionSystem system to handle collision within a map
  * @constructor
@@ -24,17 +24,14 @@ var CollisionSystem = function() {
 			var b = ~~(x / tilesize);
 
 			if (a <= -1 || a >= this.collisionArray.length) {
-				console.log('1');
 				return false;
 			}
 
 			if (b <= -1 || b >= this.collisionArray[a].length) {
-				console.log('2');
 				return false;
 			}
 
 			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
-				console.log('3');
 				return false;
 			}
 		} catch (error) {
@@ -180,19 +177,10 @@ var CollisionSystem = function() {
 	this.simpleCollision = function(object1, object2) {
 		var obj1 = object1;
 		var obj2 = object2;
-		console.log(object2);
 
 		if (!obj1.spriteSheet || !object2.spriteSheet) {
 			return false;
 		}
-
-
-		console.log(obj1.y + obj1.spriteSheet._frameHeight);
-		console.log(obj2.y);
-		console.log(obj1.y + obj1.spriteSheet._frameHeight < obj2.y);
-		console.log(obj1.y > obj2.y + object2.spriteSheet._frameHeight);
-		console.log(obj1.x > obj2.x + object2.spriteSheet._frameWidth);
-		console.log(obj1.x + obj1.spriteSheet._frameWidth < obj2.x);
 
 		return !(
 				obj1.y + obj1.spriteSheet._frameHeight < obj2.y ||

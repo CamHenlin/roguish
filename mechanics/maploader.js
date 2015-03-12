@@ -1,4 +1,4 @@
-/**
+ /**
  * @name MapLoader
  * @class
  */
@@ -8,6 +8,7 @@
  * @constructor
  */
 function MapLoader(loader) {
+	// initilizations
 	this.callback = null;
 	var map;
 
@@ -50,18 +51,6 @@ function MapLoader(loader) {
 			this.callback();
 		}
 	}
-	/**
-	 * Performs basic validity tests on map
-	 * @return {boolean}
-	 */
-	function isValidMap() {
-		return true;
-		// Runs some basic checks on the map to make sure it is a good map
-		// checks for starting point
-		// checks for end point
-		// checks to make sure you can get from the start to the end point? using A*?
-		// checks the size, 16-4096 I think
-		// maybe if starting/ending point doesn't exist it can randomly generate?
-	}
+
 
 }

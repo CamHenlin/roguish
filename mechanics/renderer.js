@@ -1,4 +1,4 @@
-
+ 
 /**
  * Renderer handles rendering a map file to the canvas
  * @param {EaselJS stage} gamestage EaselJS stage
@@ -51,7 +51,8 @@ function Renderer(gamestage) {
 
 
 	/**
-	 * Run at the end of our map rendering process
+	 * Run at the end of our map rendering process. Adds various containers to the gamestage and 
+	 * declares doneRendering to be true, which lets the rest of the program continue.
 	 * @private
 	 */
 	function completeRenderer() {
@@ -77,7 +78,7 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * Initialize all of the layers in the map
+	 * Parses the mapData tilesets and Initialize all of the layers in the map
 	 * @private
 	 */
 	function initLayers() {
@@ -369,7 +370,7 @@ function Renderer(gamestage) {
 	};
 
 	/**
-	 * Basically reinitialize all of our variables here, gets us ready to draw a new map
+	 * Reinitialize all of our variables here, gets us ready to draw a new map
 	 * @param  {Object} mapData new map JSON
 	 */
 	this.prepareRenderer = function(mapData) {
@@ -578,7 +579,7 @@ function Renderer(gamestage) {
 	}
 
 	/**
-	 *
+	 *Function to handle moving objects from startxy to movingToCellTarget
 	 * @public
 	 */
 	this.movementTickActions = function() {
