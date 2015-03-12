@@ -8,6 +8,7 @@
  * @constructor
  */
 function MapLoader(loader) {
+	// initilizations
 	this.callback = null;
 	var map;
 
@@ -43,7 +44,7 @@ function MapLoader(loader) {
 	 */
 	function handleTilesetLoad() {
 		var image = loader.getResult('tileset');
-		renderer.prepareRenderer(map);
+		renderer.prepareRenderer(map);h
 		renderer.setImage(image);
 		renderer.initMap();
 		if (this.callback) {
