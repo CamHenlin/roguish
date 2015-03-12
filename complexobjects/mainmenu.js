@@ -1,14 +1,13 @@
 /**
- * [mainForm Main menu form, which is displayed at the beginning of the game]
- * @return {[void]} []
+ * Main menu form, which is displayed at the beginning of the game
  */
 function mainForm() {
 	var fields = [{
 		text: 'New Game!',
 		type: 'button',
 		callback: function() {
-			console.log('click')
-			selectMap(mainMenu);
+			console.log('click');
+			selectPlayers(mainMenu);
 		}
 	},{
 		text: 'high scores',
@@ -28,9 +27,8 @@ function mainForm() {
 }
 
 /**
- * [selectMap Select map menu form. This function is not used]
- * @param  {[function]} previous [previous menu item, this menu hides]
- * @return {[void]}          []
+ * Select map menu form. This function is not used
+ * @param  {function} previous previous menu item, this menu hides
  */
 function selectMap(previous) {
 	previous.hide();
@@ -65,9 +63,8 @@ function selectMap(previous) {
 }
 
 /**
- * [selectPlayers description]
- * @param  {[function]} previous [previous menu item, that this menu hides]
- * @return {[void]}          []
+ * The menu for selecting the number of players
+ * @param  {function} previous previous menu item, that this menu hides
  */
 function selectPlayers(previous) {
 	previous.hide();
@@ -93,9 +90,9 @@ function selectPlayers(previous) {
 }
 
 /**
- * [namePlayers The menus for naming each player. creates a menu with a text field for player name input]
- * @param  {[type]} numPlayers [The number of players chosen, the dialog will be displayed this number of times.]
- * @param  {[type]} names      [The list of names added recursively in this function.]
+ * The menus for naming each player. creates a menu with a text field for player name input]
+ * @param  {number} numPlayers The number of players chosen, the dialog will be displayed this number of times.
+ * @param  {string[]} names      The list of names added recursively in this function.
  */
 function namePlayers(numPlayers, names) {
 	if (names.length == numPlayers) {

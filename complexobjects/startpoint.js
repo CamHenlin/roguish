@@ -1,17 +1,14 @@
 /**
- * @name  StartPoint
- * @class
- */
-
-/**
- * StartPoint
- * @constructor
+ * [StartPoint description]
+ * @param {number} x     x-position
+ * @param {number} y     y-position
+ * @param {number} startPointNumber 
  */
 var StartPoint = function(x, y, startPointNumber) {
 	this.x = x;
 	this.y = y;
 	this.startPointNumber = startPointNumber;
-	this.spriteSheet = new createjs.SpriteSheet({  // set sprite for the dragon
+	this.spriteSheet = new createjs.SpriteSheet({  
 		"images": [loader.getResult("starttile")],
 		"frames": {
 			"width": 16,

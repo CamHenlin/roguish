@@ -1,9 +1,4 @@
 /**
- * @name  ExampleComplexObject
- * @class
- */
-
-/**
  * ExampleSimpleObject
  * @constructor
  */

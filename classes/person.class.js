@@ -1,7 +1,6 @@
 
 /**
- * Person mainly built to handle walking direction code, but I'm sure we can think of other things people share
- * or maybe rename and use to just handle walking code for all things that walk?
+ * Base class for players
  * @constructor
  */
 var Person = function() {
@@ -14,10 +13,9 @@ var Person = function() {
 	this.healthBar;
 
 	/**
-	 * note that this currently makes assumptions about what animations are available
-	 * and should be moved away from doing so
-	 * @param  {number} deltax
-	 * @param  {number} deltay
+	 * Updates movement animation 
+	 * @param  {number} deltax change in x
+	 * @param  {number} deltay change in y
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {

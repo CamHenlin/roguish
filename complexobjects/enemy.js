@@ -38,6 +38,7 @@ var Enemy = function(x, y, level) {
 
 	/**
 	 * This function will be inherited by child classes that handle how the enemy moves
+	 * @abstract
 	 */
 	this.doMovement = function() {
 	};
@@ -74,7 +75,6 @@ var Enemy = function(x, y, level) {
 			this.turnCounter = 0;
 			return;
 		}
-
 		this.doMovement();
 	};
 
@@ -85,16 +85,14 @@ var Enemy = function(x, y, level) {
 	this.isWithinMaxDistance = function() {
 		for (var i = 0; i < activeObjects.length; i++) {
 			if (activeObjects[i] instanceof Player) {
-				var dx = Math.pow(activeObjects[i].x - this.x, 2);
-				var dy = Math.pow(activeObjects[i].y - this.y, 2);
+				var dx = Math.abs(activeObjects[i].x - this.x);
+				var dy = Math.abs(activeObjects[i].y - this.y);
 				var distance = Math.sqrt(dy + dx);
-				console.log(distance);
 				if (distance < MAX_ENEMY_DISTANCE) {
 					return true;
 				}
 			}
 		}
-
 		return false;
 	};
 
@@ -106,7 +104,7 @@ var Enemy = function(x, y, level) {
 		this.hp -= attackingObject.attack;
 
 		if (this.hp <= 0) {
-			attackingObject.xp += this.xp;
+			attackingObject.gainXP(this.xp);
 			this.die();
 			return;
 		}
@@ -138,8 +136,6 @@ var Enemy = function(x, y, level) {
 		if (index > -1) {
 			activeObjects.splice(index, 1);
 		}
-
-		console.log("len:" + activeObjects.length);
 	};
 
 	/**

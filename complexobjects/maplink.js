@@ -1,15 +1,11 @@
-/**
- * @name  MapLink
- * @class
- */
 
 /**
  * [MapLink description]
- * @param {[type]} x                [description]
- * @param {[type]} y                [description]
- * @param {[type]} graphic          [description]
- * @param {[type]} link             [description]
- * @param {[type]} startPointNumber [description]
+ * @param {number} x                x-coordinate
+ * @param {number} y                y-coordinate
+ * @param {string} graphic          manifest ID for graphic
+ * @param {string} link             name of JSON file containing link data
+ * @param {number} startPointNumber 
  */
 var MapLink = function(x, y, graphic, link, startPointNumber) {
 	this.x = x;
@@ -17,7 +13,7 @@ var MapLink = function(x, y, graphic, link, startPointNumber) {
 	this.link = link;
 	this.startPointNumber = startPointNumber;
 
-	this.spriteSheet = new createjs.SpriteSheet({  // set sprite for the dragon
+	this.spriteSheet = new createjs.SpriteSheet({ 
 		"images": [loader.getResult(graphic)],
 		"frames": {
 			"width": 16,
@@ -41,6 +37,9 @@ var MapLink = function(x, y, graphic, link, startPointNumber) {
 	// add our animations to global gamestage:
 	renderer.activeObjectsContainer.addChild(this.animations);
 
+	/**
+	 * Run on each frame rendering in main loop
+	 */
 	this.tickActions = function() {
 		for (var i = 0; i < activeObjects.length; i++) {
 			if (activeObjects[i] instanceof Player) {

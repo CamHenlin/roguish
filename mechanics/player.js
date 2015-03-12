@@ -1,18 +1,25 @@
 
 /**
- * Player class
- * @param {number} x initial coordinate
- * @param {number} y initial coordinate
+ * Class with behavior and attributes for players
+ * @param {number} x initial x-coordinate
+ * @param {number} y initial y-coordinate
+ * @param {number} initiative
  * @constructor
  */
 var Player = function(x, y, initiative) {
-	this.x = x;
-	this.y = y;
-	this.initiative = initiative; // this is a statistic used for determining player turn in default advanceturn.js
-	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame).
+	this.x = x; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.y = y; // now im thinking that maybe we should instead change these to map grid coordinates
+	this.initiative = initiative; // this is a skill used for determining player turn in default advanceturn.js
+	this.moveSpeed = 4; // sort of useless stat, how fast they move on the map (px/frame)
+	this.attackSpeed = 1; // skill that determines how many attacks you can make in a single turn
+	//Scout is skill affecting how hard it is for enemies to detect player, and how far player can see/move
 	this.turnCounter = 0;
-	this.xp = 1;
+	this.level = 1;
+	this.xp = 0;
+	this.hp = 10*this.level;
+	this.skillPoints = 1;
 	this.attack = 2;
+	this.actionMenu = {};
 	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
@@ -44,12 +51,12 @@ var Player = function(x, y, initiative) {
 			},
 			"spin-left": {
 				"frames": [0, 8, 12, 4],
-				"next": "spin",
+				"next": "spin-left",
 				"speed": 1
 			},
 			"spin-right": {
 				"frames": [0, 4, 12, 8],
-				"next": "spin",
+				"next": "spin-right",
 				"speed": 1
 			},
 			"walk-front": {
@@ -130,6 +137,9 @@ var Player = function(x, y, initiative) {
 
 	};
 
+	//
+	var attackTarget = null;
+
 	/**
 	 * Click handler for attack
 	 * @return {MouseEvent} event
@@ -155,7 +165,6 @@ var Player = function(x, y, initiative) {
 			var clickSprite = new createjs.Sprite(clickEventSpriteSheet, "exist");
 			clickSprite.x = x - renderer.container.x;
 			clickSprite.y = y - renderer.container.y;
-			console.log(clickSprite);
 
 			var clickedEnemy = null;
 
@@ -165,8 +174,10 @@ var Player = function(x, y, initiative) {
 				}
 
 				if (collisionSystem.simpleCollision(clickSprite, activeObjects[i])) {
-					alert(i);
 					clickedEnemy = activeObjects[i];
+
+					// reference for attack sprite
+					attackTarget = activeObjects[i];
 					break;
 				}
 			}
@@ -186,6 +197,62 @@ var Player = function(x, y, initiative) {
 	attackClickHandler = attackClickHandler.bind(this);
 
 	/**
+	 * Function that creates Form to display player attributes
+	 */
+	this.createStatsForm = function() {
+		var fields = [{
+				text: '+Initiative: '+this.initiative,
+				type: 'button',
+				callback: function() {
+					if (this.skillPoints > 0){
+						this.skillPoints -= 1;
+						this.initiative += 1;
+						statsMenu.destroy();
+						this.createStatsForm();
+					}
+				}.bind(this)
+			},
+			{
+				text: '+Attack Speed: '+this.attackSpeed,
+				type: 'button',
+				callback: function() {
+					if (this.skillPoints > 0){
+						this.skillPoints -= 1;
+						this.attackSpeed += 1;
+						statsMenu.destroy();
+						this.createStatsForm();
+					}
+				}.bind(this)
+			},
+			{
+				text: '+Scout: '+this.scout,
+				type: 'button',
+				callback: function() {
+					if (this.skillPoints > 0){
+						this.skillPoints -= 1;
+						this.scout += 1;
+						statsMenu.destroy();
+						this.createStatsForm();
+					}
+				}.bind(this)
+			},{
+				text: 'close',
+				type: 'button',
+				callback: function() {
+					statsMenu.destroy();
+				}
+			}
+			];
+		var options = {
+				message:this.playerName+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
+				      +this.hp+'   Attack: '+this.attack+'   Level: '+this.level+'   XP: '+this.xp+'   Next Level: '
+				      +(this.levelUpThreshold()-this.xp)
+		}
+		var statsMenu = new Form(0,0,fields, options);
+		statsMenu.render();
+	};
+
+	/**
 	 * Click handler for move
 	 * @param  {MouseEvent} event
 	 */
@@ -194,9 +261,6 @@ var Player = function(x, y, initiative) {
 		var y = event.pageY / gamezoom;
 
 		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x, y);
-		console.log(JSON.stringify(collisionCoordinate));
-		console.log(isSelectionInSelectableBounds(this, x, y));
-		console.log(collisionSystem.checkCellValidForObject(collisionCoordinate));
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			renderer.moveObjectTo(this, x, y - 16, true);
 			removeSelectableArea();
@@ -207,7 +271,7 @@ var Player = function(x, y, initiative) {
 	moveClickHandler = moveClickHandler.bind(this);
 
 	/**
-	 * [mouseMoveHandler description
+	 * Clickhandler for mousemove
 	 * @param  {MouseEvent} event
 	 */
 	var mouseMoveHandler = function(event) {
@@ -255,7 +319,7 @@ var Player = function(x, y, initiative) {
 	mouseMoveHandler = mouseMoveHandler.bind(this);
 
 	/**
-	 * Code that gets called when it's the players turn. should probably initialize a menu or something
+	 * Code that gets called when it's the players turn. Initializes the player's action menu
 	 */
 	this.turn = function() {
 		this.currentDirection = "";
@@ -263,9 +327,8 @@ var Player = function(x, y, initiative) {
 
 		playerTurn = true;
 		this.totalTurns++;
-		console.log(this.getName() + '\'s turn called');
 		renderer.centerMapOnObject(this, function() {
-			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
+			this.actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',
 					key: "m",
 					type: 'button',
@@ -275,7 +338,7 @@ var Player = function(x, y, initiative) {
 							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
-						actionMenu.destroy();
+						this.actionMenu.destroy();
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
 				}, {
 					text: 'Attack',
@@ -287,18 +350,44 @@ var Player = function(x, y, initiative) {
 							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
-						actionMenu.destroy();
+						this.actionMenu.destroy();
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
-				}], {cssClass:'playerActions'});
-			actionMenu.render();
+				}, {
+					text: 'Skills',
+					key: "s",
+					type: 'button',
+					callback: function() {
+						this.createStatsForm();
+
+					}.bind(this)
+				}
+
+				], {cssClass:'playerActions'});
+			this.actionMenu.render();
 			showSelectableArea(this);
 		}.bind(this));
 	};
+
+
+
+	var removeAttackAnimation = function() {
+		renderer.activeObjectsContainer.removeChild(this.attackAnimation);
+
+	}.bind(this);
+
 
 	/**
 	 * Resets animation position and turn counter
 	 */
 	this.cleanUpMovement = function() {
+		if(attackTarget) {
+			renderer.activeObjectsContainer.addChild(this.attackAnimation);
+			this.attackAnimation.x = attackTarget.x + attackTarget.animations.x;
+			this.attackAnimation.y = attackTarget.y + attackTarget.animations.y;
+			attackTarget = null;
+			setTimeout(removeAttackAnimation, 1000);
+		}
+
 		this.animations.gotoAndPlay("stand-front");
 		this.turnCounter = 0;
 	};
@@ -320,8 +409,8 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * [getScore Calculates and returns the player's current score.]
-	 * @return {[type]} [The player's current score]
+	 * Calculates and returns the player's current score.
+	 * @return {number} The player's current score
 	 */
 	this.getScore = function() {
 		var turnScore = 100 - this.totalTurns;
@@ -330,6 +419,30 @@ var Player = function(x, y, initiative) {
 			turnScore = 1;
 
 		return this.xp * turnScore;
+	}
+
+	/*
+	 * Determines how much XP the player needs to level up
+	 * @return {integer} amount of xp needed to level up
+	 */
+	this.levelUpThreshold = function() {
+		return 500*this.level;
+	};
+
+	/**
+	 * Gives the player amount of xp, and then levels them up if they have passed a threshold
+	 * @param {int} amount How much XP the player gets
+	 */
+	this.gainXP = function(amount) {
+		this.xp += amount;
+		if (this.xp >= this.levelUpThreshold()) {
+			this.level += 1;
+			this.skillPoints += 2;
+			this.hp = 10+(this.level/2); //Players automatically get reset back to full hp plus a little bit
+			this.attack += 1; //Players start to hit harder as they level up
+			console.log("You have leveled up! "+this.xp+" xp, "+this.level+" level, "+this.skillPoints+" Skill Points, "+
+						this.hp+" hp, "+ this.attack+" attack!");
+		};
 	};
 };
 
