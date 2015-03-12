@@ -55,6 +55,7 @@ var MapLink = function(x, y, graphic, link, startPointNumber) {
 							}
 						}
 
+						console.log('resetting activeObjects');
 						activeObjects = [];
 						renderer.centered = true;
 
