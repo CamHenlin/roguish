@@ -3,6 +3,8 @@
 */
 
 /*
+
+ // for programmatically doing stuff
 function simulateCanvasClick(x,y, callback) {
 	var evt = new MouseEvent("click", {
 			clientX:x,
@@ -353,7 +355,26 @@ QUnit.module("renderer tests");
 
 
 QUnit.module("player tests");
+QUnit.test("player tests", function(assert) {
+	var done = assert.async();
+	var playerTests = function() {
+		if(renderer) {
 
+			var testPlayer = new Player(40,40, 1);
+			testPlayer.setName("Player");
+
+			assert.equal(testPlayer.x, 40, "player x");
+			assert.equal(testPlayer.y, 40, "player y");
+			assert.equal(testPlayer.initiative, 1, "player initiative");
+			assert.equal(testPlayer.getName(), "Player", "player name");
+			done();
+		}
+		else {
+			setTimeout(playerTests, 60);
+		}
+	};
+	playerTests();
+});
 
 QUnit.module("enemy tests");
 QUnit.test("enemy tests", function(assert) {
