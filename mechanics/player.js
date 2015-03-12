@@ -213,13 +213,13 @@ var Player = function(x, y, initiative) {
 				}
 			}
 
-			if (!clickedEnemy) {
-				return;
-			}
-
 			renderer.moveObjectTo(this, x, y - 16, true);
 			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
 			removeSelectableArea();
+
+			if (!clickedEnemy) {
+				return;
+			}
 
 			calculateDamage(this, clickedEnemy);
 
