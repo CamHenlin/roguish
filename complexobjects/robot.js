@@ -59,7 +59,6 @@ var Robot = function(x, y, level) {
 	 * Robots move towards the nearest player
 	 */
 	this.doMovement = function() {
-		console.log('robot moving');
 		this.sprite.gotoAndPlay("move");
 
 		var nearestPlayer = this.getNearestPlayer();

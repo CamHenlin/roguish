@@ -437,7 +437,7 @@ var Player = function(x, y, initiative) {
 	 * @return {integer} amount of xp needed to level up
 	 */
 	this.levelUpThreshold = function() {
-		return 500*this.level;
+		return 500*((this.level*this.level)/2);
 	};
 
 	/**
