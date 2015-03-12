@@ -93,9 +93,24 @@ body{
 	padding-bottom:3rem;
 	background-position: center bottom;
 	z-index: 900;
-	max-height: 100vh;
+	max-height: 40vh;
 	overflow: scroll;
 }
+@media(max-height: 800px){
+	.forms-default{
+		background-image:none;
+		margin-top: 5%;
+	}
+}
+@media(max-height: 400px ){
+	.forms-default{
+		margin-top: 0%;
+	}
+}
+body{
+	overflow: hidden;
+}
+
 .forms-default .button-default{
 	width:100%;
 	background: none;
@@ -135,7 +150,7 @@ p{
 	position: absolute;
 	bottom:0px;
 	width:100%;
-
+	display: none;
 	background:rgba(0,0,0,.5);
 	z-index: 1;
 	color:white;

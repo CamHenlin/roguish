@@ -121,6 +121,7 @@ function namePlayers(numPlayers, names) {
 		text: names.length == numPlayers - 1 ? "Start Game" : "Next",
 		callback: function() {
 			if(names.length == numPlayers -1){
+				$("#playermenu").show();
 				$("#backtomain").show();
 			}
 			startGame.hide();
