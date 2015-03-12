@@ -1,7 +1,7 @@
 /**
  * Main menu form, which is displayed at the beginning of the game
  */
-function mainForm() {
+function startMenu() {
 	var fields = [{
 		text: 'New Game!',
 		type: 'button',
@@ -17,8 +17,13 @@ function mainForm() {
 			mainMenu.hide()
 			console.log('highscores');
 		}
-	}
-	];
+	},{
+		type: 'button',
+		text: 'user guide',
+		callback: function(){
+			window.location.href = "https://www.assembla.com/spaces/cis422w15tp2-team1/wiki/User's_Guide";
+		}
+	}];
 	var options = {
 		header:"roguish",
 		message:'a game produced in cis422'
@@ -160,6 +165,20 @@ function backToMain(){
 				location.reload();
 			})
 		}
+	},{
+		type: 'button',
+		text: 'user guide',
+		callback: function(){
+			// window.location.href = "https://www.assembla.com/spaces/cis422w15tp2-team1/wiki/User's_Guide";
+			var win = window.open("https://www.assembla.com/spaces/cis422w15tp2-team1/wiki/User's_Guide", '_blank');
+			if(win){
+			    //Browser has allowed it to be opened
+			    win.focus();
+			}else{
+			    //Broswer has blocked it
+			    alert('Please allow popups for this site');
+			}
+		}
 	},
 	{
 		type: "button",
@@ -194,4 +213,6 @@ function confirm(previous, callback){
 	confirm.render();
 }
 
-mainForm();
+startMenu();
+
+
