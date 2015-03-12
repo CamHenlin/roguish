@@ -186,7 +186,7 @@ var Form = function(x, y, fields, options) {
 	 */
 	function rangeField(name, min, max, index) {
 		var html = name ? "</br>" + name + "</br>" : "";
-		return html + "<input class='range-default' type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
+		return html + "<input class='range-default' value='"+min+"'type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
 	}
 
 	/**

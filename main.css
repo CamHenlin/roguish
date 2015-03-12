@@ -93,8 +93,12 @@ body{
 	padding-bottom:3rem;
 	background-position: center bottom;
 	z-index: 900;
-	max-height: 40vh;
+	max-height: 80vh;
 	overflow: scroll;
+}
+
+.forms-default p:first-child{
+	margin-top: 2rem;
 }
 @media(max-height: 800px){
 	.forms-default{
