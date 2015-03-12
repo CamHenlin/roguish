@@ -63,10 +63,8 @@ var Robot = function(x, y, level) {
 	 */
 	this.updateMovementAnimation = function(deltax, deltay) {
 		if (deltax > 0 && this.lastFrameDirection !== "walk-right") {
-			this.animations.scaleX = 1;
 			this.lastFrameDirection = "walk-right";
 		} else if (deltax < 0 && this.lastFrameDirection !== "walk-left") {
-			this.animations.scaleX = -1;
 			this.lastFrameDirection = "walk-left";
 		}
 	};
