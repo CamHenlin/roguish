@@ -312,7 +312,7 @@ var Player = function(x, y, initiative) {
 		if (isSelectionInSelectableBounds(this, x, y) && collisionSystem.checkCellValidForObject(collisionCoordinate)) {
 			renderer.moveObjectTo(this, x, y - 16, true);
 			removeSelectableArea();
-			renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
+			// renderer.activeObjectsContainer.removeChild(this.mouseMoveSprite);
 			document.getElementById("gamecanvas").removeEventListener('click', moveClickHandler, false);
 		}
 	};
@@ -351,7 +351,7 @@ var Player = function(x, y, initiative) {
 			});
 
 			this.mouseMoveSprite = new createjs.Sprite(mouseMoveEventSpriteSheet, "exist");
-			renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
+			// renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 		}
 
 		var collisionCoordinate = collisionSystem.getCollisionCoordinateFromCell(x - renderer.container.x - renderer.container.x % 16, y - renderer.container.y - renderer.container.y % 16);
@@ -394,7 +394,7 @@ var Player = function(x, y, initiative) {
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', moveClickHandler, false);
 						if (this.mouseMoveSprite) {
-							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
+							// renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
 						this.actionMenu.destroy();
@@ -406,7 +406,7 @@ var Player = function(x, y, initiative) {
 					callback: function() {
 						document.getElementById("gamecanvas").addEventListener('click', attackClickHandler, false);
 						if (this.mouseMoveSprite) {
-							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
+							// renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
 						this.actionMenu.destroy();
