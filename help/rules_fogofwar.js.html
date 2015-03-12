@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: rules/fogofwar.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,37 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: rules/fogofwar.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code> /**
+ * Updates the renderer's fog of war around a player's position
+ * @param  {Player} playerObject
+ */
+function updateFogOfWar(playerObject) {
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x, playerObject.y + 16);
+	var distance = playerObject.scout;
+	for (var i = Math.floor(coordinates.x - distance); i &lt; coordinates.x + distance; i++) {
+		for (var j = Math.floor(coordinates.y - distance); j &lt; coordinates.y + distance; j++) {
+			var deltax = Math.pow(Math.abs(coordinates.x - i), 2);
+			var deltay = Math.pow(Math.abs(coordinates.y - j), 2);
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+			if (Math.sqrt(deltax + deltay) &lt; distance) {
+				if (renderer.fogOfWarGrid[j]) {
+					renderer.fogOfWarContainer.removeChild(renderer.fogOfWarGrid[j][i]);
+				}
+			}
+		}
+	}
+}</code></pre>
+        </article>
+    </section>
 
 
 

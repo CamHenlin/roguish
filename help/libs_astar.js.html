@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: libs/astar.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: libs/astar.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// javascript-astar 0.4.0
+// http://github.com/bgrins/javascript-astar
+// Freely distributable under the MIT License.
+// Implements the astar search algorithm in javascript using a Binary Heap.
+// Includes Binary Heap (with modifications) from Marijn Haverbeke.
+// http://eloquentjavascript.net/appendix2.html
+
+(function(definition) {
+	/* global module, define */
+	if(typeof module === 'object' &amp;&amp; typeof module.exports === 'object') {
+		module.exports = definition();
+	} else if(typeof define === 'function' &amp;&amp; define.amd) {
+		define([], definition);
+	} else {
+		var exports = definition();
+		window.astar = exports.astar;
+		window.Graph = exports.Graph;
+	}
+})(function() {
+
+function pathTo(node){
+	var curr = node,
+		path = [];
+	while(curr.parent) {
+		path.push(curr);
+		curr = curr.parent;
+	}
+	return path.reverse();
+}
+
+function getHeap() {
+	return new BinaryHeap(function(node) {
+		return node.f;
+	});
+}
+
+var astar = {
+	/**
+	* Perform an A* Search on a graph given a start and end node.
+	* @param {Graph} graph
+	* @param {GridNode} start
+	* @param {GridNode} end
+	* @param {Object} [options]
+	* @param {bool} [options.closest] Specifies whether to return the
+			   path to the closest node if the target is unreachable.
+	* @param {Function} [options.heuristic] Heuristic function (see
+	*          astar.heuristics).
+	*/
+	search: function(graph, start, end, options) {
+
+		graph.cleanDirty();
+		options = options || {};
+		var heuristic = options.heuristic || astar.heuristics.manhattan,
+			closest = options.closest || false;
+
+		var openHeap = getHeap(),
+			closestNode = start; // set the start node to be the closest if required
+
+		start.h = heuristic(start, end);
+
+		openHeap.push(start);
+		graph.markDirty(start);
+		while(openHeap.size() > 0) {
+
+			// Grab the lowest f(x) to process next.  Heap keeps this sorted for us.
+			var currentNode = openHeap.pop();
+
+			// End case -- result has been found, return the traced path.
+			if(currentNode === end) {
+				return pathTo(currentNode);
+			}
+
+			// Normal case -- move currentNode from open to closed, process each of its neighbors.
+			currentNode.closed = true;
+
+			// Find all neighbors for the current node.
+			var neighbors = graph.neighbors(currentNode);
+
+			for (var i = 0, il = neighbors.length; i &lt; il; ++i) {
+				var neighbor = neighbors[i];
+
+				if (neighbor.closed || neighbor.isWall()) {
+					// Not a valid node to process, skip to next neighbor.
+					continue;
+				}
+
+				// The g score is the shortest distance from start to current node.
+				// We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
+				var gScore = currentNode.g + neighbor.getCost(currentNode),
+					beenVisited = neighbor.visited;
+
+				if (!beenVisited || gScore &lt; neighbor.g) {
+
+					// Found an optimal (so far) path to this node.  Take score for node to see how good it is.
+					neighbor.visited = true;
+					neighbor.parent = currentNode;
+					neighbor.h = neighbor.h || heuristic(neighbor, end);
+					neighbor.g = gScore;
+					neighbor.f = neighbor.g + neighbor.h;
+					graph.markDirty(neighbor);
+					if (closest) {
+						// If the neighbour is closer than the current closestNode or if it's equally close but has
+						// a cheaper path than the current closest node then it becomes the closest node
+						if (neighbor.h &lt; closestNode.h || (neighbor.h === closestNode.h &amp;&amp; neighbor.g &lt; closestNode.g)) {
+							closestNode = neighbor;
+						}
+					}
+
+					if (!beenVisited) {
+						// Pushing to heap will put it in proper place based on the 'f' value.
+						openHeap.push(neighbor);
+					}
+					else {
+						// Already seen the node, but since it has been rescored we need to reorder it in the heap
+						openHeap.rescoreElement(neighbor);
+					}
+				}
+			}
+		}
+
+		if (closest) {
+			return pathTo(closestNode);
+		}
+
+		// No result was found - empty array signifies failure to find path.
+		return [];
+	},
+	// See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
+	heuristics: {
+		manhattan: function(pos0, pos1) {
+			var d1 = Math.abs(pos1.x - pos0.x);
+			var d2 = Math.abs(pos1.y - pos0.y);
+			return d1 + d2;
+		},
+		diagonal: function(pos0, pos1) {
+			var D = 1;
+			var D2 = Math.sqrt(2);
+			var d1 = Math.abs(pos1.x - pos0.x);
+			var d2 = Math.abs(pos1.y - pos0.y);
+			return (D * (d1 + d2)) + ((D2 - (2 * D)) * Math.min(d1, d2));
+		}
+	},
+	cleanNode:function(node){
+		node.f = 0;
+		node.g = 0;
+		node.h = 0;
+		node.visited = false;
+		node.closed = false;
+		node.parent = null;
+	}
+};
+
+/**
+* A graph memory structure
+* @param {Array} gridIn 2D array of input weights
+* @param {Object} [options]
+* @param {bool} [options.diagonal] Specifies whether diagonal moves are allowed
+*/
+function Graph(gridIn, options) {
+	options = options || {};
+	this.nodes = [];
+	this.diagonal = !!options.diagonal;
+	this.grid = [];
+	for (var y = 0; y &lt; gridIn.length; y++) {
+		var column = gridIn[y];
+		for (var x = 0; x &lt; column.length; x++) {
+			if (!this.grid[x]) {
+				this.grid[x] = [];
+			}
+			var node = new GridNode(x, y, column[x]);
+			this.grid[x][y] = node;
+			this.nodes.push(node);
+		}
+	}
+	this.init();
+}
+
+Graph.prototype.init = function() {
+	this.dirtyNodes = [];
+	for (var i = 0; i &lt; this.nodes.length; i++) {
+		astar.cleanNode(this.nodes[i]);
+	}
+};
+
+Graph.prototype.cleanDirty = function() {
+	for (var i = 0; i &lt; this.dirtyNodes.length; i++) {
+		astar.cleanNode(this.dirtyNodes[i]);
+	}
+	this.dirtyNodes = [];
+};
+
+Graph.prototype.markDirty = function(node) {
+	this.dirtyNodes.push(node);
+};
+
+Graph.prototype.neighbors = function(node) {
+	var ret = [],
+		x = node.x,
+		y = node.y,
+		grid = this.grid;
+
+	// West
+	if(grid[x-1] &amp;&amp; grid[x-1][y]) {
+		ret.push(grid[x-1][y]);
+	}
+
+	// East
+	if(grid[x+1] &amp;&amp; grid[x+1][y]) {
+		ret.push(grid[x+1][y]);
+	}
+
+	// South
+	if(grid[x] &amp;&amp; grid[x][y-1]) {
+		ret.push(grid[x][y-1]);
+	}
+
+	// North
+	if(grid[x] &amp;&amp; grid[x][y+1]) {
+		ret.push(grid[x][y+1]);
+	}
+
+	if (this.diagonal) {
+		// Southwest
+		if(grid[x-1] &amp;&amp; grid[x-1][y-1]) {
+			ret.push(grid[x-1][y-1]);
+		}
+
+		// Southeast
+		if(grid[x+1] &amp;&amp; grid[x+1][y-1]) {
+			ret.push(grid[x+1][y-1]);
+		}
+
+		// Northwest
+		if(grid[x-1] &amp;&amp; grid[x-1][y+1]) {
+			ret.push(grid[x-1][y+1]);
+		}
+
+		// Northeast
+		if(grid[x+1] &amp;&amp; grid[x+1][y+1]) {
+			ret.push(grid[x+1][y+1]);
+		}
+	}
+
+	return ret;
+};
+
+Graph.prototype.toString = function() {
+	var graphString = [],
+		nodes = this.grid, // when using grid
+		rowDebug, row, y, l;
+	for (var x = 0, len = nodes.length; x &lt; len; x++) {
+		rowDebug = [];
+		row = nodes[x];
+		for (y = 0, l = row.length; y &lt; l; y++) {
+			rowDebug.push(row[y].weight);
+		}
+		graphString.push(rowDebug.join(" "));
+	}
+	return graphString.join("\n");
+};
+
+function GridNode(x, y, weight) {
+	this.x = x;
+	this.y = y;
+	this.weight = weight;
+}
+
+GridNode.prototype.toString = function() {
+	return "[" + this.x + " " + this.y + "]";
+};
+
+GridNode.prototype.getCost = function() {
+	return this.weight;
+};
+
+GridNode.prototype.isWall = function() {
+	return this.weight === 0;
+};
+
+function BinaryHeap(scoreFunction){
+	this.content = [];
+	this.scoreFunction = scoreFunction;
+}
+
+BinaryHeap.prototype = {
+	push: function(element) {
+		// Add the new element to the end of the array.
+		this.content.push(element);
+
+		// Allow it to sink down.
+		this.sinkDown(this.content.length - 1);
+	},
+	pop: function() {
+		// Store the first element so we can return it later.
+		var result = this.content[0];
+		// Get the element at the end of the array.
+		var end = this.content.pop();
+		// If there are any elements left, put the end element at the
+		// start, and let it bubble up.
+		if (this.content.length > 0) {
+			this.content[0] = end;
+			this.bubbleUp(0);
+		}
+		return result;
+	},
+	remove: function(node) {
+		var i = this.content.indexOf(node);
+
+		// When it is found, the process seen in 'pop' is repeated
+		// to fill up the hole.
+		var end = this.content.pop();
+
+		if (i !== this.content.length - 1) {
+			this.content[i] = end;
+
+			if (this.scoreFunction(end) &lt; this.scoreFunction(node)) {
+				this.sinkDown(i);
+			}
+			else {
+				this.bubbleUp(i);
+			}
+		}
+	},
+	size: function() {
+		return this.content.length;
+	},
+	rescoreElement: function(node) {
+		this.sinkDown(this.content.indexOf(node));
+	},
+	sinkDown: function(n) {
+		// Fetch the element that has to be sunk.
+		var element = this.content[n];
+
+		// When at 0, an element can not sink any further.
+		while (n > 0) {
+
+			// Compute the parent element's index, and fetch it.
+			var parentN = ((n + 1) >> 1) - 1,
+				parent = this.content[parentN];
+			// Swap the elements if the parent is greater.
+			if (this.scoreFunction(element) &lt; this.scoreFunction(parent)) {
+				this.content[parentN] = element;
+				this.content[n] = parent;
+				// Update 'n' to continue at the new position.
+				n = parentN;
+			}
+			// Found a parent that is less, no need to sink any further.
+			else {
+				break;
+			}
+		}
+	},
+	bubbleUp: function(n) {
+		// Look up the target element and its score.
+		var length = this.content.length,
+			element = this.content[n],
+			elemScore = this.scoreFunction(element);
+
+		while(true) {
+			// Compute the indices of the child elements.
+			var child2N = (n + 1) &lt;&lt; 1,
+				child1N = child2N - 1;
+			// This is used to store the new position of the element, if any.
+			var swap = null,
+				child1Score;
+			// If the first child exists (is inside the array)...
+			if (child1N &lt; length) {
+				// Look it up and compute its score.
+				var child1 = this.content[child1N];
+				child1Score = this.scoreFunction(child1);
+
+				// If the score is less than our element's, we need to swap.
+				if (child1Score &lt; elemScore){
+					swap = child1N;
+				}
+			}
+
+			// Do the same checks for the other child.
+			if (child2N &lt; length) {
+				var child2 = this.content[child2N],
+					child2Score = this.scoreFunction(child2);
+				if (child2Score &lt; (swap === null ? elemScore : child1Score)) {
+					swap = child2N;
+				}
+			}
+
+			// If the element needs to be moved, swap it, and continue.
+			if (swap !== null) {
+				this.content[n] = this.content[swap];
+				this.content[swap] = element;
+				n = swap;
+			}
+			// Otherwise, we are done.
+			else {
+				break;
+			}
+		}
+	}
+};
+
+return {
+	astar: astar,
+	Graph: Graph
+};
+
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="DisableFogOfWar.html">DisableFogOfWar</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#DEFAULT_PERSON_ATTACK">DEFAULT_PERSON_ATTACK</a></li><li><a href="global.html#DEFAULT_PERSON_HEALTH">DEFAULT_PERSON_HEALTH</a></li><li><a href="global.html#DEFAULT_PERSON_SIGHT_DISTANCE">DEFAULT_PERSON_SIGHT_DISTANCE</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#LOG_FPS">LOG_FPS</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#MAP_MOVE_SPEED">MAP_MOVE_SPEED</a></li><li><a href="global.html#MapLink">MapLink</a></li><li><a href="global.html#MAX_ENEMY_DISTANCE">MAX_ENEMY_DISTANCE</a></li><li><a href="global.html#MAX_HIGH_SCORES">MAX_HIGH_SCORES</a></li><li><a href="global.html#MAX_TURN_COUNTER">MAX_TURN_COUNTER</a></li><li><a href="global.html#MIN_ENEMY_DISTANCE">MIN_ENEMY_DISTANCE</a></li><li><a href="global.html#namePlayers">namePlayers</a></li><li><a href="global.html#NUM_ENEMIES">NUM_ENEMIES</a></li><li><a href="global.html#NUM_PLAYERS">NUM_PLAYERS</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#startMenu">startMenu</a></li><li><a href="global.html#StartPoint">StartPoint</a></li><li><a href="global.html#tickActions">tickActions</a></li><li><a href="global.html#TILESET_FILE_TYPE">TILESET_FILE_TYPE</a></li><li><a href="global.html#TREASURE_VALUE">TREASURE_VALUE</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 10:48:29 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

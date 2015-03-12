@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: complexobjects/enemy.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: complexobjects/enemy.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+
+/**
+ * Base class of an enemy. All enemies will extend this class
+ * @param {number} x     Initial x position of enemy
+ * @param {number} y     Initial y position of enemy
+ * @param {number} level Initial level of enemy
+ * @constructor
+ */
+var Enemy = function(x, y, level) {
+	this.x = x;  // x position on canvas
+	this.y = y;  // y position on canvas
+	this.level = level;
+	this.hp = 10 * level;
+	this.xp = 100 * level;
+	this.movementSpeed = level * 25;
+	this.attackSpeed = 1;
+	this.attack = level;
+	this.defense = level;
+	this.scout = level * 1.25;
+	this.magic = level;
+	this.initiative = 10;
+	this.vision = 1; //How far the enemy can see, way of approximating how far an enemy can move in a turn.
+	this.turnCounter = 0;  // Determines when the enemy should perform its turn
+	this.watchedElements = [];
+	this.counter = 0;
+	this.moveSpeed = 4;         // How fast the enemy moves on the screen.
+								// moveSpeed is different from movementSpeed as movementSpeed determines how far
+								// the enemy moves per turn.
+
+	var maxHp = this.hp; // never changes once initialized
+
+	this.healthBarMaxWidth = 18;
+	this.healthBar = new createjs.Bitmap("../graphics/health_bar.png");
+	this.healthBar.scaleX = this.healthBarMaxWidth / this.healthBar.image.width;
+	this.healthBar.x = this.x;
+	this.healthBar.y = this.y - 5;
+
+	/**
+	 * Enemy moves towards the nearest player, and then attacks
+	 */
+	this.doTurn = function() {
+
+		//First the enemy moves near the player
+		this.sprite.gotoAndPlay("move");
+
+		var nearestPlayer = this.getNearestPlayer();
+		if (!nearestPlayer) {
+			return;
+		}
+
+		renderer.moveObjectTo(this,nearestPlayer.animations.x-1,nearestPlayer.animations.y-1);
+
+		//Then the enemy attacks the player
+		calculateDamage(this,nearestPlayer);
+
+	};
+
+	/**
+	 * Finds the player on the gamestage that is closest to this enemy
+	 * @return {Player} The nearest player to this enemy
+	 */
+	this.getNearestPlayer = function() {
+		var leastDistance = -1;
+		var nearestPlayer;
+
+		for (var i = 0; i &lt; activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				var dx = Math.abs(activeObjects[i].x - this.x);
+				var dy = Math.abs(activeObjects[i].y - this.y);
+				var distance = dy + dx;
+
+				if (leastDistance === -1 || leastDistance > distance) {
+					leastDistance = distance;
+					nearestPlayer = activeObjects[i];
+				}
+			}
+		}
+
+		return nearestPlayer;
+	};
+
+	/**
+	 * turn code that gets called when it's the enemy's turn
+	 */
+	this.turn = function() {
+		if (!this.isWithinMaxDistance()) {
+			this.turnCounter = 0;
+			return;
+		}
+		this.doTurn();
+		this.turnCounter = 0;
+	};
+
+	/**
+	 * Checks whether or not the enemy is within the max distance from a player
+	 * @return {Boolean}
+	 */
+	this.isWithinMaxDistance = function() {
+		for (var i = 0; i &lt; activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				var dx = Math.abs(activeObjects[i].x - this.x);
+				var dy = Math.abs(activeObjects[i].y - this.y);
+				var distance = Math.sqrt(dy + dx);
+				if (distance &lt; Math.max(MAX_ENEMY_DISTANCE-activeObjects[i].scout+this.vision,MIN_ENEMY_DISTANCE)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	};
+
+	/**
+	 * Reduces this enemy's hp by the amount of damage received and updates health bar
+ 	 * @param  {Object} attackingObject
+	 */
+	this.receiveDamage = function(attackingObject) {
+		this.hp -= attackingObject.attack;
+
+		if (this.hp &lt;= 0) {
+			attackingObject.gainXP(this.xp);
+			this.die();
+			return;
+		}
+
+		var newHealthBarWidth = this.healthBarMaxWidth * (this.hp / maxHp);
+
+		if (this.hp / maxHp &lt; 0.2) { // less than 20% hp, make the health bar red
+			this.animations.removeChild(this.healthBar);
+			this.healthBar = new createjs.Bitmap("../graphics/health_bar_red.png");
+			this.healthBar.x = this.x;
+			this.healthBar.y = this.y - 5;
+			this.animations.addChild(this.healthBar);
+		}
+
+		if (newHealthBarWidth === 0) {
+			newHealthBarWidth = 1;
+		}
+
+		this.healthBar.scaleX = newHealthBarWidth / this.healthBar.image.width;
+	};
+
+	/**
+	 * Kills this enemy, removing the enemy from activeObjects and the gamestage
+	 */
+	this.die = function() {
+		renderer.activeObjectsContainer.removeChild(this.animations);
+		var index = activeObjects.indexOf(this);
+
+		if (index > -1) {
+			activeObjects.splice(index, 1);
+		}
+	};
+
+	/**
+	 * Keeps track of watchedElements and what the enemy should be doing
+	 */
+	this.tickActions = function() {
+		for (var i = 0; i &lt; this.watchedElements.length; i++) {
+			this.watchedElements[i].tickActions(); // tick watched elements
+		}
+
+		this.counter++;
+	};
+
+	/**
+	 * Gets called after enemy has finished moving
+	 */
+	this.cleanUpMovement = function() {
+		this.turnCounter = 0;
+	};
+};
+
+Enemy.prototype = new ComplexObject;
+Enemy.prototype.constructor = Enemy;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="DisableFogOfWar.html">DisableFogOfWar</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#DEFAULT_PERSON_ATTACK">DEFAULT_PERSON_ATTACK</a></li><li><a href="global.html#DEFAULT_PERSON_HEALTH">DEFAULT_PERSON_HEALTH</a></li><li><a href="global.html#DEFAULT_PERSON_SIGHT_DISTANCE">DEFAULT_PERSON_SIGHT_DISTANCE</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#LOG_FPS">LOG_FPS</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#MAP_MOVE_SPEED">MAP_MOVE_SPEED</a></li><li><a href="global.html#MapLink">MapLink</a></li><li><a href="global.html#MAX_ENEMY_DISTANCE">MAX_ENEMY_DISTANCE</a></li><li><a href="global.html#MAX_HIGH_SCORES">MAX_HIGH_SCORES</a></li><li><a href="global.html#MAX_TURN_COUNTER">MAX_TURN_COUNTER</a></li><li><a href="global.html#MIN_ENEMY_DISTANCE">MIN_ENEMY_DISTANCE</a></li><li><a href="global.html#namePlayers">namePlayers</a></li><li><a href="global.html#NUM_ENEMIES">NUM_ENEMIES</a></li><li><a href="global.html#NUM_PLAYERS">NUM_PLAYERS</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#startMenu">startMenu</a></li><li><a href="global.html#StartPoint">StartPoint</a></li><li><a href="global.html#tickActions">tickActions</a></li><li><a href="global.html#TILESET_FILE_TYPE">TILESET_FILE_TYPE</a></li><li><a href="global.html#TREASURE_VALUE">TREASURE_VALUE</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 10:48:29 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

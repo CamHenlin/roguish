@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mechanics/collision.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mechanics/collision.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code> 
+/**
+ * CollisionSystem system to handle collision within a map
+ * @constructor
+ */
+var CollisionSystem = function() {
+	/**
+	 * Array holding collision data
+	 * @type {Array}
+	 */
+	this.collisionArray = [[],[]];
+
+	/**
+	 * Returns true if coordinate is valid
+	 * @param  {number} x    x-coordinate in pixels
+	 * @param  {number} y    y-coordinate in pixels
+	 * @return {boolean}
+	 */
+	this.checkCellValid = function(x, y) {
+		var tilesize = 16; // this is used as width and height!
+
+		try {
+			var a = ~~(y / tilesize);
+			var b = ~~(x / tilesize);
+
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
+				return false;
+			}
+
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+				return false;
+			}
+
+			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				return false;
+			}
+		} catch (error) {
+
+		}
+
+		return true;
+	};
+
+	/**
+	 * Returns true if coordinate is valid
+	 * @param  {number} x x-component in grid coordinates
+	 * @param  {number} y y-component in grid coordinates
+	 * @return {boolean}
+	 */
+	this.checkCollisionCellValid = function(x, y) {
+		try {
+			var a = y;
+			var b = x;
+
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
+				return false;
+			}
+
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+				return false;
+			}
+
+			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				return false;
+			}
+		} catch (error) {
+
+		}
+
+		return true;
+	};
+
+	/**
+	 * Returns false if object intersects invalid tile
+	 * @param  {Object} object
+	 * @return {boolean}
+	 */
+	this.checkCellValidForObject = function(object) {
+		var tilesize = 16; // this is used as width and height!
+
+		try {
+			// top left
+			var a = ~~(object.y / tilesize);
+			var b = ~~(object.x / tilesize);
+
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
+				return false;
+			}
+
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+				return false;
+			}
+
+			// top right
+			var a = ~~(object.y / tilesize);
+			var b = ~~(object.x + object.animations.spriteSheet._frameWidth / tilesize);
+
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
+				return false;
+			}
+
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+				return false;
+			}
+
+			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				return false;
+			}
+
+			// bottom left
+			var a = ~~(object.y + object.animations.spriteSheet._frameHeight / tilesize);
+			var b = ~~(object.x / tilesize);
+
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
+				return false;
+			}
+
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+				return false;
+			}
+
+			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				return false;
+			}
+
+			// bottom right
+			var a = ~~(object.y + object.animations.spriteSheet._frameHeight / tilesize);
+			var b = ~~(object.x + object.animations.spriteSheet._frameWidth / tilesize);
+
+			if (a &lt;= -1 || a >= this.collisionArray.length) {
+				return false;
+			}
+
+			if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+				return false;
+			}
+
+			if (this.collisionArray[a][b] === 0) { // if there is an item in the collision array, that means we can't go there
+				return false;
+			}
+		} catch (error) {
+
+		}
+
+		return true;
+	};
+
+	/**
+	 * Returns object with grid coordinates
+	 * @param  {number} x
+	 * @param  {number} y
+	 * @return {Object}
+	 */
+	this.getCollisionCoordinateFromCell = function(x, y) {
+		var tilesize = 16; // this is used as width and height!
+
+		var a = ~~(y / tilesize);
+		var b = ~~(x / tilesize);
+
+		if (a &lt;= -1 || a >= this.collisionArray.length) {
+			a = 0;
+		}
+
+		if (b &lt;= -1 || b >= this.collisionArray[a].length) {
+			b = 0;
+		}
+
+		return {x: b, y: a};
+	};
+
+	/**
+	 * Returns true if objects intersect
+	 * @param  {Object} object1
+	 * @param  {Object} object2
+	 * @return {boolean}
+	 */
+	this.simpleCollision = function(object1, object2) {
+		var obj1 = object1;
+		var obj2 = object2;
+
+		if (!obj1.spriteSheet || !object2.spriteSheet) {
+			return false;
+		}
+
+		return !(
+				obj1.y + obj1.spriteSheet._frameHeight &lt; obj2.y ||
+				obj1.y > obj2.y + object2.spriteSheet._frameHeight ||
+				obj1.x > obj2.x + object2.spriteSheet._frameWidth  ||
+				obj1.x + obj1.spriteSheet._frameWidth &lt; obj2.x
+		);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="DisableFogOfWar.html">DisableFogOfWar</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#DEFAULT_PERSON_ATTACK">DEFAULT_PERSON_ATTACK</a></li><li><a href="global.html#DEFAULT_PERSON_HEALTH">DEFAULT_PERSON_HEALTH</a></li><li><a href="global.html#DEFAULT_PERSON_SIGHT_DISTANCE">DEFAULT_PERSON_SIGHT_DISTANCE</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#LOG_FPS">LOG_FPS</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#MAP_MOVE_SPEED">MAP_MOVE_SPEED</a></li><li><a href="global.html#MapLink">MapLink</a></li><li><a href="global.html#MAX_ENEMY_DISTANCE">MAX_ENEMY_DISTANCE</a></li><li><a href="global.html#MAX_HIGH_SCORES">MAX_HIGH_SCORES</a></li><li><a href="global.html#MAX_TURN_COUNTER">MAX_TURN_COUNTER</a></li><li><a href="global.html#MIN_ENEMY_DISTANCE">MIN_ENEMY_DISTANCE</a></li><li><a href="global.html#namePlayers">namePlayers</a></li><li><a href="global.html#NUM_ENEMIES">NUM_ENEMIES</a></li><li><a href="global.html#NUM_PLAYERS">NUM_PLAYERS</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#startMenu">startMenu</a></li><li><a href="global.html#StartPoint">StartPoint</a></li><li><a href="global.html#tickActions">tickActions</a></li><li><a href="global.html#TILESET_FILE_TYPE">TILESET_FILE_TYPE</a></li><li><a href="global.html#TREASURE_VALUE">TREASURE_VALUE</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 10:48:29 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

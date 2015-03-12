@@ -45,7 +45,7 @@ var Form = function(x, y, fields, options) {
 
 	/**
 	 * [values returns the values of all fields within a form]
-	 * @return {Object containing form values}
+	 * @return {Object}
 	 * @public
 	 */
 	this.values = function() {

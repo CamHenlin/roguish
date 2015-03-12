@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: rules/calculatedamage.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,45 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: rules/calculatedamage.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Used to calculate damage during an attack
+ * @param  {Object} attackingObject
+ * @param  {Object} defendingObject
+ */
 
+function calculateDamage(attackingObject, defendingObject) {
+	//attacking Object attacks a number of times equal to their attack speed
+	for (var i = 0; i &lt; attackingObject.attackSpeed; i++){
+		if (attackingObject instanceof Player ){
+			attackingObject.attackAnimation.x = defendingObject.animations.x - defendingObject.spriteSheet._frameWidth / 2;
+			attackingObject.attackAnimation.y = defendingObject.animations.y;
+			renderer.activeObjectsContainer.addChild(attackingObject.attackAnimation);
+			attackingObject.attackAnimation.gotoAndPlay("slash");
+		}
 
-    <h3> </h3>
+		if (defendingObject.hp > 0){
+			defendingObject.receiveDamage(attackingObject);
+		}
 
+		if (attackingObject instanceof Player ){
+			setTimeout(function() {
+				renderer.activeObjectsContainer.removeChild(attackingObject.attackAnimation)
+			}, 500);
+		}
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+	}
+}</code></pre>
+        </article>
+    </section>
 
 
 

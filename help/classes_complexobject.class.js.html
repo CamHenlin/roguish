@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: classes/complexobject.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,37 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: classes/complexobject.class.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * Base class for complex objects. Objects which move on the map such as enemies will inherit this class.
+ * @constructor
+ */
+var ComplexObject = function() {
+	
+	this.animations;
+	this.currentDirection = "";
+	this.lastFrameDirection = "";
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+	/**
+	 * abstract method for updating movement animation
+	 * @param  {number} deltax 
+	 * @param  {number} deltay
+	 * @abstract
+	 */
+	this.updateMovementAnimation = function(deltax, deltay) {
+	};
+};</code></pre>
+        </article>
+    </section>
 
 
 

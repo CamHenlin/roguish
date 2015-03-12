@@ -39,7 +39,7 @@ var Widget = function(options) {
 
 	/**
 	 * Hides element
-	 * @return {Widget that was hidden}
+	 * @return {Widget}
 	 */
 	this.hide = function() {
 		this.el.hide();

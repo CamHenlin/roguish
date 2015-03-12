@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: rules/advanceturn.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,41 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: rules/advanceturn.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @name advanceTurn
+ * @description [Code that handles everything needed when a turn is advanced.]
+ */
 
+/**
+ * [advanceTurn Function used in default game engine for determining next player turn]
+ */
+function advanceTurn() {
+	var turnFlag = false;
+	for (var i = 0; i &lt; activeObjects.length; i++) {
+		if ((activeObjects[i] instanceof Enemy) || activeObjects[i].constructor === Player) {
+			activeObjects[i].turnCounter += activeObjects[i].initiative;
+		}
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+		if (activeObjects[i].turnCounter >= MAX_TURN_COUNTER &amp;&amp; !turnFlag) {
+			activeObjects[i].turn();
+			turnFlag = true;
+			if (activeObjects[i].constructor === Player) {
+				activePlayer = activeObjects[i];
+			}
+		}
+	}
+}</code></pre>
+        </article>
+    </section>
 
 
 

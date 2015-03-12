@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: mechanics/main.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: mechanics/main.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @name Main
+ * @description [Code that initializes and starts the game.]
+ */
+
+var loader = new createjs.LoadQueue(false);
+loader.addEventListener("complete", handleComplete);
+
+loader.loadManifest([
+	{id: "player", src: "graphics/player.png"},
+	{id: "robot", src: "graphics/treadbot1sheet.png"},
+	{id: "fogofwar", src: "graphics/fogofwar.png"},
+	{id: "selectablearea", src: "graphics/selectablearea.png"},
+	{id: "validtile", src: "graphics/validtile.png"},
+	{id: "dragon", src: "graphics/dragon.png"},
+	{id: "chest", src: "graphics/chest.png"},
+	{id: "starttile", src: "graphics/starttile.png"},
+	{id: "stairsdown", src: "graphics/stairsdown.png"},
+	{id: "slash", src: "graphics/slash.png"},
+	{id: "black", src: "graphics/black.png"},
+	{id: "stairsup", src: "graphics/stairsup.png"}
+]);
+
+/**
+ * [handleComplete Handler for preload complete]
+ */
+function handleComplete() {
+	init();
+}
+
+var gamestage; // this is the global canvas object that everything canvas-related in the game will attach to
+var renderer;
+var maploader;
+var collisionSystem = new CollisionSystem();
+var activeObjects = [];
+var gamezoom = 3; // Cameron: my suggestion is that 2 = 100% game zoom. 1 is really small and would make the game feel more like an RTS I feel like
+var playerTurn = false; // note that this is turned off by the renderer at the end of a move and turned on by advanceturn, blocks other players and objects from getting their "tick"
+var activePlayer = {}; // this is set to the currently active player by the advance turn function
+var selectableAreas = []; // global container for selectablearea blocks
+var gameOver = false;  // gets set to true when the end game goal has been collided with, prevents objects from being updated
+var fpsLabel = {};
+var isDemo = true;
+var startPoint = {};
+
+/**
+ * [fixViewport Fixes the viewport on a window resize event]
+ */
+function fixViewport() {
+	gamestage.canvas.width = window.innerWidth / gamezoom;
+	gamestage.canvas.height = window.innerHeight / gamezoom;
+	gamestage.update(); // note that I'm sort of breaking the rules here calling an update without the game loop, but this will force a redraw, otherwise the screen will flash black
+}
+
+/**
+ * [init Call everything needed to start a game, initially. might be different from initvars later. called by loader handlecomplete handler]
+ */
+function init() {
+	console.log('initializing');
+	initVars();
+
+	window.onresize = fixViewport;
+}
+
+
+/**
+ * [initVars Initialize all variables needed for a new game to start]
+ */
+function initVars() {
+	console.log('initializing vars');
+	gamestage = new createjs.Stage("gamecanvas");
+	gamestage.canvas.width = window.innerWidth / gamezoom;
+	gamestage.canvas.height = window.innerHeight / gamezoom;
+	gamestage.clear();
+	activeObjects.length = 0;
+	gamestage.snapToPixelEnabled = true;
+	renderer = new Renderer(gamestage);
+	maploader = new MapLoader(loader);
+	maploader.loadMap('dungeon.json'); //change this to the name of the map you want to load. the map must be in maps to work
+	createjs.Ticker.addEventListener("tick", handleTick);
+	createjs.Ticker.useRAF = true;
+	createjs.Ticker.setFPS(60);
+	gameOver = false;
+
+	if (LOG_FPS) {
+		fpsLabel = new createjs.Text("", "14px 'Helvetica'", "#FFF");
+		fpsLabel.x = gamestage.canvas.width - 64;
+		fpsLabel.y = gamestage.canvas.height - 64;
+	}
+
+
+	// this initiates sort of a demo mode I guess?
+	setTimeout(function() {
+		var activeObjectsLength = activeObjects.length;
+		var i = 0;
+		var callNextActiveObject = function(i) {
+			if (!isDemo) {
+				return;
+			}
+
+			if (i &lt; activeObjectsLength) {
+				renderer.centerMapOnObject(activeObjects[i], function() {
+					renderer.fogOfWarContainer.uncache();
+					updateFogOfWar(activeObjects[i]);
+					renderer.beginCaching(renderer.fogOfWarContainer);
+					setTimeout(function() {
+						callNextActiveObject(i+1);
+					}, 120);
+					return;
+				});
+			}
+		}
+		callNextActiveObject(i);
+	}, 1000);
+}
+
+/**
+ * [handleTick Our main game loop]
+ * @param  {TickEvent} event
+ */
+function handleTick(event) {
+	if (!renderer.doneRendering) {
+		console.log('not done rendering');
+		return;
+	}
+
+	if (renderer.moving) {
+		renderer.movementTickActions();
+	} else if (!renderer.centered) {
+		renderer.centerMapOnObjectTick();
+	} else if (!playerTurn &amp;&amp; !gameOver) {
+		for (var i = 0; i &lt; activeObjects.length; i++) {
+			activeObjects[i].tickActions();
+		}
+
+		for (var i = 0; i &lt; renderer.simpleobjects.length; i++) {
+			renderer.simpleobjects[i].tickActions();
+		}
+
+		advanceTurn();
+	}
+
+	if (LOG_FPS) {
+		fpsLabel.text = Math.round(createjs.Ticker.getMeasuredFPS()) + " / " + Math.round(createjs.Ticker.getFPS());
+	}
+
+	// this should be the only time the gamestage is updated anywhere in our code. Ensures that we only attempt to render 60 times per second.
+	gamestage.update();
+
+	return;
+}
+
+/**
+ * handles keypress events in menus
+ * @param  {keyEvent} event standard keydown event
+ */
+document.onkeydown = function(event) {
+	if(activePlayer.actionMenu) {
+		for (var i in activePlayer.actionMenu.fields) {
+			if (activePlayer.actionMenu.fields[i].key.toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
+				activePlayer.actionMenu.fields[i].callback();
+			}
+		}
+	}
+
+
+	return;
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="DisableFogOfWar.html">DisableFogOfWar</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#DEFAULT_PERSON_ATTACK">DEFAULT_PERSON_ATTACK</a></li><li><a href="global.html#DEFAULT_PERSON_HEALTH">DEFAULT_PERSON_HEALTH</a></li><li><a href="global.html#DEFAULT_PERSON_SIGHT_DISTANCE">DEFAULT_PERSON_SIGHT_DISTANCE</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#LOG_FPS">LOG_FPS</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#MAP_MOVE_SPEED">MAP_MOVE_SPEED</a></li><li><a href="global.html#MapLink">MapLink</a></li><li><a href="global.html#MAX_ENEMY_DISTANCE">MAX_ENEMY_DISTANCE</a></li><li><a href="global.html#MAX_HIGH_SCORES">MAX_HIGH_SCORES</a></li><li><a href="global.html#MAX_TURN_COUNTER">MAX_TURN_COUNTER</a></li><li><a href="global.html#MIN_ENEMY_DISTANCE">MIN_ENEMY_DISTANCE</a></li><li><a href="global.html#namePlayers">namePlayers</a></li><li><a href="global.html#NUM_ENEMIES">NUM_ENEMIES</a></li><li><a href="global.html#NUM_PLAYERS">NUM_PLAYERS</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#startMenu">startMenu</a></li><li><a href="global.html#StartPoint">StartPoint</a></li><li><a href="global.html#tickActions">tickActions</a></li><li><a href="global.html#TILESET_FILE_TYPE">TILESET_FILE_TYPE</a></li><li><a href="global.html#TREASURE_VALUE">TREASURE_VALUE</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 10:48:29 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

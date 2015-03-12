@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: classes/person.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,52 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: classes/person.class.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * Base class for players
+ * @constructor
+ */
+var Person = function() {
+	this.animations;
+	this.currentDirection = "";
+	this.lastFrameDirection = "";
+	this.scout = DEFAULT_PERSON_SIGHT_DISTANCE;
+	this.hp = DEFAULT_PERSON_HEALTH;
+	this.attack = DEFAULT_PERSON_ATTACK;
+	this.healthBar;
 
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+	/**
+	 * Updates movement animation 
+	 * @param  {number} deltax change in x
+	 * @param  {number} deltay change in y
+	 */
+	this.updateMovementAnimation = function(deltax, deltay) {
+		if (deltax > 0 &amp;&amp; this.lastFrameDirection !== "walk-right") {
+			this.animations.gotoAndPlay("walk-right");
+			this.lastFrameDirection = "walk-right";
+		} else if (deltax &lt; 0 &amp;&amp; this.lastFrameDirection !== "walk-left") {
+			this.animations.gotoAndPlay("walk-left");
+			this.lastFrameDirection = "walk-left";
+		} else if (deltay > 0 &amp;&amp; this.lastFrameDirection !== "walk-front") {
+			this.animations.gotoAndPlay("walk-front");
+			this.lastFrameDirection = "walk-front";
+		} else if (deltay &lt; 0 &amp;&amp; this.lastFrameDirection !== "walk-back") {
+			this.animations.gotoAndPlay("walk-back");
+			this.lastFrameDirection = "walk-back";
+		}
+	};
+};</code></pre>
+        </article>
+    </section>
 
 
 

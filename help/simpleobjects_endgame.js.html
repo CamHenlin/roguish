@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: simpleobjects/endgame.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: simpleobjects/endgame.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Simple object that ends the game and declares the player that collides with it the winner
+ * @param {number} x x position on canvas
+ * @param {number} y y position on canvas
+ * @constructor
+ */
+var EndGame = function(x, y) {
+	SimpleObject.call(this, x, y);
+
+	this.spriteSheet = new createjs.SpriteSheet({  // treasure chest sprite sheet
+		"images": [loader.getResult("chest")],
+		"frames": {
+			"width": 16,
+			"height": 16,
+			"count": 2
+		},
+		"animations": {
+			"open": {
+				"frames": [0],
+				"next": "open",
+				"speed": 1
+			},
+
+			"closed": {
+				"frames": [1],
+				"next": "closed",
+				"speed": 1
+			}
+		}
+	});
+
+	this.animations = new createjs.Sprite(this.spriteSheet, "open");
+	this.animations.x = x;
+	this.animations.y = y;
+	renderer.activeObjectsContainer.addChild(this.animations);
+
+	this.doMovement = function () {};
+	this.getNearestPlayer = function() {};
+	this.isWithinMaxDistance = function() {};
+	this.receiveDamage = function() {};
+	this.die = function() {};
+	this.cleanUpMovement = function() {};
+
+	/**
+	 * Ends the game by displaying a dialog notifying who won and a button to click to play again
+	 * @param  {Player} winner reference to a Player object, the player who reached the treasure chest.
+	 */
+	this.endGame = function(winner) {
+		this.animations.gotoAndPlay("open");
+
+		var winnerScore = winner.getScore() + TREASURE_VALUE;
+		var playerWithHighestScore = winner;
+		for (var i = 0; i &lt; activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				if (winnerScore &lt; activeObjects[i].getScore()) {
+					playerWithHighestScore = activeObjects[i];
+					winnerScore = activeObjects[i].getScore();
+				}
+			}
+		}
+
+		var endMenu = new Form([
+		{
+			text: playerWithHighestScore.getName() + " has won the game with a score of " + winnerScore + "!",
+			type: "basic-text",
+			callback: function() {
+			}
+		},
+		{
+			text: "Play Again!",
+			type: "button",
+			callback: function() {
+				endMenu.destroy();
+				window.location.reload();
+			}
+		},
+		{
+			text: "Main Menu",
+			type: "button",
+			callback: function() {
+				endMenu.destroy();
+				window.location.reload();
+			}
+		}
+		]);
+
+		if (localStorage.highScore === undefined) {
+			var hs = [];
+			for (var i = 0; i &lt; MAX_HIGH_SCORES; i++) {
+				hs.push({name: "&lt;None>", score: 0});
+			}
+
+			localStorage.highScore = JSON.stringify(hs);
+		}
+
+		var dict = {
+			text: "Top 5 Scores:",
+			type: "basic-text",
+			callback: function() {
+			}
+		};
+
+		endMenu.fields.splice(1, 0, dict);
+
+		var highScores = JSON.parse(localStorage.highScore);
+
+		for (var i = 0; i &lt; highScores.length; i++) {
+			if (winnerScore > highScores[i].score) {
+				for (var k = i; k &lt; highScores.length - 1; k++) {
+					var swap = highScores[k + 1];
+					highScores[k + 1] = highScores[i];
+					highScores[i] = swap;
+				}
+
+				highScores[i] = {name: playerWithHighestScore.getName(), score: winnerScore};
+				break;
+			}
+		}
+
+		localStorage.highScore = JSON.stringify(highScores);
+
+		for (var i = 0; i &lt; highScores.length; i++) {
+			if (highScores[i].name === "&lt;None>") {
+				continue;
+			}
+
+			var element = {
+				text: (i + 1) + ". " + highScores[i].name + ": " + highScores[i].score,
+				type: "basic-text",
+				callback: function() {}
+			};
+
+			endMenu.fields.splice(i + 2, 0, element);
+		}
+
+		endMenu.render();
+		gameOver = true;
+	};
+
+	/**
+	 * Updates the state of this object, checking to see if a player has collided with it
+	 */
+	this.tickActions = function() {
+		for (var i = 0; i &lt; activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				var player = activeObjects[i];
+
+				if (player.x + player.animations.spriteSheet._frameWidth > this.x &amp;&amp; player.x &lt; this.x + this.animations.spriteSheet._frameWidth) {        // Check player collision
+					if (player.y + player.animations.spriteSheet._frameHeight > this.y &amp;&amp; player.y &lt; this.y + this.animations.spriteSheet._frameHeight) {
+						this.endGame(player);
+					}
+				}
+			}
+		}
+	};
+};
+
+EndGame.prototype = new SimpleObject;   // Extends SimpleObject
+EndGame.prototype.constructor = EndGame;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CollisionSystem.html">CollisionSystem</a></li><li><a href="ComplexObject.html">ComplexObject</a></li><li><a href="DisableFogOfWar.html">DisableFogOfWar</a></li><li><a href="Dragon.html">Dragon</a></li><li><a href="EndGame.html">EndGame</a></li><li><a href="Enemy.html">Enemy</a></li><li><a href="ExampleComplexObject.html">ExampleComplexObject</a></li><li><a href="ExampleSimpleObject.html">ExampleSimpleObject</a></li><li><a href="global.html#Form">Form</a></li><li><a href="MapLoader.html">MapLoader</a></li><li><a href="Person.html">Person</a></li><li><a href="Player.html">Player</a></li><li><a href="Renderer.html">Renderer</a></li><li><a href="Robot.html">Robot</a></li><li><a href="SimpleObject.html">SimpleObject</a></li><li><a href="global.html#Widget">Widget</a></li></ul><h3>Global</h3><ul><li><a href="global.html#advanceTurn">advanceTurn</a></li><li><a href="global.html#calculateDamage">calculateDamage</a></li><li><a href="global.html#Constants">Constants</a></li><li><a href="global.html#DEFAULT_PERSON_ATTACK">DEFAULT_PERSON_ATTACK</a></li><li><a href="global.html#DEFAULT_PERSON_HEALTH">DEFAULT_PERSON_HEALTH</a></li><li><a href="global.html#DEFAULT_PERSON_SIGHT_DISTANCE">DEFAULT_PERSON_SIGHT_DISTANCE</a></li><li><a href="global.html#destroy">destroy</a></li><li><a href="global.html#fixViewport">fixViewport</a></li><li><a href="global.html#getPositionCSS">getPositionCSS</a></li><li><a href="global.html#getValue">getValue</a></li><li><a href="global.html#handleComplete">handleComplete</a></li><li><a href="global.html#handleTick">handleTick</a></li><li><a href="global.html#hide">hide</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initVars">initVars</a></li><li><a href="global.html#isSelectionInSelectableBounds">isSelectionInSelectableBounds</a></li><li><a href="global.html#LOG_FPS">LOG_FPS</a></li><li><a href="global.html#Main">Main</a></li><li><a href="global.html#MAP_MOVE_SPEED">MAP_MOVE_SPEED</a></li><li><a href="global.html#MapLink">MapLink</a></li><li><a href="global.html#MAX_ENEMY_DISTANCE">MAX_ENEMY_DISTANCE</a></li><li><a href="global.html#MAX_HIGH_SCORES">MAX_HIGH_SCORES</a></li><li><a href="global.html#MAX_TURN_COUNTER">MAX_TURN_COUNTER</a></li><li><a href="global.html#MIN_ENEMY_DISTANCE">MIN_ENEMY_DISTANCE</a></li><li><a href="global.html#namePlayers">namePlayers</a></li><li><a href="global.html#NUM_ENEMIES">NUM_ENEMIES</a></li><li><a href="global.html#NUM_PLAYERS">NUM_PLAYERS</a></li><li><a href="global.html#removeSelectableArea">removeSelectableArea</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#selectMap">selectMap</a></li><li><a href="global.html#selectPlayers">selectPlayers</a></li><li><a href="global.html#show">show</a></li><li><a href="global.html#showSelectableArea">showSelectableArea</a></li><li><a href="global.html#startMenu">startMenu</a></li><li><a href="global.html#StartPoint">StartPoint</a></li><li><a href="global.html#tickActions">tickActions</a></li><li><a href="global.html#TILESET_FILE_TYPE">TILESET_FILE_TYPE</a></li><li><a href="global.html#TREASURE_VALUE">TREASURE_VALUE</a></li><li><a href="global.html#updateFogOfWar">updateFogOfWar</a></li><li><a href="global.html#values">values</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-beta1</a> on Thu Mar 12 2015 10:48:29 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

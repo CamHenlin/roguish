@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: rules/showselectablearea.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,89 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: rules/showselectablearea.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Updates the selectable area around a player
+ * @param  {Player} playerObject
+ */
+function showSelectableArea(playerObject) {
+	var fogOfWarSpriteSheet = new createjs.SpriteSheet({
+		"images": [loader.getResult("selectablearea")],
+		"frames": {
+			"width": 16,
+			"height": 16,
+			"count": 0
+		},
+		"animations": {
+			"still": {
+				"frames": [0],
+				"next": "still",
+				"speed": 1
+			}
+		}
+	});
 
+	removeSelectableArea();
 
-    <h3> </h3>
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x, playerObject.y + 16);
+	var distance = playerObject.scout;
+	renderer.fogOfWarContainer.uncache();
 
+	for (var i = Math.floor(coordinates.x - distance); i &lt; coordinates.x + distance; i++) {
+		for (var j = Math.floor(coordinates.y - distance); j &lt; coordinates.y + distance; j++) {
+			var deltax = Math.pow(Math.abs(coordinates.x - i), 2);
+			var deltay = Math.pow(Math.abs(coordinates.y - j), 2);
 
+			if (Math.sqrt(deltax + deltay) &lt; distance) {
+				var selectableArea = new createjs.Sprite(fogOfWarSpriteSheet);
+				selectableArea.x = i * renderer.mapData.tilewidth;
+				selectableArea.y = j * renderer.mapData.tileheight;
+				renderer.fogOfWarContainer.addChild(selectableArea);
+				selectableAreas.push(selectableArea);
+			}
+		}
+	}
 
+	renderer.beginCaching(renderer.fogOfWarContainer);
+}
 
+/**
+ * Removes selectable area
+ */
+function removeSelectableArea() {
+	renderer.fogOfWarContainer.uncache();
+	for (var i = 0; i &lt; selectableAreas.length; i++) {
+		renderer.fogOfWarContainer.removeChild(selectableAreas[i]);
+	}
+	selectableAreas = [];
+	renderer.beginCaching(renderer.fogOfWarContainer);
+}
 
-
-
-
-
-
-    
-
-
-
-
-
+/**
+ * True if selection location is in selectable area bounds
+ * @param  {Player} playerObject
+ * @param  {number}  x
+ * @param  {number}  y
+ * @return {boolean}
+ */
+function isSelectionInSelectableBounds(playerObject, x, y) {
+	var selectCoordinate = collisionSystem.getCollisionCoordinateFromCell(x - renderer.container.x, y - renderer.container.y - 16);
+	var coordinates = collisionSystem.getCollisionCoordinateFromCell(playerObject.x, playerObject.y);
+	var deltax = Math.pow(Math.abs(coordinates.x - selectCoordinate.x), 2);
+	var deltay = Math.pow(Math.abs(coordinates.y - selectCoordinate.y), 2);
+	var distance = playerObject.scout;
+	return distance > Math.sqrt(deltax + deltay);
+}</code></pre>
+        </article>
+    </section>
 
 
 

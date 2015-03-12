@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: classes/simpleobject.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,29 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: classes/simpleobject.class.js</h1>
 
     
 
 
 
     
-
-
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**
+ * Base class for all simple objects.
+ * @constructor
+ */
+var SimpleObject = function(x, y) {
+	this.x = x;  // x position
+	this.y = y;  // y position
+	this.spriteSheet; // Sprite sheet for this simple object
+	this.animations; // animations loaded from the sprite sheet for drawing
+};
+</code></pre>
+        </article>
+    </section>
 
 
 
