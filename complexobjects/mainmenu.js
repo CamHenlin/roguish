@@ -114,7 +114,7 @@ function namePlayers(numPlayers, names) {
 			for (var i = 0; i < numPlayers; i++) {
 				var player = new Player(i * 16 + parseInt(startPoint.x), i * 16 + parseInt(startPoint.y), 10);
 				if(names[i]) player.setName(names[i]);
-				else player.setName("Player " + i);
+				else player.setName("Player " + (i + 1));
 				activeObjects.push(player);
 				updateFogOfWar(player);
 			}
