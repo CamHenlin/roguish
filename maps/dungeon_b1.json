@@ -67,15 +67,15 @@
                  "properties":
                     {
                      "graphic":"stairsdown",
-                     "link":"dungeon",
+                     "link":"dungeon_b2",
                      "startpoint":"1"
                     },
                  "rotation":0,
                  "type":"MapLink",
                  "visible":true,
                  "width":0,
-                 "x":442,
-                 "y":41.5
+                 "x":96,
+                 "y":96
                 }, 
                 {
                  "height":0,
@@ -89,8 +89,8 @@
                  "type":"StartPoint",
                  "visible":true,
                  "width":0,
-                 "x":382.75,
-                 "y":42.75
+                 "x":384,
+                 "y":48
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -111,7 +111,7 @@
         {
          "firstgid":1,
          "image":"..\/graphics\/dungeon_tiles_0.png",
-         "imageheight":176,
+         "imageheight":448,
          "imagewidth":448,
          "margin":0,
          "name":"dungeon_tiles_0",

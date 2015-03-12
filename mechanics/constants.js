@@ -48,7 +48,7 @@ var TILESET_FILE_TYPE = '.png';
  * @constant
  * @default
  */
-var DEFAULT_PERSON_SIGHT_DISTANCE = 4;
+var DEFAULT_PERSON_SIGHT_DISTANCE = 14;
 
 /**
  * Default health
