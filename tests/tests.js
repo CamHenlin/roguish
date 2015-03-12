@@ -362,13 +362,23 @@ QUnit.test("player tests", function(assert) {
 
 			var testPlayer = new Player(40,40, 1);
 			testPlayer.setName("Player");
+			activeObjects.push(testPlayer);
 
 			assert.equal(testPlayer.x, 40, "player x");
 			assert.equal(testPlayer.y, 40, "player y");
 			assert.equal(testPlayer.initiative, 1, "player initiative");
 			assert.equal(testPlayer.getName(), "Player", "player name");
-			done();
+			assert.equal(testPlayer.hp, 100, "player hp");
+			assert.equal(testPlayer.xp, 0, "player xp");
+
+			testPlayer.die();
+			setTimeout(function() {
+				assert.ok(!renderer.activeObjectsContainer.contains(testPlayer.animations), "player.animations is removed from renderer.activeObjectsContainer");
+				assert.ok(activeObjects.indexOf(testPlayer) === -1, "player is removed from activeObjects");
+				done();
+			}, 1000);
 		}
+		
 		else {
 			setTimeout(playerTests, 60);
 		}
