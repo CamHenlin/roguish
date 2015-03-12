@@ -6,6 +6,7 @@ function mainForm() {
 		text: 'New Game!',
 		type: 'button',
 		callback: function() {
+			mainMenu.hide()
 			console.log('click');
 			selectPlayers(mainMenu);
 		}
@@ -13,6 +14,7 @@ function mainForm() {
 		text: 'high scores',
 		type: 'button',
 		callback: function(){
+			mainMenu.hide()
 			console.log('highscores');
 		}
 	}
@@ -30,8 +32,7 @@ function mainForm() {
  * Select map menu form. This function is not used
  * @param  {function} previous previous menu item, this menu hides
  */
-function selectMap(previous) {
-	previous.hide();
+function selectMap() {
 	var fields = [
 	{
 		text: 'map',
@@ -50,9 +51,7 @@ function selectMap(previous) {
 		text: 'next',
 		type: 'button',
 		callback: function() {
-			console.log('next thing');
-			console.log(newGame.getValue('mapname'))
-			console.log('named')
+			newGame.hide();
 			selectPlayers(newGame);
 			isDemo = false;
 		}
@@ -66,9 +65,7 @@ function selectMap(previous) {
  * The menu for selecting the number of players
  * @param  {function} previous previous menu item, that this menu hides
  */
-function selectPlayers(previous) {
-	previous.hide();
-
+function selectPlayers() {
 	var fields = [
 	{
 		type: 'range',
@@ -123,6 +120,9 @@ function namePlayers(numPlayers, names) {
 		type: "button",
 		text: names.length == numPlayers - 1 ? "Start Game" : "Next",
 		callback: function() {
+			if(names.length == numPlayers -1){
+				$("#backtomain").show();
+			}
 			startGame.hide();
 			names.push(startGame.getValue('player' + names.length));
 			namePlayers(numPlayers, names);
@@ -131,6 +131,50 @@ function namePlayers(numPlayers, names) {
 
 	var startGame = new Form(fields, {header:"names"});
 	startGame.render();
+}
+
+function backToMain(){
+	var fields = [
+	{
+		type: "button",
+		text: "quit",
+		callback: function() {
+			confirm(backToMain, function(){
+				location.reload();
+			})
+		}
+	},
+	{
+		type: "button",
+		text: "continue",
+		callback: function() {
+			backToMain.hide();
+		}
+	}];
+
+	var backToMain = new Form(fields, {header:"Pause"});
+	backToMain.render();
+}
+
+function confirm(previous, callback){
+	previous.hide()
+	var fields = [
+	{
+		type:"button",
+		text: "yes",
+		callback: callback
+	},
+	{
+		type:"button",
+		text:"no",
+		callback: function(){
+			confirm.hide();
+			previous.render();
+		}
+	}];
+
+	var confirm = new Form(fields, {header:"are you sure?"});
+	confirm.render();
 }
 
 mainForm();

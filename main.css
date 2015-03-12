@@ -92,7 +92,7 @@ body{
 	background-repeat: no-repeat;
 	padding-bottom:3rem;
 	background-position: center bottom;
-
+	z-index: 900;
 }
 .forms-default .button-default{
 	width:100%;
@@ -172,4 +172,11 @@ progress[value]::-webkit-progress-value {
 
     border-radius: 2px; 
     background-size: 35px 20px, 100% 100%, 100% 100%;
+}
+
+#backtomain{
+	padding:1.5rem;
+	z-index: 9000;
+	position: absolute;
+	display: none;
 }
