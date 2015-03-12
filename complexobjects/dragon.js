@@ -48,62 +48,6 @@ var Dragon = function(x, y, level) {
 	renderer.activeObjectsContainer.addChild(this.animations);
 
 	/**
-	 * Decides whether the dragon should move up or down based on nearest player location
-	 * @private
-	 * @param {number} dy difference between nearest player's y position and this dragon's y position
-	 * @return {boolean} true if move succeeded, false otherwise
-	 */
-	function moveUpOrDown(dy) {
-		if (dy >= 0) {
-			return renderer.moveObjectTo(this, x, y + Math.min(this.moveLength,dy-1), false); // Move down
-		}
-
-		return renderer.moveObjectTo(this, x, y - Math.min(this.moveLength,dy-1), false); // Move up
-	};
-
-	/**
-	 * Decides whether the dragon should move right or left based on nearest player location
-	 * @private
-	 * @param {number} dx difference between nearest player's x position and this dragon's x position
-	 * @return {boolean} true if move succeeded, false otherwise
-	 */
-	function moveRightOrLeft(dx) {
-		if (dx >= 0) {
-			return renderer.moveObjectTo(this, x + Math.min(this.moveLength,dx-1), y, false); // move right
-		}
-
-		return renderer.moveObjectTo(this, x - Math.min(this.moveLength,dx-1), y, false); // move left
-	};
-
-	/**
-	 * Dragons move towards the nearest player
-	 */
-	this.doMovement = function() {
-		var nearestPlayer = this.getNearestPlayer();
-		if (!nearestPlayer) {
-			return;
-		}
-
-		var dx = nearestPlayer.x - this.x;
-		var dy = nearestPlayer.y - this.y;
-		var success = false;
-
-		if (Math.abs(dx) > Math.abs(dy)) { // Move right or left
-			success = moveRightOrLeft.call(this, dx);
-
-			if (!success) {
-				moveUpOrDown.call(this, dy);
-			}
-		} else {  // Move up or down
-			success = moveUpOrDown.call(this, dy);
-
-			if (!success) {
-				moveRightOrLeft.call(this, dx);
-			}
-		}
-	};
-
-	/**
 	 * Updates the dragon's animation based on what direction it is moving
 	 * @param  {number} deltax Dragon's movement on the x-axis
 	 * @param  {number} deltay Dragon's movement on the y-axis

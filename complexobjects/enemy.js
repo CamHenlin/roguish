@@ -14,7 +14,7 @@ var Enemy = function(x, y, level) {
 	this.hp = 10 * level;
 	this.xp = 100 * level;
 	this.movementSpeed = level * 25;
-	this.attackSpeed = level;
+	this.attackSpeed = 1;
 	this.attack = level;
 	this.defense = level;
 	this.scout = level * 1.25;
@@ -35,12 +35,24 @@ var Enemy = function(x, y, level) {
 	this.healthBar.x = this.x;
 	this.healthBar.y = this.y - 5;
 
-
 	/**
-	 * This function will be inherited by child classes that handle how the enemy moves
-	 * @abstract
+	 * Enemy moves towards the nearest player, and then attacks
 	 */
-	this.doMovement = function() {
+	this.doTurn = function() {
+
+		//First the enemy moves near the player
+		this.sprite.gotoAndPlay("move");
+
+		var nearestPlayer = this.getNearestPlayer();
+		if (!nearestPlayer) {
+			return;
+		}
+
+		renderer.moveObjectTo(this,nearestPlayer.animations.x-1,nearestPlayer.animations.y-1);
+
+		//Then the enemy attacks the player
+		calculateDamage(this,nearestPlayer);
+
 	};
 
 	/**
@@ -75,7 +87,7 @@ var Enemy = function(x, y, level) {
 			this.turnCounter = 0;
 			return;
 		}
-		this.doMovement();
+		this.doTurn();
 		this.turnCounter = 0;
 	};
 

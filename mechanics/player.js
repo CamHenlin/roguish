@@ -142,6 +142,26 @@ var Player = function(x, y, initiative) {
 	var attackTarget = null;
 
 	/**
+	 * Removes the player from the map, gives a gameover screen if no players are left alive
+	 */
+	this.die = function() {
+
+	};
+
+	/**
+	 * Reduces Player's HP by the amount of damage received and updates health bar
+ 	 * @param  {Object} attackingObject
+	 */
+	this.receiveDamage = function(attackingObject) {
+		this.hp -= attackingObject.attack;
+
+		if (this.hp <= 0){
+			this.die();
+		}
+
+	};
+
+	/**
 	 * Click handler for attack
 	 * @return {MouseEvent} event
 	 */
@@ -196,6 +216,8 @@ var Player = function(x, y, initiative) {
 		}
 	}
 	attackClickHandler = attackClickHandler.bind(this);
+
+
 
 	/**
 	 * Function that creates Form to display player attributes
