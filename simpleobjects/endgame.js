@@ -43,14 +43,25 @@ var EndGame = function(x, y) {
 
 	/**
 	 * Ends the game by displaying a dialog notifying who won and a button to click to play again
-	 * @param  {Player} winner reference to a Player object, the player who won
+	 * @param  {Player} winner reference to a Player object, the player who reached the treasure chest.
 	 */
 	this.endGame = function(winner) {
 		this.animations.gotoAndPlay("open");
 
+		var winnerScore = winner.getScore() + TREASURE_VALUE;
+		var playerWithHighestScore = winner;
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				if (winnerScore < activeObjects[i].getScore()) {
+					playerWithHighestScore = activeObjects[i];
+					winnerScore = activeObjects[i].getScore();
+				}
+			}
+		}
+
 		var endMenu = new Form([
 		{
-			text: winner.getName() + " has won the game with a score of " + winner.getScore() + "!",
+			text: playerWithHighestScore.getName() + " has won the game with a score of " + winnerScore + "!",
 			type: "basic-text",
 			callback: function() {
 			}
@@ -94,14 +105,14 @@ var EndGame = function(x, y) {
 		var highScores = JSON.parse(localStorage.highScore);
 
 		for (var i = 0; i < highScores.length; i++) {
-			if (winner.getScore() > highScores[i].score) {
+			if (winnerScore > highScores[i].score) {
 				for (var k = i; k < highScores.length - 1; k++) {
 					var swap = highScores[k + 1];
 					highScores[k + 1] = highScores[i];
 					highScores[i] = swap;
 				}
 
-				highScores[i] = {name: winner.getName(), score: winner.getScore()};
+				highScores[i] = {name: playerWithHighestScore.getName(), score: winnerScore};
 				break;
 			}
 		}

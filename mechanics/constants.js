@@ -97,3 +97,11 @@ var MIN_ENEMY_DISTANCE = 8;
  * @default
  */
 var MAX_HIGH_SCORES = 5;
+
+/**
+ * [TREASURE_VALUE The amount of points finding the treasure gives to the player.]
+ * @type {number}
+ * @constant
+ * @default
+ */
+var TREASURE_VALUE = 100;
