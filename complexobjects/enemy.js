@@ -76,6 +76,7 @@ var Enemy = function(x, y, level) {
 			return;
 		}
 		this.doMovement();
+		this.turnCounter = 0;
 	};
 
 	/**
@@ -88,7 +89,7 @@ var Enemy = function(x, y, level) {
 				var dx = Math.abs(activeObjects[i].x - this.x);
 				var dy = Math.abs(activeObjects[i].y - this.y);
 				var distance = Math.sqrt(dy + dx);
-				if (distance < MAX_ENEMY_DISTANCE) {
+				if (distance < Math.max(MAX_ENEMY_DISTANCE-activeObjects[i].scout,MIN_ENEMY_DISTANCE)) {
 					return true;
 				}
 			}

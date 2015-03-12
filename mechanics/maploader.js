@@ -51,6 +51,4 @@ function MapLoader(loader) {
 			this.callback();
 		}
 	}
-
-
 }

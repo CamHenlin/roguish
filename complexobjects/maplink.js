@@ -5,7 +5,7 @@
  * @param {number} y                y-coordinate
  * @param {string} graphic          manifest ID for graphic
  * @param {string} link             name of JSON file containing link data
- * @param {number} startPointNumber 
+ * @param {number} startPointNumber
  */
 var MapLink = function(x, y, graphic, link, startPointNumber) {
 	this.x = x;
@@ -13,7 +13,7 @@ var MapLink = function(x, y, graphic, link, startPointNumber) {
 	this.link = link;
 	this.startPointNumber = startPointNumber;
 
-	this.spriteSheet = new createjs.SpriteSheet({ 
+	this.spriteSheet = new createjs.SpriteSheet({
 		"images": [loader.getResult(graphic)],
 		"frames": {
 			"width": 16,

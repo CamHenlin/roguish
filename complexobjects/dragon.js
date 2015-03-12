@@ -55,10 +55,10 @@ var Dragon = function(x, y, level) {
 	 */
 	function moveUpOrDown(dy) {
 		if (dy >= 0) {
-			return renderer.moveObjectTo(this, x, y + this.moveLength, false); // Move down
+			return renderer.moveObjectTo(this, x, y + Math.min(this.moveLength,dy-1), false); // Move down
 		}
 
-		return renderer.moveObjectTo(this, x, y - this.moveLength, false); // Move up
+		return renderer.moveObjectTo(this, x, y - Math.min(this.moveLength,dy-1), false); // Move up
 	};
 
 	/**
@@ -69,10 +69,10 @@ var Dragon = function(x, y, level) {
 	 */
 	function moveRightOrLeft(dx) {
 		if (dx >= 0) {
-			return renderer.moveObjectTo(this, x + this.moveLength, y, false); // move right
+			return renderer.moveObjectTo(this, x + Math.min(this.moveLength,dx-1), y, false); // move right
 		}
 
-		return renderer.moveObjectTo(this, x - this.moveLength, y, false); // move left
+		return renderer.moveObjectTo(this, x - Math.min(this.moveLength,dx-1), y, false); // move left
 	};
 
 	/**

@@ -17,7 +17,8 @@ loader.loadManifest([
 	{id: "starttile", src: "graphics/starttile.png"},
 	{id: "stairsdown", src: "graphics/stairsdown.png"},
 	{id: "slash", src: "graphics/slash.png"},
-	{id: "black", src: "graphics/black.png"}
+	{id: "black", src: "graphics/black.png"},
+	{id: "stairsup", src: "graphics/stairsup.png"}
 ]);
 
 /**

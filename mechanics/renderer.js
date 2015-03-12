@@ -1,4 +1,4 @@
- 
+
 /**
  * Renderer handles rendering a map file to the canvas
  * @param {EaselJS stage} gamestage EaselJS stage
@@ -51,7 +51,7 @@ function Renderer(gamestage) {
 
 
 	/**
-	 * Run at the end of our map rendering process. Adds various containers to the gamestage and 
+	 * Run at the end of our map rendering process. Adds various containers to the gamestage and
 	 * declares doneRendering to be true, which lets the rest of the program continue.
 	 * @private
 	 */
@@ -82,6 +82,7 @@ function Renderer(gamestage) {
 	 * @private
 	 */
 	function initLayers() {
+		console.log('initing layers');
 		var w = this.mapData.tilesets[0].tilewidth;
 		var h = this.mapData.tilesets[0].tileheight;
 		this.simpleobjects = [];
@@ -144,6 +145,7 @@ function Renderer(gamestage) {
 	 * @return {EaselJS Container}
 	 */
 	function initSimpleObjects(layerData, tilesetSheet, tilewidth, tileheight) {
+		console.log('initing simple objects');
 		var container = new createjs.Container();
 
 		for (var y = 0; y < layerData.height; y++) {
@@ -154,6 +156,7 @@ function Renderer(gamestage) {
 				if (layerData.data[idx] !== 0) {
 					// each different simple object will have an idx entry here
 					if (layerData.data[idx] === 1) { // This is the chest (end game goal)
+						console.log('pushing endgame');
 						var endGame = new EndGame(x * tilewidth, y * tileheight);
 						var cellBitmap = endGame.animations;
 						cellBitmap.gotoAndStop("closed");
@@ -163,8 +166,10 @@ function Renderer(gamestage) {
 						container.addChild(cellBitmap);
 						this.simpleobjects.push(endGame);
 					} else if (layerData.data[idx] === 2) {
+						console.log('pushing robot!');
 						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 5));
 					} else if (layerData.data[idx] === 3) {
+						console.log('pushing dragon!');
 						activeObjects.push(new Dragon(x * tilewidth, y * tileheight, 5));
 					}
 				}
@@ -583,7 +588,6 @@ function Renderer(gamestage) {
 	 * @public
 	 */
 	this.movementTickActions = function() {
-		console.log('moving');
 		var startxy = collisionSystem.getCollisionCoordinateFromCell(this.movingObject.x, this.movingObject.y);
 		if (!this.movementSearchResult[0] || (startxy.x === this.movementSearchResult[0].x && startxy.y === this.movementSearchResult[0].y)) {
 			// this section basically means we are looking to move to a new cell

@@ -48,7 +48,7 @@ var TILESET_FILE_TYPE = '.png';
  * @constant
  * @default
  */
-var DEFAULT_PERSON_SIGHT_DISTANCE = 4;
+var DEFAULT_PERSON_SIGHT_DISTANCE = 14;
 
 /**
  * Default health
@@ -88,7 +88,7 @@ var MAX_ENEMY_DISTANCE = 8;
  * @constant
  * @default
  */
-var MAX_ENEMY_DISTANCE = 8;
+var MIN_ENEMY_DISTANCE = 8;
 
 /**
  * [MAX_HIGH_SCORES The max amount of high scores kept track of]
