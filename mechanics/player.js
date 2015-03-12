@@ -159,7 +159,8 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * Reduces Player's HP by the amount of damage received and updates health bar
+	 * Reduces Player's HP by the amount of damage received. If player's hp is reduced to 0, they die.
+	 * If no players are left alive, then the game is over.
  	 * @param  {Object} attackingObject
 	 */
 	this.receiveDamage = function(attackingObject) {
@@ -243,7 +244,8 @@ var Player = function(x, y, initiative) {
 
 
 	/**
-	 * Function that creates Form to display player attributes
+	 * Menu that displays player stats and lets the player use skill points
+	 * to increase the three main stats, Initiative, Attack Speed, and Scout.
 	 */
 	this.createStatsForm = function() {
 		var fields = [{
@@ -487,7 +489,7 @@ var Player = function(x, y, initiative) {
 	};
 
 	/**
-	 * Gives the player amount of xp, and then levels them up if they have passed a threshold
+	 * Gives the player amount of xp, and then levels them up if they have passed a certain threshold
 	 * @param {int} amount How much XP the player gets
 	 */
 	this.gainXP = function(amount) {
@@ -497,8 +499,6 @@ var Player = function(x, y, initiative) {
 			this.skillPoints += 2;
 			this.hp = 100 + (5 * this.level / 2); //Players automatically get reset back to full hp plus a little bit
 			this.attack += 1; //Players start to hit harder as they level up
-			console.log("You have leveled up! "+this.xp+" xp, "+this.level+" level, "+this.skillPoints+" Skill Points, "+
-						this.hp+" hp, "+ this.attack+" attack!");
 		};
 	};
 };

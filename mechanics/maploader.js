@@ -14,7 +14,7 @@ function MapLoader(loader) {
 
 	/**
 	* Loads the given map file
-	* @param {string} mapname
+	* @param {string} filename of map in JSON format
 	* @param {callback} callback to be called when map is loaded
 	*/
 	this.loadMap = function(mapname, callback) {
@@ -26,7 +26,8 @@ function MapLoader(loader) {
 	};
 
 	/**
-	* Handler for preload complete
+	* Handler that runs when preload in this.loadMap completes. Is used to load the map from the JSON file.
+	* @private
 	*/
 	function handleMapLoad() {
 		map = loader.getResult('map');
@@ -40,7 +41,9 @@ function MapLoader(loader) {
 	}
 
 	/**
-	 * Handler for when tileset is loaded
+	 * Handler that runs when preload in handleMapLoad() is complete. It sets up the renderer with the map.
+	 * Using two Handler's this way guarantee's the code will run in the right order.
+	 * @private
 	 */
 	function handleTilesetLoad() {
 		var image = loader.getResult('tileset');
