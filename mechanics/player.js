@@ -203,13 +203,13 @@ var Player = function(x, y, initiative) {
 				}
 			}
 
-			renderer.moveObjectTo(this, x, y - 16, true);
-			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
-			removeSelectableArea();
-
 			if (!clickedEnemy) {
 				return;
 			}
+
+			renderer.moveObjectTo(this, x, y - 16, true);
+			document.getElementById("gamecanvas").removeEventListener('click', attackClickHandler, false);
+			removeSelectableArea();
 
 			calculateDamage(this, clickedEnemy);
 
@@ -267,7 +267,7 @@ var Player = function(x, y, initiative) {
 			}
 			];
 		var options = {
-				message:playerName+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
+				message:this.getName()+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
 				      +this.hp+'   Attack: '+this.attack+'   Level: '+this.level+'   XP: '+this.xp+'   Next Level: '
 				      +(this.levelUpThreshold()-this.xp)
 		}
