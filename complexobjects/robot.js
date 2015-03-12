@@ -8,10 +8,10 @@
 var Robot = function(x, y, level) {
 	Enemy.call(this, x, y, level); // Call super constructor
 
-	this.attackSpeed = 2;
+	this.attackSpeed = 1;
 	this.movementSpeed = 10;
 	this.moveLength = 2;
-	this.attack = level + 5;
+	this.attack = level + 50;
 	this.defense = level - 15;
 	this.hp = 1*level;
 

@@ -14,7 +14,9 @@ function calculateDamage(attackingObject, defendingObject) {
 			attackingObject.attackAnimation.gotoAndPlay("slash");
 		}
 
-		defendingObject.receiveDamage(attackingObject);
+		if (defendingObject.hp > 0){
+			defendingObject.receiveDamage(attackingObject);
+		}
 
 		if (attackingObject instanceof Player ){
 			setTimeout(function() {
