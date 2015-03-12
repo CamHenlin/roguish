@@ -109,8 +109,9 @@ var EndGame = function(x, y) {
 		localStorage.highScore = JSON.stringify(highScores);
 
 		for (var i = 0; i < highScores.length; i++) {
-			if (highScores[i].name === "<None>")
+			if (highScores[i].name === "<None>") {
 				continue;
+			}
 
 			var element = {
 				text: (i + 1) + ". " + highScores[i].name + ": " + highScores[i].score,

@@ -494,7 +494,7 @@ var Player = function(x, y, initiative) {
 		if (this.xp >= this.levelUpThreshold()) {
 			this.level += 1;
 			this.skillPoints += 2;
-			this.hp = 10+(this.level/2); //Players automatically get reset back to full hp plus a little bit
+			this.hp = 100 + (5 * this.level / 2); //Players automatically get reset back to full hp plus a little bit
 			this.attack += 1; //Players start to hit harder as they level up
 			console.log("You have leveled up! "+this.xp+" xp, "+this.level+" level, "+this.skillPoints+" Skill Points, "+
 						this.hp+" hp, "+ this.attack+" attack!");
