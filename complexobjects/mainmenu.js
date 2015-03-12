@@ -76,7 +76,8 @@ function selectPlayers() {
 		type: 'range',
 		id: 'numberOfPlayers',
 		min: 1,
-		max: 4
+		max: 4,
+		value: 1
 	},
 	{
 		text: 'Next',
@@ -103,7 +104,8 @@ function namePlayers(numPlayers, names) {
 		maploader.loadMap('dungeon.json', function() {
 			for (var i = 0; i < numPlayers; i++) {
 				var player = new Player(i * 16 + parseInt(startPoint.x), i * 16 + parseInt(startPoint.y), 10);
-				player.setName(names[i]);
+				if(names[i]) player.setName(names[i]);
+				else player.setName("Player " + i);
 				activeObjects.push(player);
 				updateFogOfWar(player);
 			}

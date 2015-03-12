@@ -184,9 +184,10 @@ var Form = function(x, y, fields, options) {
 	 * @return {string}
 	 * @private
 	 */
-	function rangeField(name, min, max, index) {
+	function rangeField(name, min, max, defaultValue, index) {
 		var html = name ? "</br>" + name + "</br>" : "";
-		return html + "<input class='range-default' value='"+min+"'type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "'></input>"
+		return html + "<input class='range-default' type='range' id='" + getId.call(this, index) + "' min='" + min + "' max='" + max + "' value='"+defaultValue+"'></input>";
+
 	}
 
 	/**
@@ -208,7 +209,7 @@ var Form = function(x, y, fields, options) {
 			} else if (field.type === 'number') {
 				html += numberField.call(this, field.text, field.min, field.max, (field.id) ? field.id : index);
 			} else if (field.type === 'range') {
-				html += rangeField.call(this, field.text, field.min, field.max, (field.id) ? field.id : index);
+				html += rangeField.call(this, field.text, field.min, field.max, field.value, (field.id) ? field.id : index);
 			} else if (field.type === 'button') {
 				html += buttonField.call(this, field.text, (field.id) ? field.id : index);
 			} else if (field.type === 'basic-text') {

@@ -53,12 +53,12 @@ var Player = function(x, y, initiative) {
 			"spin-left": {
 				"frames": [0, 8, 12, 4],
 				"next": "spin-left",
-				"speed": 1
+				"speed": .1
 			},
 			"spin-right": {
 				"frames": [0, 4, 12, 8],
 				"next": "spin-right",
-				"speed": 1
+				"speed": .1
 			},
 			"walk-front": {
 				"frames": [1, 2, 3, 2],
@@ -455,6 +455,10 @@ var Player = function(x, y, initiative) {
 						this.hp+" hp, "+ this.attack+" attack!");
 		};
 	};
+
+	this.die = function() {
+		this.animations.gotoAndPlay("spin-right");
+	}
 };
 
 Player.prototype = new Person;
