@@ -169,6 +169,17 @@ var Player = function(x, y, initiative) {
 			this.die();
 		}
 
+		alivePlayers = 0;
+		for (var i = 0; i < activeObjects.length; i++) {
+			if (activeObjects[i] instanceof Player) {
+				alivePlayers++;
+			}
+		}
+
+		if (alivePlayers == 0){
+			alert("you lost");
+		}
+
 	};
 
 	/**
