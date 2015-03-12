@@ -245,7 +245,7 @@ var Player = function(x, y, initiative) {
 			}
 			];
 		var options = {
-				message:this.playerName+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
+				message:playerName+' has '+this.skillPoints+' Skill Points to spend.\nHP: '
 				      +this.hp+'   Attack: '+this.attack+'   Level: '+this.level+'   XP: '+this.xp+'   Next Level: '
 				      +(this.levelUpThreshold()-this.xp)
 		}
