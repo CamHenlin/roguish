@@ -371,6 +371,7 @@ var Player = function(x, y, initiative) {
 		$('#currentPlayer').html(this.getName() + '\'s Turn!');
 		var percentHealth = this.hp / this.maxHP;
 		$('#health').val(percentHealth * 100);
+		$('#currentScore').html('Score: ' + this.getScore());
 	};
 
 	/**
