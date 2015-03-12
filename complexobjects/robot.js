@@ -66,8 +66,10 @@ var Robot = function(x, y, level) {
 		if (!nearestPlayer) {
 			return;
 		}
-
-		renderer.moveObjectTo(this,nearestPlayer.x,nearestPlayer.y);
+		console.log(nearestPlayer);
+console.log(nearestPlayer.animations.x);
+console.log(nearestPlayer.animations.y);
+		renderer.moveObjectTo(this,nearestPlayer.animations.x,nearestPlayer.animations.y);
 	};
 
 	/**
