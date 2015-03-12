@@ -160,10 +160,10 @@ function Renderer(gamestage) {
 						activeObjects.push(new EndGame(x * tilewidth, y * tileheight));
 					} else if (layerData.data[idx] === 2) {
 						console.log('pushing robot!');
-						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 5));
+						activeObjects.push(new Robot(x * tilewidth, y * tileheight, 1));
 					} else if (layerData.data[idx] === 3) {
 						console.log('pushing dragon!');
-						activeObjects.push(new Dragon(x * tilewidth, y * tileheight, 5));
+						activeObjects.push(new Dragon(x * tilewidth, y * tileheight, 1));
 					}
 				}
 			}
