@@ -3,7 +3,7 @@
  * Class with behavior and attributes for players
  * @param {number} x initial x-coordinate
  * @param {number} y initial y-coordinate
- * @param {number} initiative 
+ * @param {number} initiative
  * @constructor
  */
 var Player = function(x, y, initiative) {
@@ -19,6 +19,7 @@ var Player = function(x, y, initiative) {
 	this.hp = 10*this.level;
 	this.skillPoints = 1;
 	this.attack = 2;
+	this.actionMenu = {};
 	this.totalTurns = 0; // counts how many turns this player has taken.
 	this.spriteSheet =  new createjs.SpriteSheet({
 		"images": [loader.getResult("player")],
@@ -136,7 +137,7 @@ var Player = function(x, y, initiative) {
 
 	};
 
-	// 
+	//
 	var attackTarget = null;
 
 	/**
@@ -327,7 +328,7 @@ var Player = function(x, y, initiative) {
 		playerTurn = true;
 		this.totalTurns++;
 		renderer.centerMapOnObject(this, function() {
-			var actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
+			this.actionMenu = new Form((this.animations.x + this.animations.spriteSheet._frameWidth + 8 - renderer.gamestage.x) * gamezoom, (this.animations.y + renderer.gamestage.y) * gamezoom, [{
 					text: 'Move',
 					key: "m",
 					type: 'button',
@@ -337,7 +338,7 @@ var Player = function(x, y, initiative) {
 							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
-						actionMenu.destroy();
+						this.actionMenu.destroy();
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
 				}, {
 					text: 'Attack',
@@ -349,7 +350,7 @@ var Player = function(x, y, initiative) {
 							renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 						}
 						$("body").mousemove(mouseMoveHandler);
-						actionMenu.destroy();
+						this.actionMenu.destroy();
 					}.bind(this) // binding this because i want to be able to access the this.mouseMoveSprite variable
 				}, {
 					text: 'Skills',
@@ -357,12 +358,12 @@ var Player = function(x, y, initiative) {
 					type: 'button',
 					callback: function() {
 						this.createStatsForm();
-						
+
 					}.bind(this)
 				}
 
 				], {cssClass:'playerActions'});
-			actionMenu.render();
+			this.actionMenu.render();
 			showSelectableArea(this);
 		}.bind(this));
 	};
@@ -371,7 +372,7 @@ var Player = function(x, y, initiative) {
 
 	var removeAttackAnimation = function() {
 		renderer.activeObjectsContainer.removeChild(this.attackAnimation);
-		
+
 	}.bind(this);
 
 
@@ -386,7 +387,7 @@ var Player = function(x, y, initiative) {
 			attackTarget = null;
 			setTimeout(removeAttackAnimation, 1000);
 		}
-		
+
 		this.animations.gotoAndPlay("stand-front");
 		this.turnCounter = 0;
 	};

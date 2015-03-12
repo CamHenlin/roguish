@@ -147,3 +147,19 @@ function handleTick(event) {
 
 	return;
 }
+
+/**
+ * [onkeydown handles keypress events in menus]
+ * @param  {[type]} event [standard keydown event]
+ * @return {[type]}       [void]
+ */
+document.onkeydown = function(event) {
+	for (var i in activePlayer.actionMenu.fields) {
+		console.log(activePlayer.actionMenu.fields[i].key + " === " + String.fromCharCode(event.keyCode));
+		if (activePlayer.actionMenu.fields[i].key.toLowerCase() === String.fromCharCode(event.keyCode).toLowerCase()) {
+			activePlayer.actionMenu.fields[i].callback();
+		}
+	}
+
+	return;
+};
