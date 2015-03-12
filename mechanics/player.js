@@ -17,6 +17,7 @@ var Player = function(x, y, initiative) {
 	this.level = 1;
 	this.xp = 0;
 	this.hp = 10*this.level;
+	this.maxHP = this.hp;
 	this.skillPoints = 1;
 	this.attack = 2;
 	this.actionMenu = {};
@@ -301,8 +302,8 @@ var Player = function(x, y, initiative) {
 					}
 				}
 			});
-			this.mouseMoveSprite = new createjs.Sprite(mouseMoveEventSpriteSheet, "exist");
 
+			this.mouseMoveSprite = new createjs.Sprite(mouseMoveEventSpriteSheet, "exist");
 			renderer.activeObjectsContainer.addChild(this.mouseMoveSprite);
 		}
 
@@ -319,9 +320,19 @@ var Player = function(x, y, initiative) {
 	mouseMoveHandler = mouseMoveHandler.bind(this);
 
 	/**
+	 * [updatePlayerUI Updates the UI that displays the current player's name and health.]
+	 */
+	this.updatePlayerUI = function() {
+		$('#currentPlayer').html(this.getName() + '\'s Turn!');
+		var percentHealth = this.hp / this.maxHP;
+		$('#health').val(percentHealth * 100);
+	};
+
+	/**
 	 * Code that gets called when it's the players turn. Initializes the player's action menu
 	 */
 	this.turn = function() {
+		this.updatePlayerUI();
 		this.currentDirection = "";
 		this.lastFrameDirection = "";
 
