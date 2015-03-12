@@ -67,27 +67,7 @@ var Robot = function(x, y, level) {
 			return;
 		}
 
-		var dx = nearestPlayer.x - this.x;
-		var dy = nearestPlayer.y - this.y;
-		var targetx;
-		var targety;
-
-		if (dx > 0){
-			targetx = this.x + Math.min(this.moveLength,dx);
-		}
-		else{
-			targetx = this.x - Math.min(this.moveLength,Math.abs(dx));
-		}
-
-
-		if (dy > 0){
-			targety = this.y + Math.min(this.moveLength,dy);
-		}
-		else{
-			this.y - Math.min(this.moveLength,Math.abs(dy));
-		}
-
-		renderer.moveObjectTo(this,targetx,targety);
+		renderer.moveObjectTo(this,nearestPlayer.x,nearestPlayer.y);
 	};
 
 	/**
